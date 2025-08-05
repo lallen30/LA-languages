@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Images for "{{ word }}"</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="modal-content">
+    <!-- Search Field -->
+    <div class="search-section">
+      <ion-item>
+        <ion-input 
+          [(ngModel)]="searchTerm" 
+          (ionInput)="onSearchChange()"
+          placeholder="Search for images..."
+          clearInput="true">
+          <ion-icon name="search" slot="start"></ion-icon>
+        </ion-input>
+        <ion-button 
+          slot="end" 
+          fill="clear" 
+          size="small" 
+          (click)="refreshSearch()"
+          [disabled]="isSearching">
+          <ion-icon name="refresh" [class.spin]="isSearching"></ion-icon>
+        </ion-button>
+        <ion-button 
+          slot="end" 
+          fill="clear" 
+          size="small" 
+          (click)="resetToOriginalWord()"
+          title="Reset to original word">
+          <ion-icon name="arrow-undo"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <p>
+        <strong>Tap images to select them for your flashcard</strong><br>
+        Selected: {{ selectedImages.length }} / {{ maxSelection }}
+        <span *ngIf="isSearching" class="searching-text"> • Searching...</span>
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button fill="outline" size="small" (click)="selectAll()" [disabled]="displayedImages.length === 0 || isSearching">
+        <ion-icon name="checkmark-done" slot="start"></ion-icon>
+        Select All ({{ Math.min(displayedImages.length, maxSelection) }})
+      </ion-button>
+      
+      <ion-button fill="outline" size="small" (click)="clearAll()" [disabled]="selectedImages.length === 0">
+        <ion-icon name="close-circle" slot="start"></ion-icon>
+        Clear All
+      </ion-button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isSearching">
+      <ion-spinner></ion-spinner>
+      <p>Searching for images...</p>
+    </div>
+
+    <!-- Images Grid -->
+    <div class="images-grid" *ngIf="displayedImages.length > 0 && !isSearching">
+      <div 
+        *ngFor="let image of displayedImages; trackBy: trackByImage" 
+        class="image-item"
+        [class.selected]="isImageSelected(image)"
+        [class.disabled]="!isImageSelected(image) && !canSelectMore()"
+        (click)="toggleImageSelection(image)">
+        
+        <img [src]="image" [alt]="searchTerm" loading="lazy">
+        
+        <!-- Selection indicator -->
+        <div class="selection-indicator" *ngIf="isImageSelected(image)">
+          <ion-icon name="checkmark-circle" color="primary"></ion-icon>
+          <span class="selection-number">{{ getSelectionNumber(image) }}</span>
+        </div>
+        
+        <!-- Disabled overlay -->
+        <div class="disabled-overlay" *ngIf="!isImageSelected(image) && !canSelectMore()">
+          <ion-icon name="ban" color="medium"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Images Button -->
+    <div class="load-more-section" *ngIf="displayedImages.length > 0 && !isSearching">
+      <ion-button 
+        fill="outline" 
+        size="small" 
+        (click)="loadMoreImages()"
+        [disabled]="isLoadingMore">
+        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+        <span *ngIf="!isLoadingMore">Load More Images</span>
+        <span *ngIf="isLoadingMore">Loading...</span>
+        <ion-spinner *ngIf="isLoadingMore" slot="end" name="crescent"></ion-spinner>
+      </ion-button>
+    </div>
+
+    <!-- No Images State -->
+    <div class="no-images" *ngIf="displayedImages.length === 0 && !isSearching">
+      <ion-icon name="image-outline" size="large" color="medium"></ion-icon>
+      <h3>No Images Found</h3>
+      <p *ngIf="searchTerm">We couldn't find any images for "{{ searchTerm }}". Try a different search term or create the card without images.</p>
+      <p *ngIf="!searchTerm">Enter a search term to find images for your flashcard.</p>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="dismiss()">
+        Cancel
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="solid" 
+        (click)="confirm()"
+        [disabled]="selectedImages.length === 0 && images.length > 0">
+        Create Card
+        <span *ngIf="selectedImages.length > 0">({{ selectedImages.length }} images)</span>
+        <span *ngIf="selectedImages.length === 0 && images.length === 0">(No images)</span>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

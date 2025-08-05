@@ -1,0 +1,133 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Statistics</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Statistics</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="stats-container">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Loading statistics...</p>
+    </div>
+
+    <!-- Stats Content -->
+    <div *ngIf="!isLoading">
+      <!-- Overall Stats -->
+      <ion-card class="overview-card">
+        <ion-card-header>
+          <ion-card-title>Overview</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <ion-icon name="library" class="stat-icon" color="primary"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.totalCards }}</span>
+                <span class="stat-label">Total Cards</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <ion-icon name="trophy" class="stat-icon" color="success"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.masteredCards }}</span>
+                <span class="stat-label">Mastered</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <ion-icon [name]="getStreakIcon()" class="stat-icon" [color]="getStreakColor()"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.streak }}</span>
+                <span class="stat-label">Day Streak</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <ion-icon name="analytics" class="stat-icon" [color]="getAccuracyColor()"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.accuracy }}%</span>
+                <span class="stat-label">Accuracy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="last-review">
+            <ion-text color="medium">
+              Last review: {{ formatLastReview() }}
+            </ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Deck Statistics -->
+      <ion-card *ngIf="deckStats.length > 0" class="deck-stats-card">
+        <ion-card-header>
+          <ion-card-title>Deck Progress</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="deck-list">
+            <div *ngFor="let deck of deckStats" class="deck-stat-item">
+              <div class="deck-header">
+                <h3>{{ deck.name }}</h3>
+                <span class="completion-badge" 
+                      [class.high]="deck.completionPercentage >= 80"
+                      [class.medium]="deck.completionPercentage >= 50 && deck.completionPercentage < 80"
+                      [class.low]="deck.completionPercentage < 50">
+                  {{ deck.completionPercentage }}%
+                </span>
+              </div>
+              
+              <div class="progress-bar">
+                <div class="progress-fill" 
+                     [style.width.%]="deck.completionPercentage"></div>
+              </div>
+              
+              <div class="deck-details">
+                <div class="detail-item">
+                  <span class="detail-label">Total:</span>
+                  <span class="detail-value">{{ deck.totalCards }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">New:</span>
+                  <span class="detail-value">{{ deck.newCards }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Review:</span>
+                  <span class="detail-value">{{ deck.reviewCards }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Mastered:</span>
+                  <span class="detail-value">{{ deck.masteredCards }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- No Data State -->
+      <div *ngIf="deckStats.length === 0" class="empty-state">
+        <ion-icon name="bar-chart-outline" class="empty-icon"></ion-icon>
+        <h2>No Statistics Yet</h2>
+        <p>Start studying some decks to see your progress!</p>
+      </div>
+
+      <!-- Reset Button -->
+      <div class="reset-section">
+        <ion-button fill="outline" color="danger" (click)="resetStats()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Reset Statistics
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

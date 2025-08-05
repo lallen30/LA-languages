@@ -1,1 +1,12 @@
+.hidden {
+  display: none !important;
+}
 
+// Smooth transition for tab bar visibility
+ion-tab-bar {
+  transition: transform 0.3s ease-in-out;
+  
+  &.hidden {
+    transform: translateY(100%);
+  }
+}

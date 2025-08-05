@@ -1,18 +1,35 @@
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component, EnvironmentInjector, inject, OnInit, OnDestroy } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { triangle, ellipse, square } from 'ionicons/icons';
+import { home, library, barChart, settings } from 'ionicons/icons';
+import { SessionStateService } from '../services/session-state.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
-  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, CommonModule],
 })
-export class TabsPage {
+export class TabsPage implements OnInit, OnDestroy {
   public environmentInjector = inject(EnvironmentInjector);
+  isSessionActive = false;
+  private subscription: Subscription = new Subscription();
 
-  constructor() {
-    addIcons({ triangle, ellipse, square });
+  constructor(private sessionStateService: SessionStateService) {
+    addIcons({ home, library, barChart, settings });
+  }
+
+  ngOnInit() {
+    this.subscription = this.sessionStateService.sessionActive$.subscribe(
+      (isActive) => {
+        this.isSessionActive = isActive;
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

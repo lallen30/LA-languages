@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ deck?.name || 'Manage Cards' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ deck?.name || 'Manage Cards' }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Search Bar -->
+  <ion-searchbar 
+    [(ngModel)]="searchTerm" 
+    (ionInput)="filterCards()" 
+    placeholder="Search cards..."
+    show-clear-button="focus">
+  </ion-searchbar>
+
+  <!-- Cards Count -->
+  <div class="cards-info">
+    <ion-chip color="primary">
+      <ion-label>{{ filteredCards.length }} of {{ cards.length }} cards</ion-label>
+    </ion-chip>
+  </div>
+
+  <!-- Cards List -->
+  <div class="cards-container" *ngIf="filteredCards.length > 0">
+    <ion-card *ngFor="let card of filteredCards" (click)="openCardActions(card)" class="card-item">
+      <ion-card-header>
+        <div class="card-header-content">
+          <div class="card-words">
+            <ion-card-title>{{ card.spanishWord }}</ion-card-title>
+            <ion-card-subtitle>{{ card.englishTranslation }}</ion-card-subtitle>
+          </div>
+          <ion-chip [color]="getCardStatusColor(card)" class="status-chip">
+            <ion-label>{{ getCardStatusText(card) }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content *ngIf="card.imageUrls && card.imageUrls.length > 0">
+        <div class="card-images">
+          <img 
+            *ngFor="let imageUrl of card.imageUrls.slice(0, 3)" 
+            [src]="imageUrl" 
+            [alt]="card.spanishWord"
+            class="preview-image">
+          <div *ngIf="card.imageUrls.length > 3" class="more-images">
+            +{{ card.imageUrls.length - 3 }}
+          </div>
+        </div>
+      </ion-card-content>
+
+      <div class="card-stats">
+        <ion-item lines="none">
+          <ion-label>
+            <p>Repetitions: {{ card.repetitions || 0 }}</p>
+            <p>Ease Factor: {{ (card.easeFactor || 2.5).toFixed(1) }}</p>
+            <p *ngIf="card.nextReview">Next Review: {{ card.nextReview | date:'short' }}</p>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredCards.length === 0 && cards.length > 0">
+    <ion-icon name="search-outline" size="large"></ion-icon>
+    <h3>No cards found</h3>
+    <p>Try adjusting your search terms</p>
+  </div>
+
+  <div class="empty-state" *ngIf="cards.length === 0">
+    <ion-icon name="library-outline" size="large"></ion-icon>
+    <h3>No cards in this deck</h3>
+    <p>Add some cards to get started!</p>
+    <ion-button fill="outline" (click)="addCard()">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Add Cards
+    </ion-button>
+  </div>
+</ion-content>

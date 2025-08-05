@@ -1,0 +1,192 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="settings-container">
+    <!-- Appearance -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Appearance</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="moon" slot="start"></ion-icon>
+          <ion-label>Dark Mode</ion-label>
+          <ion-toggle [(ngModel)]="settings.darkMode" (ionChange)="onDarkModeChange()"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Text-to-Speech -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Text-to-Speech</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="language" slot="start"></ion-icon>
+          <ion-select 
+            [(ngModel)]="settings.ttsLanguage" 
+            (ionChange)="onTtsLanguageChange()"
+            placeholder="Select Language">
+            <ion-select-option *ngFor="let lang of availableLanguages" [value]="lang.code">
+              {{ lang.name }}
+            </ion-select-option>
+          </ion-select>
+          <ion-label slot="start">Language</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="speedometer" slot="start"></ion-icon>
+          <ion-label>Speech Rate: {{ settings.ttsRate }}</ion-label>
+          <ion-range 
+            [(ngModel)]="settings.ttsRate"
+            (ionChange)="onTtsRateChange()"
+            min="0.5" 
+            max="2.0" 
+            step="0.1"
+            snaps="true">
+          </ion-range>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="musical-notes" slot="start"></ion-icon>
+          <ion-label>Pitch: {{ settings.ttsPitch }}</ion-label>
+          <ion-range 
+            [(ngModel)]="settings.ttsPitch"
+            (ionChange)="onTtsPitchChange()"
+            min="0.5" 
+            max="2.0" 
+            step="0.1"
+            snaps="true">
+          </ion-range>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="volume-high" slot="start"></ion-icon>
+          <ion-label>Auto-speak on flip</ion-label>
+          <ion-toggle [(ngModel)]="settings.autoSpeak" (ionChange)="onAutoSpeakChange()"></ion-toggle>
+        </ion-item>
+
+        <ion-button expand="block" fill="outline" (click)="testTts()">
+          <ion-icon name="play" slot="start"></ion-icon>
+          Test Speech
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Study Settings -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Study Settings</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="layers" slot="start"></ion-icon>
+          <ion-label>Max cards per session</ion-label>
+          <ion-input 
+            type="number" 
+            [(ngModel)]="settings.maxCardsPerSession"
+            (ionChange)="onMaxCardsChange()"
+            min="5" 
+            max="100">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="notifications" slot="start"></ion-icon>
+          <ion-label>Study reminders</ion-label>
+          <ion-toggle [(ngModel)]="settings.studyReminders" (ionChange)="onStudyRemindersChange()"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Images -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Images</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="image" slot="start"></ion-icon>
+          <ion-select 
+            [(ngModel)]="settings.imageQuality" 
+            (ionChange)="onImageQualityChange()"
+            placeholder="Select Quality">
+            <ion-select-option *ngFor="let quality of imageQualities" [value]="quality.value">
+              {{ quality.label }}
+            </ion-select-option>
+          </ion-select>
+          <ion-label slot="start">Image Quality</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="folder" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Cache</h3>
+            <p>{{ getCacheSize() }}</p>
+          </ion-label>
+          <ion-button fill="outline" size="small" (click)="clearImageCache()">
+            Clear
+          </ion-button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Data Management -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Data Management</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="data-buttons">
+          <ion-button expand="block" fill="outline" (click)="exportData()">
+            <ion-icon name="download" slot="start"></ion-icon>
+            Export Data
+          </ion-button>
+
+          <ion-button expand="block" fill="outline" (click)="importData()">
+            <ion-icon name="cloud-upload" slot="start"></ion-icon>
+            Import Data
+          </ion-button>
+
+          <ion-button expand="block" fill="outline" color="warning" (click)="resetAllSettings()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Reset Settings
+          </ion-button>
+
+          <ion-button expand="block" fill="outline" color="danger" (click)="resetAllData()">
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Delete All Data
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- App Info -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>About</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="information-circle" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Flashcard App</h3>
+            <p>Version 1.0.0</p>
+            <p>Built with Ionic Angular & Capacitor</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

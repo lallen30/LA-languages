@@ -1,0 +1,191 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Show back button during session -->
+    <ion-buttons slot="start" *ngIf="isSessionActive">
+      <ion-button (click)="endSession()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <!-- Show title when no session active -->
+    <ion-title *ngIf="!isSessionActive">Flashcards</ion-title>
+    
+    <!-- Show progress during session -->
+    <ion-title *ngIf="isSessionActive">
+      {{ sessionProgress.completed }} / {{ sessionProgress.total }}
+    </ion-title>
+    
+    <!-- Translation Button in Header -->
+    <ion-buttons slot="end" *ngIf="isSessionActive && currentCard?.englishTranslation">
+      <ion-button 
+        fill="clear" 
+        (click)="showTranslation = !showTranslation">
+        <ion-icon name="language"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Flashcards</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Session Active -->
+  <div *ngIf="isSessionActive && currentCard" class="session-container">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <ion-progress-bar [value]="sessionProgress.percentage / 100"></ion-progress-bar>
+      <ion-text class="progress-text">
+        {{ sessionProgress.completed }} / {{ sessionProgress.total }} cards
+      </ion-text>
+    </div>
+
+    <!-- Fill in the Blank Card -->
+    <div *ngIf="currentCard.type === 'fill-blank'" class="card-container" (click)="flipCard()">
+      <div class="flashcard" [class.flipped]="isFlipped">
+        <div class="card-front">
+          <div class="card-content">
+            <h2>{{ currentCard.sentenceFront }}</h2>
+            <p class="hint">Tap to reveal answer</p>
+          </div>
+        </div>
+        
+        <div class="card-back">
+          <div class="card-content">
+            <h2 [innerHTML]="highlightedBack"></h2>
+            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
+              {{ currentCard.englishTranslation }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Picture Word Card -->
+    <div *ngIf="currentCard.type === 'picture-word'" class="card-container" (click)="flipCard()">
+      <div class="flashcard" [class.flipped]="isFlipped">
+        <!-- Show Spanish word first or images first based on showWordFirst -->
+        <div class="card-front" *ngIf="currentCard.showWordFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.spanishWord }}</h2>
+            <p class="hint">Tap to see images</p>
+          </div>
+        </div>
+        
+        <div class="card-front" *ngIf="!currentCard.showWordFirst">
+          <div class="card-content">
+            <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0">
+              <img *ngFor="let imageUrl of currentCard.imageUrls" 
+                   [src]="imageUrl" 
+                   [alt]="currentCard.spanishWord"
+                   class="grid-image">
+            </div>
+            <div *ngIf="!currentCard.imageUrls || currentCard.imageUrls.length === 0" class="no-images">
+              <ion-icon name="image-outline" size="large"></ion-icon>
+              <p>No images available</p>
+            </div>
+            <p class="hint">Tap to see word</p>
+          </div>
+        </div>
+        
+        <div class="card-back" *ngIf="currentCard.showWordFirst">
+          <div class="card-content">
+            <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0">
+              <img *ngFor="let imageUrl of currentCard.imageUrls" 
+                   [src]="imageUrl" 
+                   [alt]="currentCard.spanishWord"
+                   class="grid-image">
+            </div>
+            <div *ngIf="!currentCard.imageUrls || currentCard.imageUrls.length === 0" class="no-images">
+              <ion-icon name="image-outline" size="large"></ion-icon>
+              <p>No images available</p>
+            </div>
+            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
+              {{ currentCard.englishTranslation }}
+            </p>
+          </div>
+        </div>
+        
+        <div class="card-back" *ngIf="!currentCard.showWordFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.spanishWord }}</h2>
+            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
+              {{ currentCard.englishTranslation }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Centered Listen Button Above Tabs -->
+    <div class="listen-button-container">
+      <ion-button 
+        fill="clear" 
+        size="large"
+        class="listen-button"
+        (click)="speak()">
+        <ion-icon name="volume-high" size="large"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Icon Action Buttons at Bottom -->
+    <div class="bottom-action-bar">
+      
+      <!-- Forgot Button -->
+      <div class="action-button-with-label">
+        <ion-button 
+          fill="clear" 
+          size="large"
+          color="danger"
+          class="action-icon-btn forgot-action"
+          (click)="markIncorrect()">
+          <ion-icon name="close-circle" size="large"></ion-icon>
+        </ion-button>
+        <ion-text class="action-label">Forgot</ion-text>
+      </div>
+      
+      <!-- Later Button -->
+      <div class="action-button-with-label">
+        <ion-button 
+          fill="clear" 
+          size="large"
+          color="warning"
+          class="action-icon-btn later-action"
+          (click)="markLater()">
+          <ion-icon name="refresh-circle" size="large"></ion-icon>
+        </ion-button>
+        <ion-text class="action-label">Later</ion-text>
+      </div>
+      
+      <!-- Got It Button -->
+      <div class="action-button-with-label">
+        <ion-button 
+          fill="clear" 
+          size="large"
+          color="success"
+          class="action-icon-btn gotit-action"
+          (click)="markCorrect()">
+          <ion-icon name="checkmark-circle" size="large"></ion-icon>
+        </ion-button>
+        <ion-text class="action-label">Got It</ion-text>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Active Session -->
+  <div *ngIf="!isSessionActive" class="no-session">
+    <div class="welcome-content">
+      <ion-icon name="library-outline" class="welcome-icon"></ion-icon>
+      <h2>Ready to Study?</h2>
+      <p>Select a deck to start your flashcard session</p>
+      
+      <ion-button expand="block" (click)="goToDecks()" class="start-btn">
+        <ion-icon name="play" slot="start"></ion-icon>
+        Browse Decks
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
