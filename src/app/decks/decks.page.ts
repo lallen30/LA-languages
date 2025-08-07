@@ -12,10 +12,12 @@ import { ImageService } from '../services/image.service';
 import { addIcons } from 'ionicons';
 import { 
   add, 
+  addOutline,
   create, 
   createOutline, 
   trashOutline, 
-  play, 
+  play,
+  playOutline, 
   libraryOutline,
   imageOutline,
   closeCircle,
@@ -65,10 +67,12 @@ export class DecksPage implements OnInit {
     // Register all required icons for the Decks page
     addIcons({
       add,
+      addOutline,
       create,
       createOutline,
       trashOutline,
       play,
+      playOutline,
       libraryOutline,
       imageOutline,
       closeCircle,
@@ -420,6 +424,13 @@ export class DecksPage implements OnInit {
           }
         },
         {
+          text: 'Translate',
+          icon: 'language',
+          handler: () => {
+            this.createTranslateCard(deck);
+          }
+        },
+        {
           text: 'Cancel',
           icon: 'close',
           role: 'cancel'
@@ -503,6 +514,44 @@ export class DecksPage implements OnInit {
     await alert.present();
   }
 
+  async createTranslateCard(deck: Deck) {
+    // Get the current language name for dynamic placeholder
+    const currentLanguage = this.languages.find(lang => lang.code === this.selectedLanguage);
+    const languageName = currentLanguage ? currentLanguage.name : 'Target language';
+    
+    const alert = await this.alertController.create({
+      header: 'Create Translation Card',
+      inputs: [
+        {
+          name: 'targetWord',
+          type: 'text',
+          placeholder: `${languageName} word (e.g., "casa")`
+        },
+        {
+          name: 'englishWord',
+          type: 'text',
+          placeholder: 'English translation (e.g., "house")'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Create',
+          handler: async (data) => {
+            if (data.targetWord && data.englishWord) {
+              await this.saveTranslateCard(deck, data);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async saveFillBlankCard(deck: Deck, data: any) {
     const sentenceFront = data.sentence.replace(data.missingWord, '___');
     const sentenceBack = data.sentence.replace(data.missingWord, `**${data.missingWord}**`);
@@ -516,6 +565,28 @@ export class DecksPage implements OnInit {
       missingWord: data.missingWord,
       englishTranslation: data.translation,
       imageUrls: [],
+      easeFactor: 2.5,
+      interval: 1,
+      repetitions: 0,
+      lastReviewed: new Date(),
+      nextReview: new Date(),
+      isNew: true,
+      skipCount: 0
+    };
+
+    await this.cardService.addCard(newCard);
+    await this.loadDecks();
+  }
+
+  async saveTranslateCard(deck: Deck, data: any) {
+    const newCard: Card = {
+      id: this.generateId(),
+      deckId: deck.id,
+      type: 'translate',
+      targetLanguageWord: data.targetWord,
+      englishTranslation: data.englishWord,
+      imageUrls: [],
+      showTargetLanguageFirst: Math.random() > 0.5, // Randomly show either target language or English first
       easeFactor: 2.5,
       interval: 1,
       repetitions: 0,
@@ -849,5 +920,73 @@ export class DecksPage implements OnInit {
     }
 
     await this.loadDecks();
+  }
+
+  // New methods for icon buttons
+  
+  /**
+   * Start studying a deck - navigate to home page with the selected deck
+   */
+  async startStudying(deck: Deck) {
+    console.log('Starting study for deck:', deck.name);
+    // Navigate to home page and pass the deck ID
+    this.router.navigate(['/tabs/home'], { 
+      queryParams: { deckId: deck.id } 
+    });
+  }
+
+  /**
+   * Show add card options - reuse existing showAddCardOptions method
+   */
+  async showAddCardOptions(deck: Deck) {
+    console.log('Showing add card options for deck:', deck.name);
+    // Reuse the existing openDeckActions method logic for adding cards
+    await this.openAddCardActionSheet(deck);
+  }
+
+  /**
+   * Navigate to card management page for the deck
+   */
+  async navigateToCardManagement(deck: Deck) {
+    console.log('Navigating to card management for deck:', deck.name);
+    this.router.navigate(['/tabs/card-management', deck.id]);
+  }
+
+  /**
+   * Helper method to show add card action sheet
+   */
+  private async openAddCardActionSheet(deck: Deck) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Add Card Type',
+      buttons: [
+        {
+          text: 'Fill in the Blank',
+          icon: 'create-outline',
+          handler: () => {
+            this.createFillBlankCard(deck);
+          }
+        },
+        {
+          text: 'Picture Word',
+          icon: 'image-outline',
+          handler: () => {
+            this.createPictureWordCard(deck);
+          }
+        },
+        {
+          text: 'Translate',
+          icon: 'language',
+          handler: () => {
+            this.createTranslateCard(deck);
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 }

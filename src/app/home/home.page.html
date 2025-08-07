@@ -71,7 +71,6 @@
         <div class="card-front" *ngIf="currentCard.showWordFirst">
           <div class="card-content">
             <h2>{{ currentCard.spanishWord }}</h2>
-            <p class="hint">Tap to see images</p>
           </div>
         </div>
         
@@ -87,7 +86,6 @@
               <ion-icon name="image-outline" size="large"></ion-icon>
               <p>No images available</p>
             </div>
-            <p class="hint">Tap to see word</p>
           </div>
         </div>
         
@@ -115,6 +113,38 @@
             <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
               {{ currentCard.englishTranslation }}
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Translate Card -->
+    <div *ngIf="currentCard.type === 'translate'" class="card-container" (click)="flipCard()">
+      <div class="flashcard" [class.flipped]="isFlipped">
+        <!-- Show target language first or English first based on showTargetLanguageFirst -->
+        <div class="card-front" *ngIf="currentCard.showTargetLanguageFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.targetLanguageWord }}</h2>
+            <p class="hint">Translate to English</p>
+          </div>
+        </div>
+        
+        <div class="card-front" *ngIf="!currentCard.showTargetLanguageFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.englishTranslation }}</h2>
+            <p class="hint">Translate to target language</p>
+          </div>
+        </div>
+        
+        <div class="card-back" *ngIf="currentCard.showTargetLanguageFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.englishTranslation }}</h2>
+          </div>
+        </div>
+        
+        <div class="card-back" *ngIf="!currentCard.showTargetLanguageFirst">
+          <div class="card-content">
+            <h2>{{ currentCard.targetLanguageWord }}</h2>
           </div>
         </div>
       </div>

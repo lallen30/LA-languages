@@ -60,9 +60,19 @@ ion-input {
   }
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  ion-card {
-    background: var(--ion-color-dark-shade);
-  }
+// Using ::ng-deep to penetrate Ionic's component encapsulation
+
+// Light mode support - default styling
+::ng-deep ion-card {
+  --background: var(--ion-color-step-50);
+}
+
+// Dark mode support - when toggle is ON
+::ng-deep body.dark ion-card {
+  --background: var(--ion-color-primary);
+}
+
+// Alternative approach using host-context
+:host-context(body.dark) ::ng-deep ion-card {
+  --background: var(--ion-color-primary);
 }

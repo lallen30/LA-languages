@@ -35,7 +35,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: var(--ion-color-light);
+  background: var(--ion-color-primary);
   border-radius: 12px;
   
   .stat-icon {
@@ -49,7 +49,7 @@
     .stat-number {
       font-size: 20px;
       font-weight: bold;
-      color: var(--ion-color-dark);
+      color: var(--ion-color-primary);
     }
     
     .stat-label {
@@ -94,7 +94,7 @@
     margin: 0;
     font-size: 16px;
     font-weight: 600;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-primary);
   }
 }
 
@@ -210,7 +210,7 @@
 @media (prefers-color-scheme: dark) {
   .stat-item,
   .deck-stat-item {
-    background: var(--ion-color-dark-shade);
+    background: var(--ion-color-light);
   }
   
   .progress-bar {

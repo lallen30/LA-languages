@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ActionSheetController, ModalController, LoadingController } from '@ionic/angular';
@@ -31,7 +31,8 @@ export class CardManagementPage implements OnInit {
     private actionSheetController: ActionSheetController,
     private modalController: ModalController,
     private loadingController: LoadingController,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -51,6 +52,8 @@ export class CardManagementPage implements OnInit {
 
   async loadDeckAndCards(deckId: string) {
     try {
+      console.log('DEBUG: Loading deck and cards for deckId:', deckId);
+      
       // Load deck
       const decks = await this.storageService.getAllDecks();
       this.deck = decks.find((d: Deck) => d.id === deckId) || null;
@@ -61,9 +64,12 @@ export class CardManagementPage implements OnInit {
         return;
       }
 
-      // Load cards
-      this.cards = await this.storageService.getCardsByDeck(deckId);
-      this.filteredCards = [...this.cards];
+      // Load cards - create completely new array references for change detection
+      const freshCards = await this.storageService.getCardsByDeck(deckId);
+      this.cards = [...freshCards]; // Create new array reference
+      this.filteredCards = [...this.cards]; // Create new filtered array reference
+      
+      console.log('DEBUG: Loaded', this.cards.length, 'cards, filtered to', this.filteredCards.length);
     } catch (error) {
       console.error('Error loading deck and cards:', error);
     }
@@ -74,16 +80,36 @@ export class CardManagementPage implements OnInit {
       this.filteredCards = [...this.cards];
     } else {
       const term = this.searchTerm.toLowerCase();
-      this.filteredCards = this.cards.filter(card => 
-        card.spanishWord?.toLowerCase().includes(term) ||
-        card.englishTranslation?.toLowerCase().includes(term)
-      );
+      this.filteredCards = this.cards.filter(card => {
+        // Search in different fields based on card type
+        if (card.type === 'translate') {
+          return card.targetLanguageWord?.toLowerCase().includes(term) ||
+                 card.englishTranslation?.toLowerCase().includes(term);
+        } else if (card.type === 'picture-word') {
+          return card.spanishWord?.toLowerCase().includes(term) ||
+                 card.englishTranslation?.toLowerCase().includes(term);
+        } else if (card.type === 'fill-blank') {
+          return card.missingWord?.toLowerCase().includes(term) ||
+                 card.sentenceFront?.toLowerCase().includes(term) ||
+                 card.sentenceBack?.toLowerCase().includes(term);
+        }
+        return false;
+      });
     }
   }
 
   async openCardActions(card: Card) {
+    let headerText = '';
+    if (card.type === 'translate') {
+      headerText = card.targetLanguageWord || 'Translate Card';
+    } else if (card.type === 'picture-word') {
+      headerText = card.spanishWord || 'Picture Card';
+    } else if (card.type === 'fill-blank') {
+      headerText = card.missingWord || 'Fill-in-the-Blank Card';
+    }
+    
     const actionSheet = await this.actionSheetController.create({
-      header: card.spanishWord,
+      header: headerText,
       buttons: [
         {
           text: 'Edit Card',
@@ -119,9 +145,48 @@ export class CardManagementPage implements OnInit {
   }
 
   async editCard(card: Card) {
-    const alert = await this.alertController.create({
-      header: 'Edit Card',
-      inputs: [
+    let inputs: any[] = [];
+    let buttonText = 'Save';
+    
+    // Configure inputs based on card type
+    if (card.type === 'translate') {
+      inputs = [
+        {
+          name: 'targetLanguageWord',
+          type: 'text',
+          placeholder: 'Target Language Word',
+          value: card.targetLanguageWord
+        },
+        {
+          name: 'englishTranslation',
+          type: 'text',
+          placeholder: 'English Translation',
+          value: card.englishTranslation
+        }
+      ];
+    } else if (card.type === 'fill-blank') {
+      inputs = [
+        {
+          name: 'sentenceFront',
+          type: 'text',
+          placeholder: 'Sentence with blank (use ____ for blank)',
+          value: card.sentenceFront
+        },
+        {
+          name: 'missingWord',
+          type: 'text',
+          placeholder: 'Missing word',
+          value: card.missingWord
+        },
+        {
+          name: 'sentenceBack',
+          type: 'text',
+          placeholder: 'Complete sentence',
+          value: card.sentenceBack
+        }
+      ];
+    } else if (card.type === 'picture-word') {
+      inputs = [
         {
           name: 'spanishWord',
           type: 'text',
@@ -134,24 +199,40 @@ export class CardManagementPage implements OnInit {
           placeholder: 'English Translation',
           value: card.englishTranslation
         }
-      ],
+      ];
+      buttonText = 'Next'; // Picture cards need image selection
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Edit Card',
+      inputs: inputs,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel'
         },
         {
-          text: 'Next',
+          text: buttonText,
           handler: async (data) => {
-            if (data.spanishWord && data.englishTranslation) {
-              // Update the card data temporarily
-              const updatedCardData = {
-                ...card,
-                spanishWord: data.spanishWord,
-                englishTranslation: data.englishTranslation
-              };
-              // Open image selection modal for editing
-              await this.openImageSelectionForEdit(updatedCardData);
+            if (card.type === 'translate') {
+              if (data.targetLanguageWord && data.englishTranslation) {
+                await this.updateTranslateCard(card, data);
+              }
+            } else if (card.type === 'fill-blank') {
+              if (data.sentenceFront && data.missingWord && data.sentenceBack) {
+                await this.updateFillBlankCard(card, data);
+              }
+            } else if (card.type === 'picture-word') {
+              if (data.spanishWord && data.englishTranslation) {
+                // Update the card data temporarily
+                const updatedCardData = {
+                  ...card,
+                  spanishWord: data.spanishWord,
+                  englishTranslation: data.englishTranslation
+                };
+                // Open image selection modal for editing
+                await this.openImageSelectionForEdit(updatedCardData);
+              }
             }
           }
         }
@@ -313,5 +394,123 @@ export class CardManagementPage implements OnInit {
     if (card.isNew) return 'primary';
     if (card.repetitions >= 3 && card.easeFactor >= 2.5) return 'success';
     return 'warning';
+  }
+
+  async updateTranslateCard(card: Card, data: any) {
+    try {
+      console.log('DEBUG: Original card object:', card);
+      console.log('DEBUG: Original card.targetLanguageWord:', card.targetLanguageWord);
+      console.log('DEBUG: Original card.englishTranslation:', card.englishTranslation);
+      
+      // EXPERT SOLUTION: Use JSON serialization to force enumerable properties
+      // First, create a plain object with all the data
+      const cardData = {
+        id: card.id,
+        deckId: card.deckId,
+        type: card.type,
+        sentenceFront: card.sentenceFront,
+        missingWord: card.missingWord,
+        sentenceBack: card.sentenceBack,
+        spanishWord: card.spanishWord,
+        targetLanguageWord: data.targetLanguageWord,
+        englishTranslation: data.englishTranslation,
+        imageUrls: card.imageUrls || [],
+        showWordFirst: card.showWordFirst,
+        showTargetLanguageFirst: card.showTargetLanguageFirst,
+        easeFactor: card.easeFactor,
+        interval: card.interval,
+        repetitions: card.repetitions,
+        lastReviewed: card.lastReviewed,
+        nextReview: card.nextReview,
+        isNew: card.isNew,
+        skipCount: card.skipCount
+      };
+      
+      // Force serialization to make all properties enumerable
+      const updatedCard: Card = JSON.parse(JSON.stringify(cardData));
+      
+      console.log('DEBUG: After JSON serialization:', updatedCard);
+      
+      console.log('DEBUG: After explicit assignment:', updatedCard);
+      
+      console.log('DEBUG: Updating translate card with data:', data);
+      console.log('DEBUG: Full updatedCard object being saved:', updatedCard);
+      console.log('DEBUG: updatedCard.targetLanguageWord:', updatedCard.targetLanguageWord);
+      console.log('DEBUG: updatedCard.englishTranslation:', updatedCard.englishTranslation);
+      
+      await this.storageService.updateCard(updatedCard);
+      
+      // Immediately check what was actually saved
+      const savedCard = await this.storageService.getCard(updatedCard.id);
+      console.log('DEBUG: Card immediately after save:', savedCard);
+      
+      // EXPERT SOLUTION: Direct object mutation for immediate UI update
+      const cardIndex = this.cards.findIndex(c => c.id === updatedCard.id);
+      if (cardIndex !== -1) {
+        // Directly mutate the existing card object properties
+        Object.assign(this.cards[cardIndex], updatedCard);
+        
+        // Update filtered cards if present
+        const filteredIndex = this.filteredCards.findIndex(c => c.id === updatedCard.id);
+        if (filteredIndex !== -1) {
+          Object.assign(this.filteredCards[filteredIndex], updatedCard);
+        }
+        
+        // Force change detection
+        this.cdr.detectChanges();
+        
+        console.log('DEBUG: Card mutated directly in UI - immediate refresh');
+        console.log('DEBUG: Updated card:', this.cards[cardIndex]);
+        
+        // Clear focus to prevent accessibility warnings
+        if (document.activeElement && document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+      } else {
+        console.log('DEBUG: Card not found, reloading arrays');
+        await this.loadDeckAndCards(this.deck!.id);
+      }
+      
+      const toast = await this.loadingController.create({
+        message: 'Card updated successfully!',
+        duration: 2000
+      });
+      await toast.present();
+    } catch (error) {
+      console.error('Error updating translate card:', error);
+    }
+  }
+
+  async updateFillBlankCard(card: Card, data: any) {
+    try {
+      const updatedCard = {
+        ...card,
+        sentenceFront: data.sentenceFront,
+        missingWord: data.missingWord,
+        sentenceBack: data.sentenceBack
+      };
+      
+      console.log('DEBUG: Updating fill-blank card with data:', data);
+      await this.storageService.updateCard(updatedCard);
+      
+      // Force complete refresh by clearing arrays first
+      this.cards = [];
+      this.filteredCards = [];
+      
+      // Small delay to ensure arrays are cleared
+      setTimeout(async () => {
+        await this.loadDeckAndCards(this.deck!.id);
+        console.log('DEBUG: Cards reloaded, new count:', this.cards.length);
+        console.log('DEBUG: First card data:', this.cards[0]);
+      }, 100);
+      
+      const toast = await this.loadingController.create({
+        message: 'Card updated successfully!',
+        duration: 2000
+      });
+      await toast.present();
+    } catch (error) {
+      console.error('Error updating fill-blank card:', error);
+    }
   }
 }

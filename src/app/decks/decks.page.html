@@ -46,12 +46,42 @@
         
         <!-- Actions -->
         <div class="deck-actions-list" slot="end">
+          <!-- Study Button -->
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            color="primary"
+            (click)="startStudying(deck); $event.stopPropagation()">
+            <ion-icon name="play-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Add Card Button -->
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            color="success"
+            (click)="showAddCardOptions(deck); $event.stopPropagation()">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Manage Cards Button -->
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            color="medium"
+            (click)="navigateToCardManagement(deck); $event.stopPropagation()">
+            <ion-icon name="library-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Edit Deck Button -->
           <ion-button 
             fill="clear" 
             size="small" 
             (click)="editDeck(deck); $event.stopPropagation()">
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>
+          
+          <!-- Delete Deck Button -->
           <ion-button 
             fill="clear" 
             size="small" 

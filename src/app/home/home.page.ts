@@ -7,7 +7,7 @@ import { Card, CardResponse } from '../models/card.model';
 import { CardService } from '../services/card.service';
 import { TtsService } from '../services/tts.service';
 import { SessionStateService } from '../services/session-state.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { 
   arrowBack, 
@@ -44,7 +44,8 @@ export class HomePage implements OnInit, OnDestroy {
     private cardService: CardService,
     private ttsService: TtsService,
     private sessionStateService: SessionStateService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     // Register all required icons
     addIcons({
@@ -64,6 +65,14 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Handle query parameters for deck selection (from Study button)
+    this.route.queryParams.subscribe(params => {
+      if (params['deckId']) {
+        console.log('Study button: Starting session for deckId:', params['deckId']);
+        this.startStudySession(params['deckId']);
+      }
+    });
+
     // Subscribe to current card
     this.subscriptions.push(
       this.cardService.currentCard$.subscribe(card => {
@@ -101,8 +110,13 @@ export class HomePage implements OnInit, OnDestroy {
       textToSpeak = this.isFlipped 
         ? this.currentCard.sentenceBack || ''
         : this.currentCard.sentenceFront || '';
+      // Remove asterisks and replace underscores with longer pause
+      textToSpeak = textToSpeak.replace(/\*\*/g, '').replace(/_+/g, '........................ ');
     } else if (this.currentCard.type === 'picture-word') {
       textToSpeak = this.currentCard.spanishWord || '';
+    } else if (this.currentCard.type === 'translate') {
+      // For translate cards, speak the target language word
+      textToSpeak = this.currentCard.targetLanguageWord || '';
     }
     
     try {
@@ -155,6 +169,25 @@ export class HomePage implements OnInit, OnDestroy {
     this.sessionProgress = this.cardService.getSessionProgress();
     // Communicate session state to hide/show tab bar
     this.sessionStateService.setSessionActive(this.isSessionActive);
+  }
+
+  /**
+   * Start a study session for a specific deck (called from Study button)
+   */
+  async startStudySession(deckId: string) {
+    try {
+      console.log('Starting study session for deck:', deckId);
+      
+      // Start the study session using the card service
+      await this.cardService.startSession(deckId);
+      
+      // Update session status
+      this.updateSessionStatus();
+      
+      console.log('Study session started successfully');
+    } catch (error) {
+      console.error('Error starting study session:', error);
+    }
   }
 
   get highlightedBack(): string {
