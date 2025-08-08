@@ -42,11 +42,23 @@ export class StatsPage implements OnInit {
       // Load user stats
       this.userStats = await this.storageService.getStats();
       
-      // Load deck stats
-      const decks = await this.storageService.getAllDecks();
+      // Get selected language from settings (same as Decks page)
+      const selectedLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
+      console.log('DEBUG: Stats page filtering by language:', selectedLanguage);
+      
+      // Load all decks and filter by language
+      const allDecks = await this.storageService.getAllDecks();
+      console.log('DEBUG: Total decks before filtering:', allDecks.length);
+      
+      // Filter by selected language and remove duplicates
+      const uniqueDecks = this.removeDuplicateDecks(allDecks);
+      const filteredDecks = uniqueDecks.filter(deck => deck.language === selectedLanguage);
+      console.log('DEBUG: Decks after deduplication:', uniqueDecks.length);
+      console.log('DEBUG: Decks after language filtering:', filteredDecks.length);
+      
       this.deckStats = [];
       
-      for (const deck of decks) {
+      for (const deck of filteredDecks) {
         const cards = await this.storageService.getCardsByDeck(deck.id);
         const deckWithStats = {
           ...deck,
@@ -55,7 +67,7 @@ export class StatsPage implements OnInit {
         this.deckStats.push(deckWithStats);
       }
       
-      // Update overall user stats
+      // Update overall user stats (only for selected language)
       await this.updateUserStats();
       
     } catch (error) {
@@ -63,6 +75,21 @@ export class StatsPage implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private removeDuplicateDecks(decks: Deck[]): Deck[] {
+    // Remove duplicates based on deck ID
+    const uniqueDecksMap = new Map<string, Deck>();
+    
+    for (const deck of decks) {
+      if (!uniqueDecksMap.has(deck.id)) {
+        uniqueDecksMap.set(deck.id, deck);
+      } else {
+        console.log('DEBUG: Removing duplicate deck:', deck.name, 'ID:', deck.id);
+      }
+    }
+    
+    return Array.from(uniqueDecksMap.values());
   }
 
   private calculateDeckStats(cards: Card[]): DeckStats {
