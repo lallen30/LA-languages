@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { AlertController, ActionSheetController, ModalController, LoadingController } from '@ionic/angular';
+import { AlertController, ActionSheetController, ModalController, LoadingController, ToastController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +23,9 @@ import {
   closeCircle,
   close,
   language,
-  checkmark
+  checkmark,
+  downloadOutline,
+  cloudUploadOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -61,6 +63,7 @@ export class DecksPage implements OnInit {
     private modalController: ModalController,
     private loadingController: LoadingController,
     private actionSheetController: ActionSheetController,
+    private toastController: ToastController,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
@@ -78,7 +81,9 @@ export class DecksPage implements OnInit {
       closeCircle,
       close,
       language,
-      checkmark
+      checkmark,
+      downloadOutline,
+      cloudUploadOutline
     });
   }
 
@@ -771,6 +776,13 @@ export class DecksPage implements OnInit {
           }
         },
         {
+          text: 'Export Deck',
+          icon: 'download-outline',
+          handler: () => {
+            this.exportDeck(deck);
+          }
+        },
+        {
           text: 'Edit Deck',
           icon: 'create-outline',
           handler: () => {
@@ -988,5 +1000,195 @@ export class DecksPage implements OnInit {
       ]
     });
     await actionSheet.present();
+  }
+
+  /**
+   * Export a specific deck with all its cards
+   */
+  async exportDeck(deck: Deck) {
+    try {
+      console.log('Exporting deck:', deck.name);
+      
+      // Get all cards for this deck
+      const cards = await this.storageService.getCardsByDeck(deck.id);
+      
+      // Create export data structure
+      const exportData = {
+        deck: {
+          name: deck.name,
+          description: deck.description,
+          language: deck.language,
+          color: deck.color,
+          createdAt: deck.createdAt
+        },
+        cards: cards,
+        exportedAt: new Date().toISOString(),
+        version: '1.0'
+      };
+      
+      // Create and download file
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `deck-${deck.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      
+      URL.revokeObjectURL(url);
+      
+      // Show success message
+      const toast = await this.toastController.create({
+        message: `Deck "${deck.name}" exported successfully!`,
+        duration: 2000,
+        color: 'success'
+      });
+      await toast.present();
+      
+      console.log('Deck exported successfully:', deck.name);
+    } catch (error) {
+      console.error('Error exporting deck:', error);
+      
+      const toast = await this.toastController.create({
+        message: 'Export failed. Please try again.',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
+  /**
+   * Import a deck from a JSON file
+   */
+  async importDeck() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = async (event: any) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      try {
+        const text = await file.text();
+        const importData = JSON.parse(text);
+        
+        // Validate import data structure
+        if (!importData.deck || !importData.cards || !Array.isArray(importData.cards)) {
+          throw new Error('Invalid deck file format');
+        }
+        
+        const alert = await this.alertController.create({
+          header: 'Import Deck',
+          message: `Import deck "${importData.deck.name}" with ${importData.cards.length} cards?`,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Import',
+              handler: async () => {
+                await this.performDeckImport(importData);
+              }
+            }
+          ]
+        });
+        
+        await alert.present();
+      } catch (error) {
+        console.error('Import failed:', error);
+        
+        const toast = await this.toastController.create({
+          message: 'Import failed - invalid deck file',
+          duration: 2000,
+          color: 'danger'
+        });
+        await toast.present();
+      }
+    };
+    
+    input.click();
+  }
+
+  /**
+   * Perform the actual deck import process
+   */
+  private async performDeckImport(importData: any) {
+    try {
+      console.log('Importing deck:', importData.deck.name);
+      
+      // Create new deck with imported data
+      const newDeck: Deck = {
+        id: this.generateId(),
+        name: importData.deck.name,
+        description: importData.deck.description || '',
+        language: importData.deck.language || 'es-ES',
+        color: importData.deck.color || '#FF6B6B',
+        cardCount: 0,
+        newCards: 0,
+        reviewCards: 0,
+        masteredCards: 0,
+        createdAt: new Date(),
+        lastStudied: undefined
+      };
+      
+      // Save the deck
+      await this.storageService.saveDeck(newDeck);
+      console.log('Deck created:', newDeck.name);
+      
+      // Import all cards for this deck
+      let importedCards = 0;
+      for (const cardData of importData.cards) {
+        const newCard: Card = {
+          id: this.generateId(),
+          deckId: newDeck.id,
+          type: cardData.type,
+          spanishWord: cardData.spanishWord,
+          englishTranslation: cardData.englishTranslation,
+          targetLanguageWord: cardData.targetLanguageWord,
+          sentenceFront: cardData.sentenceFront,
+          sentenceBack: cardData.sentenceBack,
+          missingWord: cardData.missingWord,
+          imageUrls: cardData.imageUrls || [],
+          showWordFirst: cardData.showWordFirst,
+          showTargetLanguageFirst: cardData.showTargetLanguageFirst,
+          easeFactor: 2.5, // Reset learning progress
+          interval: 1,
+          repetitions: 0,
+          lastReviewed: new Date(),
+          nextReview: new Date(),
+          isNew: true,
+          skipCount: 0
+        };
+        
+        await this.cardService.addCard(newCard);
+        importedCards++;
+      }
+      
+      // Reload decks to show the imported deck
+      await this.loadDecks();
+      
+      // Show success message
+      const toast = await this.toastController.create({
+        message: `Deck "${newDeck.name}" imported with ${importedCards} cards!`,
+        duration: 3000,
+        color: 'success'
+      });
+      await toast.present();
+      
+      console.log('Deck import completed:', newDeck.name, 'with', importedCards, 'cards');
+    } catch (error) {
+      console.error('Error during deck import:', error);
+      
+      const toast = await this.toastController.create({
+        message: 'Import failed. Please try again.',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
   }
 }

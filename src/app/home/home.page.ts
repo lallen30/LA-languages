@@ -7,6 +7,7 @@ import { Card, CardResponse } from '../models/card.model';
 import { CardService } from '../services/card.service';
 import { TtsService } from '../services/tts.service';
 import { SessionStateService } from '../services/session-state.service';
+import { StorageService } from '../services/storage.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { 
@@ -37,6 +38,7 @@ export class HomePage implements OnInit, OnDestroy {
   showTranslation = false;
   sessionProgress = { completed: 0, total: 0, percentage: 0 };
   isSessionActive = false;
+  autoSpeakEnabled = false;
   
   private subscriptions: Subscription[] = [];
 
@@ -44,6 +46,7 @@ export class HomePage implements OnInit, OnDestroy {
     private cardService: CardService,
     private ttsService: TtsService,
     private sessionStateService: SessionStateService,
+    private storageService: StorageService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -64,7 +67,11 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Load auto-speak setting
+    this.autoSpeakEnabled = await this.storageService.getSetting('autoSpeak', false);
+    console.log('DEBUG: Loaded autoSpeakEnabled setting:', this.autoSpeakEnabled);
+
     // Handle query parameters for deck selection (from Study button)
     this.route.queryParams.subscribe(params => {
       if (params['deckId']) {
@@ -90,15 +97,41 @@ export class HomePage implements OnInit, OnDestroy {
       })
     );
 
+
+
     this.updateSessionStatus();
+  }
+
+  async ionViewWillEnter() {
+    // Refresh autoSpeak setting when user returns to this page (e.g., from Settings)
+    const newAutoSpeakSetting = await this.storageService.getSetting('autoSpeak', false);
+    if (newAutoSpeakSetting !== this.autoSpeakEnabled) {
+      this.autoSpeakEnabled = newAutoSpeakSetting;
+      console.log('DEBUG: AutoSpeak setting refreshed to:', this.autoSpeakEnabled);
+    }
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  flipCard() {
+  async flipCard() {
+    console.log('DEBUG: flipCard called, isFlipped before:', this.isFlipped);
     this.isFlipped = !this.isFlipped;
+    console.log('DEBUG: flipCard - isFlipped after:', this.isFlipped);
+    console.log('DEBUG: flipCard - autoSpeakEnabled:', this.autoSpeakEnabled);
+    
+    // Auto-play audio if enabled and card is flipped
+    if (this.autoSpeakEnabled && this.isFlipped) {
+      console.log('DEBUG: Auto-speak conditions met, will play audio in 300ms');
+      // Small delay to allow flip animation to complete
+      setTimeout(() => {
+        console.log('DEBUG: Auto-speak timeout triggered, calling speak()');
+        this.speak();
+      }, 300);
+    } else {
+      console.log('DEBUG: Auto-speak conditions NOT met - autoSpeakEnabled:', this.autoSpeakEnabled, 'isFlipped:', this.isFlipped);
+    }
   }
 
   async speak() {

@@ -287,19 +287,44 @@ export class CardManagementPage implements OnInit {
 
   async updateCardWithNewImages(cardData: Card, selectedImages: string[]) {
     try {
-      console.log('DEBUG: Updating card with new images:', selectedImages.length);
+      console.log('DEBUG: Updating picture-word card with text and image changes');
+      console.log('DEBUG: Text changes - Spanish:', cardData.spanishWord, 'English:', cardData.englishTranslation);
+      console.log('DEBUG: Image changes:', selectedImages.length, 'images selected');
       
-      // Update the card with new data and images
-      cardData.imageUrls = selectedImages;
+      // Create updated card object with both text and image changes
+      const updatedCard: Card = {
+        ...cardData,
+        imageUrls: selectedImages // Update images
+        // Text fields (spanishWord, englishTranslation) are already in cardData
+      };
       
-      await this.storageService.updateCard(cardData);
-      console.log('DEBUG: Card updated successfully, reloading cards...');
+      console.log('DEBUG: Final updated card object:', updatedCard);
       
-      // Reload the cards list
-      await this.loadDeckAndCards(this.deck!.id);
-      console.log('DEBUG: Cards reloaded successfully');
+      await this.storageService.updateCard(updatedCard);
+      console.log('DEBUG: Picture-word card updated successfully with all changes');
+      
+      // EXPERT SOLUTION: Direct object mutation for immediate UI update
+      const cardIndex = this.cards.findIndex(c => c.id === updatedCard.id);
+      if (cardIndex !== -1) {
+        // Directly mutate the existing card object properties
+        Object.assign(this.cards[cardIndex], updatedCard);
+        
+        // Update filtered cards if present
+        const filteredIndex = this.filteredCards.findIndex(c => c.id === updatedCard.id);
+        if (filteredIndex !== -1) {
+          Object.assign(this.filteredCards[filteredIndex], updatedCard);
+        }
+        
+        // Force change detection
+        this.cdr.detectChanges();
+        
+        console.log('DEBUG: Picture-word card updated directly in UI - immediate refresh');
+      } else {
+        console.log('DEBUG: Card not found in arrays, reloading');
+        await this.loadDeckAndCards(this.deck!.id);
+      }
     } catch (error) {
-      console.error('Error updating card with new images:', error);
+      console.error('Error updating picture-word card with new images:', error);
     }
   }
 
