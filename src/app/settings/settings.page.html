@@ -26,6 +26,128 @@
       </ion-card-content>
     </ion-card>
 
+    <!-- Color Customization -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="color-palette" style="margin-right: 8px;"></ion-icon>
+          Color Customization
+          <span class="mode-indicator">{{ settings.darkMode ? '(Dark Mode)' : '(Light Mode)' }}</span>
+        </ion-card-title>
+        <ion-card-subtitle>Customize colors for {{ settings.darkMode ? 'dark' : 'light' }} mode</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Primary Colors -->
+        <div class="color-section">
+          <h4>Primary Colors</h4>
+          <ion-item button (click)="openCustomColorPicker('primary', 'Primary Color', $event)">
+            <ion-label>Primary Color</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.primary"></div>
+              <span class="color-hex">{{ currentColorScheme.primary }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('secondary', 'Secondary Color', $event)">
+            <ion-label>Secondary Color</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.secondary"></div>
+              <span class="color-hex">{{ currentColorScheme.secondary }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('tertiary', 'Tertiary Color', $event)">
+            <ion-label>Tertiary Color</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.tertiary"></div>
+              <span class="color-hex">{{ currentColorScheme.tertiary }}</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <!-- Background Colors -->
+        <div class="color-section">
+          <h4>Backgrounds</h4>
+          <ion-item button (click)="openCustomColorPicker('background', 'Page Background', $event)">
+            <ion-label>Page Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.background"></div>
+              <span class="color-hex">{{ currentColorScheme.background }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('cardBackground', 'Card Background', $event)">
+            <ion-label>Card Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.cardBackground"></div>
+              <span class="color-hex">{{ currentColorScheme.cardBackground }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('headerBackground', 'Header Background', $event)">
+            <ion-label>Header Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.headerBackground"></div>
+              <span class="color-hex">{{ currentColorScheme.headerBackground }}</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <!-- Text Colors -->
+        <div class="color-section">
+          <h4>Text Colors</h4>
+          <ion-item button (click)="openCustomColorPicker('textPrimary', 'Primary Text', $event)">
+            <ion-label>Primary Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.textPrimary"></div>
+              <span class="color-hex">{{ currentColorScheme.textPrimary }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('textSecondary', 'Secondary Text', $event)">
+            <ion-label>Secondary Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.textSecondary"></div>
+              <span class="color-hex">{{ currentColorScheme.textSecondary }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('headerText', 'Header Text', $event)">
+            <ion-label>Header Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.headerText"></div>
+              <span class="color-hex">{{ currentColorScheme.headerText }}</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <!-- Button Colors -->
+        <div class="color-section">
+          <h4>Button Colors</h4>
+          <ion-item button (click)="openCustomColorPicker('buttonBackground', 'Button Background', $event)">
+            <ion-label>Button Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.buttonBackground"></div>
+              <span class="color-hex">{{ currentColorScheme.buttonBackground }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('buttonText', 'Button Text', $event)">
+            <ion-label>Button Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.buttonText"></div>
+              <span class="color-hex">{{ currentColorScheme.buttonText }}</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="color-actions">
+          <ion-button expand="block" fill="outline" (click)="resetColors()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Reset to Default
+          </ion-button>
+          <ion-button expand="block" (click)="previewColors()">
+            <ion-icon name="eye" slot="start"></ion-icon>
+            Preview Changes
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
     <!-- Text-to-Speech -->
     <ion-card>
       <ion-card-header>

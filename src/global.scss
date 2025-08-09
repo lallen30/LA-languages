@@ -41,13 +41,91 @@
  * -------------------------------------------
  */
 
+// Color picker modal centering - using Ionic CSS variables
+ion-modal.color-picker-modal-centered {
+  --width: 600px;
+  --max-width: 95vw;
+  --height: auto;
+  --max-height: 90vh;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  
+  // Use Ionic's positioning variables
+  --inset-inline-start: 50%;
+  --inset-block-start: 50%;
+  --transform: translate(-50%, -50%);
+  
+  // Ensure flexbox centering
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+// Global CSS to ensure primary color is applied to all relevant elements
+ion-icon[name="moon"] {
+  color: var(--ion-color-primary) !important;
+  
+  // Target the SVG inside the icon
+  svg {
+    fill: var(--ion-color-primary) !important;
+    color: var(--ion-color-primary) !important;
+  }
+  
+  // Target any paths inside the SVG
+  svg path {
+    fill: var(--ion-color-primary) !important;
+    stroke: var(--ion-color-primary) !important;
+  }
+}
+
+ion-icon[slot="start"] {
+  color: var(--ion-color-primary) !important;
+  
+  // Target the SVG inside the icon
+  svg {
+    fill: var(--ion-color-primary) !important;
+    color: var(--ion-color-primary) !important;
+  }
+  
+  // Target any paths inside the SVG
+  svg path {
+    fill: var(--ion-color-primary) !important;
+    stroke: var(--ion-color-primary) !important;
+  }
+}
+
+ion-toggle {
+  --color-checked: var(--ion-color-primary) !important;
+  --handle-background-checked: var(--ion-color-primary) !important;
+  --background-checked: rgba(var(--ion-color-primary-rgb), 0.5) !important;
+}
+
+// Ensure buttons use primary color
+ion-button[color="primary"] {
+  --color: var(--ion-color-primary) !important;
+  --background: var(--ion-color-primary) !important;
+}
+
+// Settings page specific overrides
+app-settings {
+  ion-icon[name="moon"] {
+    color: var(--ion-color-primary) !important;
+  }
+  
+  ion-toggle {
+    --color-checked: var(--ion-color-primary) !important;
+    --handle-background-checked: var(--ion-color-primary) !important;
+  }
+}
+
 body.dark {
-  --ion-color-primary: #428cff;
-  --ion-color-primary-rgb: 66,140,255;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255,255,255;
-  --ion-color-primary-shade: #3a7be0;
-  --ion-color-primary-tint: #5598ff;
+  // Primary color is now dynamically set by the settings page
+  // --ion-color-primary: #428cff;
+  // --ion-color-primary-rgb: 66,140,255;
+  // --ion-color-primary-contrast: #ffffff;
+  // --ion-color-primary-contrast-rgb: 255,255,255;
+  // --ion-color-primary-shade: #3a7be0;
+  // --ion-color-primary-tint: #5598ff;
 
   --ion-color-secondary: #50c8ff;
   --ion-color-secondary-rgb: 80,200,255;

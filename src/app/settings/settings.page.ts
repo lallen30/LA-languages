@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController, ToastController } from '@ionic/angular';
-import { StorageService } from '../services/storage.service';
+import { IonicModule, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import { ColorPickerPopoverComponent } from '../components/color-picker-popover.component';
+import { ColorPickerOverlayService } from '../services/color-picker-overlay.service';
 import { TtsService } from '../services/tts.service';
 import { ImageService } from '../services/image.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-settings',
@@ -24,6 +26,38 @@ export class SettingsPage implements OnInit {
     studyReminders: true,
     maxCardsPerSession: 20
   };
+
+  // Color schemes for light and dark modes
+  lightColorScheme = {
+    primary: '#3880ff',
+    secondary: '#3dc2ff',
+    tertiary: '#5260ff',
+    background: '#ffffff',
+    cardBackground: '#f8f9fa',
+    headerBackground: '#ffffff',
+    textPrimary: '#000000',
+    textSecondary: '#666666',
+    headerText: '#000000',
+    buttonBackground: '#3880ff',
+    buttonText: '#ffffff'
+  };
+
+  darkColorScheme = {
+    primary: '#428cff',
+    secondary: '#50c8ff',
+    tertiary: '#6370ff',
+    background: '#121212',
+    cardBackground: '#1e1e1e',
+    headerBackground: '#1f1f1f',
+    textPrimary: '#ffffff',
+    textSecondary: '#b0b0b0',
+    headerText: '#ffffff',
+    buttonBackground: '#428cff',
+    buttonText: '#ffffff'
+  };
+
+  // Current active color scheme (switches based on dark mode)
+  currentColorScheme = { ...this.lightColorScheme };
 
   availableLanguages = [
     { code: 'es-ES', name: 'Spanish' },
@@ -45,7 +79,10 @@ export class SettingsPage implements OnInit {
     private ttsService: TtsService,
     private imageService: ImageService,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private modalController: ModalController,
+    private popoverController: PopoverController,
+    private colorPickerOverlayService: ColorPickerOverlayService
   ) {}
 
   async ngOnInit() {
@@ -63,8 +100,12 @@ export class SettingsPage implements OnInit {
       this.settings.studyReminders = await this.storageService.getSetting('studyReminders', true);
       this.settings.maxCardsPerSession = await this.storageService.getSetting('maxCardsPerSession', 20);
 
-      // Apply dark mode
+      // Load custom color schemes
+      await this.loadColorSchemes();
+      
+      // Apply dark mode and colors
       this.applyDarkMode();
+      this.switchColorScheme();
       
       // Update TTS settings
       this.ttsService.setLanguage(this.settings.ttsLanguage);
@@ -112,6 +153,8 @@ export class SettingsPage implements OnInit {
 
   onDarkModeChange() {
     this.saveSetting('darkMode', this.settings.darkMode);
+    this.applyDarkMode();
+    this.switchColorScheme();
   }
 
   onTtsLanguageChange() {
@@ -335,5 +378,370 @@ export class SettingsPage implements OnInit {
   getCacheSize(): string {
     const size = this.imageService.getCacheSize();
     return `${size} images cached`;
+  }
+
+  // Color customization methods
+  async loadColorSchemes() {
+    try {
+      // Load custom light mode colors
+      const savedLightColors = await this.storageService.getSetting('lightColorScheme', null);
+      if (savedLightColors) {
+        this.lightColorScheme = { ...this.lightColorScheme, ...savedLightColors };
+      }
+
+      // Load custom dark mode colors
+      const savedDarkColors = await this.storageService.getSetting('darkColorScheme', null);
+      if (savedDarkColors) {
+        this.darkColorScheme = { ...this.darkColorScheme, ...savedDarkColors };
+      }
+    } catch (error) {
+      console.error('Error loading color schemes:', error);
+    }
+  }
+
+  switchColorScheme() {
+    // Switch between light and dark color schemes
+    this.currentColorScheme = this.settings.darkMode 
+      ? { ...this.darkColorScheme }
+      : { ...this.lightColorScheme };
+    
+    console.log('DEBUG: Switched to', this.settings.darkMode ? 'dark' : 'light', 'color scheme');
+    this.applyColors();
+  }
+
+  onColorChange(colorKey: string, event: any) {
+    const newColor = event.target.value;
+    (this.currentColorScheme as any)[colorKey] = newColor;
+    
+    // Update the appropriate mode's color scheme
+    if (this.settings.darkMode) {
+      (this.darkColorScheme as any)[colorKey] = newColor;
+      this.saveSetting('darkColorScheme', this.darkColorScheme);
+    } else {
+      (this.lightColorScheme as any)[colorKey] = newColor;
+      this.saveSetting('lightColorScheme', this.lightColorScheme);
+    }
+    
+    this.applyColors();
+  }
+
+  onHexInput(colorKey: string, event: any) {
+    let hexValue = event.target.value;
+    
+    // Auto-add # if missing
+    if (hexValue && !hexValue.startsWith('#')) {
+      hexValue = '#' + hexValue;
+      event.target.value = hexValue;
+    }
+    
+    // Validate hex color format (3 or 6 characters after #)
+    if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/i.test(hexValue)) {
+      // Convert 3-digit hex to 6-digit
+      if (hexValue.length === 4) {
+        hexValue = '#' + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
+        event.target.value = hexValue;
+      }
+      
+      (this.currentColorScheme as any)[colorKey] = hexValue;
+      
+      // Update the appropriate mode's color scheme
+      if (this.settings.darkMode) {
+        (this.darkColorScheme as any)[colorKey] = hexValue;
+        this.saveSetting('darkColorScheme', this.darkColorScheme);
+      } else {
+        (this.lightColorScheme as any)[colorKey] = hexValue;
+        this.saveSetting('lightColorScheme', this.lightColorScheme);
+      }
+      
+      this.applyColors();
+    }
+  }
+
+  applyColors() {
+    // Apply colors to CSS custom properties
+    const root = document.documentElement;
+    
+    // Primary colors with RGB variants for transparency
+    const primaryRgb = this.hexToRgb(this.currentColorScheme.primary);
+    const secondaryRgb = this.hexToRgb(this.currentColorScheme.secondary);
+    const tertiaryRgb = this.hexToRgb(this.currentColorScheme.tertiary);
+    
+    // Primary color variants
+    root.style.setProperty('--ion-color-primary', this.currentColorScheme.primary);
+    root.style.setProperty('--ion-color-primary-rgb', primaryRgb);
+    root.style.setProperty('--ion-color-primary-contrast', '#ffffff');
+    root.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
+    root.style.setProperty('--ion-color-primary-shade', this.darkenColor(this.currentColorScheme.primary, 0.12));
+    root.style.setProperty('--ion-color-primary-tint', this.lightenColor(this.currentColorScheme.primary, 0.1));
+    
+    // Debug: Log the primary color being applied
+    console.log('DEBUG: Setting --ion-color-primary to:', this.currentColorScheme.primary);
+    console.log('DEBUG: Current CSS variable value:', getComputedStyle(root).getPropertyValue('--ion-color-primary'));
+    
+    // Force immediate update of all primary-colored elements
+    this.forceElementUpdate();
+    
+    // Secondary color variants
+    root.style.setProperty('--ion-color-secondary', this.currentColorScheme.secondary);
+    root.style.setProperty('--ion-color-secondary-rgb', secondaryRgb);
+    root.style.setProperty('--ion-color-secondary-contrast', '#ffffff');
+    root.style.setProperty('--ion-color-secondary-contrast-rgb', '255,255,255');
+    root.style.setProperty('--ion-color-secondary-shade', this.darkenColor(this.currentColorScheme.secondary, 0.12));
+    root.style.setProperty('--ion-color-secondary-tint', this.lightenColor(this.currentColorScheme.secondary, 0.1));
+    
+    // Tertiary color variants
+    root.style.setProperty('--ion-color-tertiary', this.currentColorScheme.tertiary);
+    root.style.setProperty('--ion-color-tertiary-rgb', tertiaryRgb);
+    root.style.setProperty('--ion-color-tertiary-contrast', '#ffffff');
+    root.style.setProperty('--ion-color-tertiary-contrast-rgb', '255,255,255');
+    root.style.setProperty('--ion-color-tertiary-shade', this.darkenColor(this.currentColorScheme.tertiary, 0.12));
+    root.style.setProperty('--ion-color-tertiary-tint', this.lightenColor(this.currentColorScheme.tertiary, 0.1));
+    
+    // Background colors
+    root.style.setProperty('--ion-background-color', this.currentColorScheme.background);
+    root.style.setProperty('--ion-background-color-rgb', this.hexToRgb(this.currentColorScheme.background));
+    root.style.setProperty('--ion-card-background', this.currentColorScheme.cardBackground);
+    root.style.setProperty('--ion-item-background', this.currentColorScheme.cardBackground);
+    root.style.setProperty('--ion-toolbar-background', this.currentColorScheme.headerBackground);
+    root.style.setProperty('--ion-tab-bar-background', this.currentColorScheme.headerBackground);
+    
+    // Text colors - map to proper Ionic text color variables
+    root.style.setProperty('--ion-text-color', this.currentColorScheme.textPrimary);
+    root.style.setProperty('--ion-text-color-rgb', this.hexToRgb(this.currentColorScheme.textPrimary));
+    
+    // Secondary text color - use a custom property that doesn't conflict with step variables
+    root.style.setProperty('--ion-color-medium', this.currentColorScheme.textSecondary);
+    root.style.setProperty('--ion-color-medium-rgb', this.hexToRgb(this.currentColorScheme.textSecondary));
+    root.style.setProperty('--ion-color-medium-contrast', '#ffffff');
+    root.style.setProperty('--ion-color-medium-contrast-rgb', '255,255,255');
+    root.style.setProperty('--ion-color-medium-shade', this.darkenColor(this.currentColorScheme.textSecondary, 0.12));
+    root.style.setProperty('--ion-color-medium-tint', this.lightenColor(this.currentColorScheme.textSecondary, 0.1));
+    
+    // Header text colors
+    root.style.setProperty('--ion-toolbar-color', this.currentColorScheme.headerText);
+    root.style.setProperty('--ion-tab-bar-color', this.currentColorScheme.headerText);
+    
+    // Button colors - create custom button color variables
+    root.style.setProperty('--ion-color-button', this.currentColorScheme.buttonBackground);
+    root.style.setProperty('--ion-color-button-rgb', this.hexToRgb(this.currentColorScheme.buttonBackground));
+    root.style.setProperty('--ion-color-button-contrast', this.currentColorScheme.buttonText);
+    root.style.setProperty('--ion-color-button-contrast-rgb', this.hexToRgb(this.currentColorScheme.buttonText));
+    root.style.setProperty('--ion-color-button-shade', this.darkenColor(this.currentColorScheme.buttonBackground, 0.12));
+    root.style.setProperty('--ion-color-button-tint', this.lightenColor(this.currentColorScheme.buttonBackground, 0.1));
+    
+    console.log('DEBUG: Applied comprehensive custom colors to CSS variables');
+  }
+
+  // Force immediate update of all elements that use CSS variables
+  forceElementUpdate() {
+    // Trigger a reflow to ensure CSS variable changes are applied immediately
+    document.documentElement.offsetHeight;
+    
+    // Force update of all moon icons specifically
+    const moonIcons = document.querySelectorAll('ion-icon[name="moon"]');
+    moonIcons.forEach(icon => {
+      const svgs = icon.querySelectorAll('svg, svg path');
+      svgs.forEach(svg => {
+        (svg as HTMLElement).style.fill = this.currentColorScheme.primary;
+        (svg as HTMLElement).style.color = this.currentColorScheme.primary;
+      });
+    });
+    
+    // Also ensure Angular change detection runs
+    setTimeout(() => {
+      // Force Angular to check for changes
+      if ((this as any).cdr) {
+        (this as any).cdr.detectChanges();
+      }
+    }, 0);
+  }
+
+  // Helper method to convert hex to RGB
+  hexToRgb(hex: string): string {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+      const r = parseInt(result[1], 16);
+      const g = parseInt(result[2], 16);
+      const b = parseInt(result[3], 16);
+      return `${r},${g},${b}`;
+    }
+    return '0,0,0';
+  }
+
+  // Helper method to darken a color
+  darkenColor(hex: string, amount: number): string {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+      const r = Math.max(0, Math.floor(parseInt(result[1], 16) * (1 - amount)));
+      const g = Math.max(0, Math.floor(parseInt(result[2], 16) * (1 - amount)));
+      const b = Math.max(0, Math.floor(parseInt(result[3], 16) * (1 - amount)));
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+    return hex;
+  }
+
+  // Helper method to lighten a color
+  lightenColor(hex: string, amount: number): string {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (result) {
+      const r = Math.min(255, Math.floor(parseInt(result[1], 16) + (255 - parseInt(result[1], 16)) * amount));
+      const g = Math.min(255, Math.floor(parseInt(result[2], 16) + (255 - parseInt(result[2], 16)) * amount));
+      const b = Math.min(255, Math.floor(parseInt(result[3], 16) + (255 - parseInt(result[3], 16)) * amount));
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+    return hex;
+  }
+
+  resetColors() {
+    // Reset to default colors
+    if (this.settings.darkMode) {
+      this.darkColorScheme = {
+        primary: '#428cff',
+        secondary: '#50c8ff',
+        tertiary: '#6370ff',
+        background: '#121212',
+        cardBackground: '#1e1e1e',
+        headerBackground: '#1f1f1f',
+        textPrimary: '#ffffff',
+        textSecondary: '#b0b0b0',
+        headerText: '#ffffff',
+        buttonBackground: '#428cff',
+        buttonText: '#ffffff'
+      };
+      this.saveSetting('darkColorScheme', this.darkColorScheme);
+    } else {
+      this.lightColorScheme = {
+        primary: '#3880ff',
+        secondary: '#3dc2ff',
+        tertiary: '#5260ff',
+        background: '#ffffff',
+        cardBackground: '#f8f9fa',
+        headerBackground: '#ffffff',
+        textPrimary: '#000000',
+        textSecondary: '#666666',
+        headerText: '#000000',
+        buttonBackground: '#3880ff',
+        buttonText: '#ffffff'
+      };
+      this.saveSetting('lightColorScheme', this.lightColorScheme);
+    }
+    
+    this.switchColorScheme();
+    this.showToast('Colors reset to default!', 'success');
+  }
+
+  async previewColors() {
+    this.applyColors();
+    this.showToast('Color preview applied!', 'success');
+  }
+
+  async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {
+    const currentColor = (this.currentColorScheme as any)[colorKey];
+    
+    try {
+      const result = await this.colorPickerOverlayService.open(colorName, currentColor);
+      
+      if (result.saved && result.color) {
+        const newColor = result.color;
+        (this.currentColorScheme as any)[colorKey] = newColor;
+        
+        // Update the appropriate mode's color scheme
+        if (this.settings.darkMode) {
+          (this.darkColorScheme as any)[colorKey] = newColor;
+          this.saveSetting('darkColorScheme', this.darkColorScheme);
+        } else {
+          (this.lightColorScheme as any)[colorKey] = newColor;
+          this.saveSetting('lightColorScheme', this.lightColorScheme);
+        }
+        
+        // Apply colors immediately
+        this.applyColors();
+        this.showToast(`${colorName} updated to ${newColor}`, 'success');
+      }
+    } catch (error) {
+      console.error('Error opening color picker:', error);
+      this.showToast('Error opening color picker', 'danger');
+    }
+  }
+
+  openNativeColorPickerWithSave(colorKey: string, colorName: string, currentColor: string) {
+    // Create temporary hidden color input
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.value = currentColor;
+    colorInput.style.position = 'absolute';
+    colorInput.style.left = '-9999px';
+    document.body.appendChild(colorInput);
+
+    colorInput.addEventListener('change', async () => {
+      const selectedColor = colorInput.value;
+      
+      // Show confirmation alert with save button
+      const confirmAlert = await this.alertController.create({
+        header: colorName,
+        message: `Selected color: ${selectedColor}`,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'Save',
+            handler: () => {
+              (this.currentColorScheme as any)[colorKey] = selectedColor;
+              this.onColorChange(colorKey, { target: { value: selectedColor } });
+              this.showToast(`${colorName} saved: ${selectedColor}`, 'success');
+            }
+          }
+        ]
+      });
+      
+      await confirmAlert.present();
+      document.body.removeChild(colorInput);
+    });
+
+    // Trigger the color picker
+    colorInput.click();
+  }
+
+  triggerNativeColorPicker(colorKey: string, colorName: string) {
+    // Create a temporary color input
+    const tempInput = document.createElement('input');
+    tempInput.type = 'color';
+    tempInput.value = (this.currentColorScheme as any)[colorKey];
+    tempInput.style.opacity = '0';
+    tempInput.style.position = 'absolute';
+    tempInput.style.pointerEvents = 'none';
+    document.body.appendChild(tempInput);
+
+    tempInput.addEventListener('change', (e) => {
+      const newColor = (e.target as HTMLInputElement).value;
+      (this.currentColorScheme as any)[colorKey] = newColor;
+      this.onColorChange(colorKey, { target: { value: newColor } });
+      this.showToast(`${colorName} updated to ${newColor}`, 'success');
+      document.body.removeChild(tempInput);
+    });
+
+    tempInput.click();
+  }
+
+  getPresetColors(): string[] {
+    // Curated preset colors for quick selection
+    return [
+      // Blues
+      '#3880ff', '#428cff', '#0066cc', '#1e90ff', '#4169e1',
+      // Greens  
+      '#2dd36f', '#10dc60', '#00c851', '#4caf50', '#8bc34a',
+      // Purples
+      '#6a64ff', '#5260ff', '#9c27b0', '#673ab7', '#3f51b5',
+      // Reds
+      '#eb445a', '#f04141', '#e91e63', '#f44336', '#ff5722',
+      // Oranges
+      '#ffc409', '#ffce00', '#ff9800', '#ff6f00', '#ff5722',
+      // Teals
+      '#2dd36f', '#00d4aa', '#009688', '#26a69a', '#4db6ac',
+      // Grays (for text/backgrounds)
+      '#92949c', '#666666', '#333333', '#1a1a1a', '#f8f9fa'
+    ];
   }
 }

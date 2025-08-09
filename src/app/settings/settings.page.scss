@@ -1,5 +1,6 @@
 .settings-container {
   padding: 16px;
+  padding-bottom: 100px; // Extra space for tab bar
 }
 
 ion-card {
@@ -25,7 +26,18 @@ ion-item {
   
   ion-icon[slot="start"] {
     margin-right: 16px;
-    color: var(--ion-color-primary);
+    color: var(--ion-color-primary) !important;
+  }
+  
+  // Specifically target the moon icon to ensure it uses primary color
+  ion-icon[name="moon"] {
+    color: var(--ion-color-primary) !important;
+  }
+  
+  // Also target any toggle switches to use primary color
+  ion-toggle {
+    --color-checked: var(--ion-color-primary) !important;
+    --handle-background-checked: var(--ion-color-primary) !important;
   }
 }
 
@@ -47,6 +59,72 @@ ion-input {
     --border-radius: 12px;
     margin: 0;
   }
+}
+
+// Color picker styles
+.color-preview-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid var(--ion-color-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--ion-color-primary);
+  }
+}
+
+.color-hex {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  font-weight: 500;
+  min-width: 70px;
+}
+
+// Color picker modal styles
+:global(ion-modal.color-picker-modal) {
+  --width: 600px;
+  --max-width: 95vw;
+  --height: auto;
+  --max-height: 90vh;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+:global(ion-modal.color-picker-modal .modal-wrapper) {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 600px !important;
+  max-width: 95vw !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  border-radius: 16px !important;
+  margin: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+:global(ion-modal.color-picker-modal) {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:global(ion-modal.color-picker-modal ion-content) {
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
 }
 
 // Responsive design
@@ -75,4 +153,164 @@ ion-input {
 // Alternative approach using host-context
 :host-context(body.dark) ::ng-deep ion-card {
   --background: var(--ion-color-primary);
+}
+
+// Enhanced color picker styling
+.enhanced-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-preview {
+  width: 50px;
+  height: 35px;
+  border: 2px solid var(--ion-color-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  // Add a subtle pattern to show transparency
+  background-image: 
+    linear-gradient(45deg, #ccc 25%, transparent 25%), 
+    linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #ccc 75%), 
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+.color-value {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+  background: var(--ion-color-light);
+  padding: 4px 8px;
+  border-radius: 4px;
+  min-width: 70px;
+  text-align: center;
+}
+
+.hex-input {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  background: var(--ion-color-light);
+  border: 1px solid var(--ion-color-medium);
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 70px;
+  text-align: center;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--ion-color-primary);
+    background: var(--ion-color-light-tint);
+    box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.2);
+  }
+  
+  &:hover {
+    border-color: var(--ion-color-primary);
+  }
+}
+
+.enhanced-color-input {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--ion-color-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+  }
+  
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+  
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+  
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  // Hide the default color input appearance
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+  
+  &::-moz-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+}
+
+.color-preview-button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--ion-color-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  background-image: 
+    linear-gradient(45deg, #ccc 25%, transparent 25%), 
+    linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #ccc 75%), 
+    linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+  
+  &:hover {
+    transform: scale(1.05);
+    border-color: var(--ion-color-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
 }
