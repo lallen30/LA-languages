@@ -60,6 +60,22 @@
             </div>
           </div>
 
+          <!-- Metric Explanations -->
+          <div class="metric-explanations">
+            <ion-text color="medium">
+              <h4>What do these metrics mean?</h4>
+              <div class="explanation-item">
+                <strong>Mastered:</strong> Cards you've reviewed successfully 3+ times
+              </div>
+              <div class="explanation-item">
+                <strong>Day Streak:</strong> Consecutive days you've studied (resets if you skip a day)
+              </div>
+              <div class="explanation-item">
+                <strong>Accuracy:</strong> Percentage of reviewed cards you got right
+              </div>
+            </ion-text>
+          </div>
+
           <div class="last-review">
             <ion-text color="medium">
               Last review: {{ formatLastReview() }}

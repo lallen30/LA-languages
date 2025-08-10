@@ -272,19 +272,227 @@ body.dark {
 }
 
 /*
- * Custom Card Background Colors for Settings Page
+ * Global Card Background Colors
  * -------------------------------------------
  */
 
-// Light mode - default card background
-app-settings ion-card {
-  --background: var(--ion-color-step-50) !important;
-  background: var(--ion-color-step-50) !important;
+// Apply card background color to all cards throughout the app
+ion-card {
+  --background: var(--ion-card-background) !important;
+  background: var(--ion-card-background) !important;
+  background-color: var(--ion-card-background) !important;
 }
 
-// Dark mode - primary color card background
-body.dark app-settings ion-card {
-  --background: var(--ion-color-primary) !important;
-  background: var(--ion-color-primary) !important;
-  background-color: var(--ion-color-primary) !important;
+/*
+ * Custom Color Variables Application
+ * -------------------------------------------
+ */
+
+// Apply card text color to card content
+ion-card-content {
+  color: var(--app-card-text-color) !important;
+}
+
+// Apply footer colors to tab bar and footer elements
+// Temporarily commented out to fix tab bar visibility issue
+/*
+ion-tab-bar {
+  --background: var(--app-footer-background, var(--ion-toolbar-background, var(--ion-background-color))) !important;
+  --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
+}
+
+// Apply footer text color to tab buttons
+ion-tab-button {
+  --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
+  --color-selected: var(--app-footer-text-color, var(--ion-color-primary)) !important;
+}
+*/
+
+// Apply card text color to card titles and content
+ion-card-title, ion-card-subtitle {
+  color: var(--app-card-text-color) !important;
+}
+
+// Apply button colors from settings - use primary color as fallback if button colors aren't set
+ion-button,
+ion-button.button,
+ion-button.button-solid {
+  --background: var(--ion-color-button, var(--ion-color-primary)) !important;
+  --color: var(--ion-color-button-contrast, #ffffff) !important;
+  --background-activated: var(--ion-color-button-shade, var(--ion-color-primary-shade)) !important;
+  --background-focused: var(--ion-color-button-tint, var(--ion-color-primary-tint)) !important;
+  --background-hover: var(--ion-color-button-tint, var(--ion-color-primary-tint)) !important;
+  
+  // Also apply to the native button element inside
+  .button-native {
+    background: var(--ion-color-button, var(--ion-color-primary)) !important;
+    color: var(--ion-color-button-contrast, #ffffff) !important;
+  }
+  
+  // Make icons inside buttons match the button text color
+  ion-icon {
+    color: var(--ion-color-button-contrast, #ffffff) !important;
+  }
+}
+
+// Apply footer background to any footer elements
+.footer, ion-footer {
+  --background: var(--app-footer-background) !important;
+  background: var(--app-footer-background) !important;
+  color: var(--app-footer-text-color) !important;
+}
+
+// Apply item colors to all ion-item elements
+ion-item {
+  --background: var(--app-item-background) !important;
+  --color: var(--app-item-text-color) !important;
+  background: var(--app-item-background) !important;
+  color: var(--app-item-text-color) !important;
+}
+
+// Apply item text color to item labels and content
+ion-label {
+  color: var(--app-item-text-color) !important;
+}
+
+// Tab bar visibility fix
+ion-tab-bar {
+  --color: var(--ion-text-color) !important;
+  --color-selected: var(--ion-color-primary) !important;
+}
+
+// Review Action Bar - Dynamic colors using CSS variables
+.review-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+  
+  .review-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 8px;
+    min-height: 70px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    
+    ion-icon {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+    
+    .tab-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    // Dynamic color variants using CSS variables
+    &.hard-tab {
+      background: var(--review-hard-bg, #eb445a);
+      
+      ion-icon, .tab-label {
+        color: var(--review-hard-text, #ffffff);
+      }
+    }
+    
+    &.good-tab {
+      background: var(--review-good-bg, #ffc409);
+      
+      ion-icon, .tab-label {
+        color: var(--review-good-text, #000000);
+      }
+    }
+    
+    &.easy-tab {
+      background: var(--review-easy-bg, #2dd36f);
+      
+      ion-icon, .tab-label {
+        color: var(--review-easy-text, #ffffff);
+      }
+    }
+    
+    &.copy-tab {
+      background: var(--review-copy-bg, #92949c);
+      
+      ion-icon, .tab-label {
+        color: var(--review-copy-text, #ffffff);
+      }
+    }
+    
+    // Hover/active states
+    &:hover, &:active {
+      opacity: 0.8;
+    }
+    
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+// Apply secondary color to textarea text
+ion-textarea {
+  --color: var(--ion-color-medium) !important;
+  color: var(--ion-color-medium) !important;
+}
+
+// Apply secondary color to select text
+ion-select {
+  --color: var(--ion-color-medium) !important;
+  color: var(--ion-color-medium) !important;
+}
+
+// Apply secondary text color to native HTML input elements (used in alerts, modals, etc.)
+// Be more specific to avoid affecting tab bar and other UI elements
+ion-alert input[type="text"], 
+ion-alert input[type="email"], 
+ion-alert input[type="password"], 
+ion-alert input[type="number"], 
+ion-alert input[type="search"],
+ion-modal input[type="text"], 
+ion-modal input[type="email"], 
+ion-modal input[type="password"], 
+ion-modal input[type="number"], 
+ion-modal input[type="search"],
+ion-modal textarea,
+ion-alert textarea {
+  color: var(--ion-text-color) !important;
+}
+
+// Specifically target Ionic alert inputs
+.alert-input {
+  color: var(--ion-text-color) !important;
+  
+  // Style placeholder text with contrasting color
+  &::placeholder {
+    color: var(--ion-color-medium, #000000) !important;
+    opacity: 0.6;
+  }
+}
+
+// Style placeholder text for all targeted input elements
+ion-alert input[type="text"]::placeholder, 
+ion-alert input[type="email"]::placeholder, 
+ion-alert input[type="password"]::placeholder, 
+ion-alert input[type="number"]::placeholder, 
+ion-alert input[type="search"]::placeholder,
+ion-modal input[type="text"]::placeholder, 
+ion-modal input[type="email"]::placeholder, 
+ion-modal input[type="password"]::placeholder, 
+ion-modal input[type="number"]::placeholder, 
+ion-modal input[type="search"]::placeholder,
+ion-modal textarea::placeholder,
+ion-alert textarea::placeholder {
+  color: var(--ion-color-medium, #000000) !important;
+  opacity: 0.6;
 }

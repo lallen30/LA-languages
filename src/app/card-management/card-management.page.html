@@ -6,6 +6,11 @@
       </ion-button>
     </ion-buttons>
     <ion-title>{{ deck?.name || 'Manage Cards' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="resetAllCardsProgress()" [disabled]="cards.length === 0">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

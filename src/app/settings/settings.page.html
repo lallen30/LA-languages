@@ -14,10 +14,13 @@
   <div class="settings-container">
     <!-- Appearance -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Appearance</ion-card-title>
+      <ion-card-header (click)="toggleCard('appearance')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('appearance') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          Appearance
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('appearance')">
         <ion-item>
           <ion-icon name="moon" slot="start"></ion-icon>
           <ion-label>Dark Mode</ion-label>
@@ -28,15 +31,16 @@
 
     <!-- Color Customization -->
     <ion-card>
-      <ion-card-header>
+      <ion-card-header (click)="toggleCard('color-customization')" class="clickable-header">
         <ion-card-title>
-          <ion-icon name="color-palette" style="margin-right: 8px;"></ion-icon>
+          <ion-icon [name]="isCardExpanded('color-customization') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          <ion-icon name="color-palette" style="margin-left: 8px; margin-right: 8px;"></ion-icon>
           Color Customization
           <span class="mode-indicator">{{ settings.darkMode ? '(Dark Mode)' : '(Light Mode)' }}</span>
         </ion-card-title>
         <ion-card-subtitle>Customize colors for {{ settings.darkMode ? 'dark' : 'light' }} mode</ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('color-customization')">
         <!-- Primary Colors -->
         <div class="color-section">
           <h4>Primary Colors</h4>
@@ -44,47 +48,41 @@
             <ion-label>Primary Color</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.primary"></div>
-              <span class="color-hex">{{ currentColorScheme.primary }}</span>
             </div>
           </ion-item>
           <ion-item button (click)="openCustomColorPicker('secondary', 'Secondary Color', $event)">
             <ion-label>Secondary Color</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.secondary"></div>
-              <span class="color-hex">{{ currentColorScheme.secondary }}</span>
             </div>
           </ion-item>
           <ion-item button (click)="openCustomColorPicker('tertiary', 'Tertiary Color', $event)">
             <ion-label>Tertiary Color</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.tertiary"></div>
-              <span class="color-hex">{{ currentColorScheme.tertiary }}</span>
             </div>
           </ion-item>
         </div>
 
         <!-- Background Colors -->
         <div class="color-section">
-          <h4>Backgrounds</h4>
+          <h4>Background Colors</h4>
           <ion-item button (click)="openCustomColorPicker('background', 'Page Background', $event)">
             <ion-label>Page Background</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.background"></div>
-              <span class="color-hex">{{ currentColorScheme.background }}</span>
             </div>
           </ion-item>
           <ion-item button (click)="openCustomColorPicker('cardBackground', 'Card Background', $event)">
             <ion-label>Card Background</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.cardBackground"></div>
-              <span class="color-hex">{{ currentColorScheme.cardBackground }}</span>
             </div>
           </ion-item>
-          <ion-item button (click)="openCustomColorPicker('headerBackground', 'Header Background', $event)">
-            <ion-label>Header Background</ion-label>
+          <ion-item button (click)="openCustomColorPicker('itemBackground', 'Item Background', $event)">
+            <ion-label>Item Background</ion-label>
             <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.headerBackground"></div>
-              <span class="color-hex">{{ currentColorScheme.headerBackground }}</span>
+              <div class="color-swatch" [style.background-color]="currentColorScheme.itemBackground"></div>
             </div>
           </ion-item>
         </div>
@@ -96,53 +94,152 @@
             <ion-label>Primary Text</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.textPrimary"></div>
-              <span class="color-hex">{{ currentColorScheme.textPrimary }}</span>
             </div>
           </ion-item>
           <ion-item button (click)="openCustomColorPicker('textSecondary', 'Secondary Text', $event)">
             <ion-label>Secondary Text</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.textSecondary"></div>
-              <span class="color-hex">{{ currentColorScheme.textSecondary }}</span>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('cardText', 'Card Text', $event)">
+            <ion-label>Card Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.cardText"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('itemText', 'Item Text', $event)">
+            <ion-label>Item Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.itemText"></div>
+            </div>
+          </ion-item>
+        </div>
+
+                <!-- Button Colors -->
+                <div class="color-section">
+                  <h4>Button Colors</h4>
+                  <ion-item button (click)="openCustomColorPicker('buttonBackground', 'Button Background', $event)">
+                    <ion-label>Button Background</ion-label>
+                    <div class="color-preview-container" slot="end">
+                      <div class="color-swatch" [style.background-color]="currentColorScheme.buttonBackground"></div>
+                    </div>
+                  </ion-item>
+                  <ion-item button (click)="openCustomColorPicker('buttonText', 'Button Text', $event)">
+                    <ion-label>Button Text</ion-label>
+                    <div class="color-preview-container" slot="end">
+                      <div class="color-swatch" [style.background-color]="currentColorScheme.buttonText"></div>
+                    </div>
+                  </ion-item>
+                  <ion-item button (click)="openCustomColorPicker('outlinedButtonColor', 'Outlined Button', $event)">
+                    <ion-label>Outlined Button</ion-label>
+                    <div class="color-preview-container" slot="end">
+                      <div class="color-swatch" [style.background-color]="currentColorScheme.outlinedButtonColor"></div>
+                    </div>
+                  </ion-item>
+                </div>
+
+        <!-- Button Colors -->
+        <div class="color-section">
+          <h4>Header/Footer Colors</h4>
+          <ion-item button (click)="openCustomColorPicker('headerBackground', 'Header Background', $event)">
+            <ion-label>Header Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.headerBackground"></div>
             </div>
           </ion-item>
           <ion-item button (click)="openCustomColorPicker('headerText', 'Header Text', $event)">
             <ion-label>Header Text</ion-label>
             <div class="color-preview-container" slot="end">
               <div class="color-swatch" [style.background-color]="currentColorScheme.headerText"></div>
-              <span class="color-hex">{{ currentColorScheme.headerText }}</span>
             </div>
           </ion-item>
+          <ion-item button (click)="openCustomColorPicker('footerBackground', 'Footer Background', $event)">
+            <ion-label>Footer Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.footerBackground"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('footerText', 'Footer Text', $event)">
+            <ion-label>Footer Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.footerText"></div>
+            </div>
+          </ion-item>
+          
         </div>
 
-        <!-- Button Colors -->
+        <!-- Flashcard Action Bar Colors -->
         <div class="color-section">
-          <h4>Button Colors</h4>
-          <ion-item button (click)="openCustomColorPicker('buttonBackground', 'Button Background', $event)">
-            <ion-label>Button Background</ion-label>
+          <h4>Flashcard Action Bar Colors</h4>
+          <!-- Updated section for flashcard review buttons -->
+          
+          <!-- Hard Button Colors -->
+          <ion-item button (click)="openCustomColorPicker('hardButtonBackground', 'Hard Button Background', $event)">
+            <ion-label>Hard Button Background</ion-label>
             <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.buttonBackground"></div>
-              <span class="color-hex">{{ currentColorScheme.buttonBackground }}</span>
+              <div class="color-swatch" [style.background-color]="currentColorScheme.hardButtonBackground"></div>
             </div>
           </ion-item>
-          <ion-item button (click)="openCustomColorPicker('buttonText', 'Button Text', $event)">
-            <ion-label>Button Text</ion-label>
+          <ion-item button (click)="openCustomColorPicker('hardButtonText', 'Hard Button Text', $event)">
+            <ion-label>Hard Button Text</ion-label>
             <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.buttonText"></div>
-              <span class="color-hex">{{ currentColorScheme.buttonText }}</span>
+              <div class="color-swatch" [style.background-color]="currentColorScheme.hardButtonText"></div>
+            </div>
+          </ion-item>
+          
+          <!-- Good Button Colors -->
+          <ion-item button (click)="openCustomColorPicker('goodButtonBackground', 'Good Button Background', $event)">
+            <ion-label>Good Button Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.goodButtonBackground"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('goodButtonText', 'Good Button Text', $event)">
+            <ion-label>Good Button Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.goodButtonText"></div>
+            </div>
+          </ion-item>
+          
+          <!-- Easy Button Colors -->
+          <ion-item button (click)="openCustomColorPicker('easyButtonBackground', 'Easy Button Background', $event)">
+            <ion-label>Easy Button Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.easyButtonBackground"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('easyButtonText', 'Easy Button Text', $event)">
+            <ion-label>Easy Button Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.easyButtonText"></div>
+            </div>
+          </ion-item>
+          
+          <!-- I Don't Know Button Colors -->
+          <ion-item button (click)="openCustomColorPicker('incorrectButtonBackground', 'I Don\'t Know Button Background', $event)">
+            <ion-label>I Don't Know Button Background</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.incorrectButtonBackground"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('incorrectButtonText', 'I Don\'t Know Button Text', $event)">
+            <ion-label>I Don't Know Button Text</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.incorrectButtonText"></div>
             </div>
           </ion-item>
         </div>
 
         <!-- Action Buttons -->
         <div class="color-actions">
-          <ion-button expand="block" fill="outline" (click)="resetColors()">
+          <ion-button expand="block" fill="outline" color="danger" (click)="resetColors()">
             <ion-icon name="refresh" slot="start"></ion-icon>
             Reset to Default
           </ion-button>
           <ion-button expand="block" (click)="previewColors()">
-            <ion-icon name="eye" slot="start"></ion-icon>
-            Preview Changes
+            <ion-icon name="color-palette" slot="start"></ion-icon>
+            Apply Color Changes
           </ion-button>
         </div>
       </ion-card-content>
@@ -150,10 +247,13 @@
 
     <!-- Text-to-Speech -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Text-to-Speech</ion-card-title>
+      <ion-card-header (click)="toggleCard('text-to-speech')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('text-to-speech') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          Text-to-Speech
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('text-to-speech')">
         <ion-item>
           <ion-icon name="language" slot="start"></ion-icon>
           <ion-select 
@@ -208,10 +308,13 @@
 
     <!-- Study Settings -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Study Settings</ion-card-title>
+      <ion-card-header (click)="toggleCard('study-settings')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('study-settings') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          Study Settings
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('study-settings')">
         <ion-item>
           <ion-icon name="layers" slot="start"></ion-icon>
           <ion-label>Max cards per session</ion-label>
@@ -234,10 +337,13 @@
 
     <!-- Images -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Images</ion-card-title>
+      <ion-card-header (click)="toggleCard('images')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('images') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          Images
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('images')">
         <ion-item>
           <ion-icon name="image" slot="start"></ion-icon>
           <ion-select 
@@ -266,10 +372,13 @@
 
     <!-- Data Management -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>Data Management</ion-card-title>
+      <ion-card-header (click)="toggleCard('data-management')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('data-management') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          Data Management
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('data-management')">
         <div class="data-buttons">
           <ion-button expand="block" fill="outline" (click)="exportData()">
             <ion-icon name="download" slot="start"></ion-icon>
@@ -296,17 +405,26 @@
 
     <!-- App Info -->
     <ion-card>
-      <ion-card-header>
-        <ion-card-title>About</ion-card-title>
+      <ion-card-header (click)="toggleCard('about')" class="clickable-header">
+        <ion-card-title>
+          <ion-icon [name]="isCardExpanded('about') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+          About
+        </ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content *ngIf="isCardExpanded('about')">
         <ion-item>
           <ion-icon name="information-circle" slot="start"></ion-icon>
           <ion-label>
-            <h3>Flashcard App</h3>
-            <p>Version 1.0.0</p>
-            <p>Built with Ionic Angular & Capacitor</p>
+            <h3>LA Languages App</h3>
           </ion-label>
+        </ion-item>
+        
+        <ion-item button (click)="openBuyMeCoffee()">
+          <ion-icon name="cafe" slot="start"></ion-icon>
+          <ion-label class="coffee">
+            <h3>Buy me a coffee<br />Support the development of this app</h3>
+          </ion-label>
+          <ion-icon name="open" slot="end"></ion-icon>
         </ion-item>
       </ion-card-content>
     </ion-card>

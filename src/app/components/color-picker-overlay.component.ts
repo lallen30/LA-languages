@@ -32,8 +32,8 @@ import { IonicModule } from '@ionic/angular';
             </canvas>
             <div 
               class="canvas-cursor" 
-              [style.left.px]="cursorX" 
-              [style.top.px]="cursorY">
+              [style.left.px]="getCursorDisplayX()" 
+              [style.top.px]="getCursorDisplayY()">
             </div>
           </div>
 
@@ -51,7 +51,7 @@ import { IonicModule } from '@ionic/angular';
             </canvas>
             <div 
               class="hue-cursor" 
-              [style.left.px]="hueCursorX">
+              [style.left.px]="getHueCursorDisplayX()">
             </div>
           </div>
 
@@ -415,8 +415,36 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
   updateColorFromCanvas(event: MouseEvent) {
     const canvas = this.colorCanvas.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const x = Math.max(0, Math.min(canvas.width, (event.clientX - rect.left) * (canvas.width / rect.width)));
-    const y = Math.max(0, Math.min(canvas.height, (event.clientY - rect.top) * (canvas.height / rect.height)));
+    
+    // Debug logging
+    console.log('Canvas dimensions:', canvas.width, 'x', canvas.height);
+    console.log('Canvas rect:', rect.width, 'x', rect.height);
+    console.log('Mouse event:', event.clientX, event.clientY);
+    console.log('Canvas rect position:', rect.left, rect.top);
+    
+    // Calculate the scaling factor between displayed size and internal canvas size
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    console.log('Scale factors:', scaleX, scaleY);
+    
+    // Get mouse position relative to canvas (in display coordinates)
+    const mouseXDisplay = event.clientX - rect.left;
+    const mouseYDisplay = event.clientY - rect.top;
+    
+    console.log('Mouse display coordinates:', mouseXDisplay, mouseYDisplay);
+    
+    // Convert to internal canvas coordinates
+    const mouseX = mouseXDisplay * scaleX;
+    const mouseY = mouseYDisplay * scaleY;
+    
+    console.log('Mouse internal coordinates:', mouseX, mouseY);
+    
+    // Clamp to canvas bounds
+    const x = Math.max(0, Math.min(canvas.width, mouseX));
+    const y = Math.max(0, Math.min(canvas.height, mouseY));
+
+    console.log('Final cursor position:', x, y);
 
     this.cursorX = x;
     this.cursorY = y;
@@ -430,7 +458,15 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
   updateHueFromSlider(event: MouseEvent) {
     const canvas = this.hueCanvas.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const x = Math.max(0, Math.min(canvas.width, (event.clientX - rect.left) * (canvas.width / rect.width)));
+    
+    // Calculate the scaling factor between displayed size and internal canvas size
+    const scaleX = canvas.width / rect.width;
+    
+    // Get mouse position relative to canvas and scale to internal coordinates
+    const mouseX = (event.clientX - rect.left) * scaleX;
+    
+    // Clamp to canvas bounds
+    const x = Math.max(0, Math.min(canvas.width, mouseX));
 
     this.hueCursorX = x;
     this.currentHue = (x / canvas.width) * 360;
@@ -452,6 +488,30 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
     
     const hueCanvas = this.hueCanvas.nativeElement;
     this.hueCursorX = (this.currentHue / 360) * hueCanvas.width;
+  }
+
+  getCursorDisplayX(): number {
+    if (!this.colorCanvas?.nativeElement) return 0;
+    const canvas = this.colorCanvas.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    // Convert internal canvas X coordinate to display coordinate
+    return (this.cursorX / canvas.width) * rect.width;
+  }
+
+  getCursorDisplayY(): number {
+    if (!this.colorCanvas?.nativeElement) return 0;
+    const canvas = this.colorCanvas.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    // Convert internal canvas Y coordinate to display coordinate
+    return (this.cursorY / canvas.height) * rect.height;
+  }
+
+  getHueCursorDisplayX(): number {
+    if (!this.hueCanvas?.nativeElement) return 0;
+    const canvas = this.hueCanvas.nativeElement;
+    const rect = canvas.getBoundingClientRect();
+    // Convert internal hue canvas X coordinate to display coordinate
+    return (this.hueCursorX / canvas.width) * rect.width;
   }
 
   updateCursorPositions() {

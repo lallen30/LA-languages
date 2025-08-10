@@ -406,6 +406,16 @@ export class DecksPage implements OnInit {
   }
 
   async startStudySession(deck: Deck) {
+    // Check if deck has any cards first
+    const cards = await this.storageService.getCardsByDeck(deck.id);
+    
+    if (cards.length === 0) {
+      // No cards in deck - redirect to card management page to add cards
+      this.router.navigate(['/tabs/card-management', deck.id]);
+      return;
+    }
+    
+    // Deck has cards - proceed with study session
     await this.cardService.startSession(deck.id);
     this.router.navigate(['/tabs/home']);
   }
@@ -1056,6 +1066,140 @@ export class DecksPage implements OnInit {
         color: 'danger'
       });
       await toast.present();
+    }
+  }
+
+  /**
+   * Show import options - from device or from URL
+   */
+  async showImportOptions() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Import Deck',
+      buttons: [
+        {
+          text: 'Import from Device',
+          icon: 'document-outline',
+          handler: () => {
+            this.importDeck();
+          }
+        },
+        {
+          text: 'Import from URL',
+          icon: 'cloud-download-outline',
+          handler: () => {
+            this.importFromUrl();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+
+  /**
+   * Import a deck from a URL
+   */
+  async importFromUrl() {
+    const alert = await this.alertController.create({
+      header: 'Import from URL',
+      message: 'Enter the direct URL to a deck JSON file. Note: Google Drive links and some file sharing services may not work due to CORS restrictions.',
+      inputs: [
+        {
+          name: 'url',
+          type: 'url',
+          placeholder: 'https://example.com/deck.json'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Import',
+          handler: async (data) => {
+            if (data.url && data.url.trim()) {
+              await this.downloadAndImportDeck(data.url.trim());
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  /**
+   * Download and import deck from URL
+   */
+  async downloadAndImportDeck(url: string) {
+    const loading = await this.loadingController.create({
+      message: 'Downloading deck...'
+    });
+    await loading.present();
+
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const importData = await response.json();
+      
+      // Validate import data structure
+      if (!importData.deck || !importData.cards || !Array.isArray(importData.cards)) {
+        throw new Error('Invalid deck format');
+      }
+
+      await loading.dismiss();
+
+      // Show confirmation dialog
+      const alert = await this.alertController.create({
+        header: 'Import Deck',
+        message: `Import deck "${importData.deck.name}" with ${importData.cards.length} cards?`,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'Import',
+            handler: async () => {
+              await this.performDeckImport(importData);
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+
+    } catch (error) {
+      await loading.dismiss();
+      console.error('URL import failed:', error);
+      
+      let errorMessage = 'Failed to download or parse deck from URL.';
+      
+      // Provide specific guidance for common issues
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        errorMessage = 'Unable to access the URL due to CORS restrictions. This commonly happens with:\n\n• Google Drive links\n• Dropbox links\n• Some file sharing services\n\nTry using:\n• A direct link to a JSON file\n• GitHub raw file links\n• Or use "Import from Device" instead';
+      } else if (error instanceof Error && error.message.includes('HTTP error')) {
+        errorMessage = 'The URL returned an error. Please check that the link is correct and publicly accessible.';
+      } else if (error instanceof Error && error.message.includes('Invalid deck format')) {
+        errorMessage = 'The file was downloaded but doesn\'t appear to be a valid deck JSON file.';
+      }
+      
+      const alert = await this.alertController.create({
+        header: 'Import Failed',
+        message: errorMessage,
+        buttons: ['OK']
+      });
+      await alert.present();
     }
   }
 

@@ -15,9 +15,18 @@
       {{ sessionProgress.completed }} / {{ sessionProgress.total }}
     </ion-title>
     
-    <!-- Translation Button in Header -->
-    <ion-buttons slot="end" *ngIf="isSessionActive && currentCard?.englishTranslation">
+    <!-- Header Action Buttons -->
+    <ion-buttons slot="end" *ngIf="isSessionActive">
+      <!-- Copy Button -->
       <ion-button 
+        fill="clear" 
+        (click)="showCopyCardOptions()">
+        <ion-icon name="copy"></ion-icon>
+      </ion-button>
+      
+      <!-- Translation Button -->
+      <ion-button 
+        *ngIf="currentCard?.englishTranslation"
         fill="clear" 
         (click)="showTranslation = !showTranslation">
         <ion-icon name="language"></ion-icon>
@@ -161,47 +170,27 @@
       </ion-button>
     </div>
 
-    <!-- Icon Action Buttons at Bottom -->
-    <div class="bottom-action-bar">
+    <!-- Review Actions Tab Bar -->
+    <div class="review-tab-bar" *ngIf="currentCard && !showAnswer">
+      <button class="review-tab easy-tab" (click)="markCorrect('easy')">
+        <ion-icon name="checkmark"></ion-icon>
+        <span class="tab-label">Easy</span>
+      </button>
       
-      <!-- Forgot Button -->
-      <div class="action-button-with-label">
-        <ion-button 
-          fill="clear" 
-          size="large"
-          color="danger"
-          class="action-icon-btn forgot-action"
-          (click)="markIncorrect()">
-          <ion-icon name="close-circle" size="large"></ion-icon>
-        </ion-button>
-        <ion-text class="action-label">Forgot</ion-text>
-      </div>
+      <button class="review-tab good-tab" (click)="markCorrect('normal')">
+        <ion-icon name="thumbs-up"></ion-icon>
+        <span class="tab-label">Good</span>
+      </button>
       
-      <!-- Later Button -->
-      <div class="action-button-with-label">
-        <ion-button 
-          fill="clear" 
-          size="large"
-          color="warning"
-          class="action-icon-btn later-action"
-          (click)="markLater()">
-          <ion-icon name="refresh-circle" size="large"></ion-icon>
-        </ion-button>
-        <ion-text class="action-label">Later</ion-text>
-      </div>
+      <button class="review-tab hard-tab" (click)="markCorrect('hard')">
+        <ion-icon name="thumbs-down"></ion-icon>
+        <span class="tab-label">Hard</span>
+      </button>
       
-      <!-- Got It Button -->
-      <div class="action-button-with-label">
-        <ion-button 
-          fill="clear" 
-          size="large"
-          color="success"
-          class="action-icon-btn gotit-action"
-          (click)="markCorrect()">
-          <ion-icon name="checkmark-circle" size="large"></ion-icon>
-        </ion-button>
-        <ion-text class="action-label">Got It</ion-text>
-      </div>
+      <button class="review-tab incorrect-tab" (click)="markIncorrect()">
+        <ion-icon name="close"></ion-icon>
+        <span class="tab-label">I don't know</span>
+      </button>
     </div>
   </div>
 

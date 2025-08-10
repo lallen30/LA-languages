@@ -10,8 +10,11 @@ import { StorageService } from './storage.service';
 })
 export class CardService {
   private sessionQueue: Card[] = [];
-  private currentSessionSubject = new BehaviorSubject<Card[]>([]);
+  private currentDeckId: string | null = null;
+  private missedCards: Card[] = []; // Track cards marked as "I don't know"
+  private studiedCardIds: Set<string> = new Set(); // Track unique cards studied
   private currentCardSubject = new BehaviorSubject<Card | null>(null);
+  private currentSessionSubject = new BehaviorSubject<Card[]>([]);
   private sessionStatsSubject = new BehaviorSubject<any>({
     totalCards: 0,
     completedCards: 0,
@@ -36,6 +39,15 @@ export class CardService {
     console.log('Starting session for deckId:', deckId);
     console.log('Max cards requested:', maxCards);
     
+    // Track current deck ID
+    this.currentDeckId = deckId;
+    
+    // Clear missed cards from previous session when starting a new regular session
+    this.clearMissedCards();
+  
+  // Clear studied cards set for accurate unique card counting
+  this.studiedCardIds.clear();
+    
     const cards = await this.storageService.getCardsByDeck(deckId);
     console.log('Total cards found for deck:', cards.length);
     console.log('Card details:', cards.map(c => ({ id: c.id, spanishWord: c.spanishWord, missingWord: c.missingWord, deckId: c.deckId })));
@@ -54,19 +66,44 @@ export class CardService {
     console.log('Session queue cards:', this.sessionQueue.map(c => ({ spanishWord: c.spanishWord, missingWord: c.missingWord, id: c.id })));
     console.log('=== END STUDY SESSION DEBUG ===');
     
+    // Initialize session stats
+    this.sessionStatsSubject.next({
+      totalCards: this.sessionQueue.length,
+      completedCards: 0,
+      correctCards: 0,
+      incorrectCards: 0
+    });
+    
     this.currentSessionSubject.next([...this.sessionQueue]);
-    this.updateSessionStats();
-    this.nextCard();
+    
+    // Show the first card without removing it from queue yet
+    if (this.sessionQueue.length > 0) {
+      this.currentCardSubject.next(this.sessionQueue[0]);
+    }
   }
 
   /**
-   * Get the next card in the session
+   * Move to next card in session
    */
   nextCard(): Card | null {
-    const card = this.sessionQueue.shift();
-    this.currentCardSubject.next(card || null);
+    // Remove the current card (which has been answered)
+    if (this.sessionQueue.length > 0) {
+      this.sessionQueue.shift();
+    }
+    
+    // Show the next card if available
+    const nextCard = this.sessionQueue.length > 0 ? this.sessionQueue[0] : null;
+    this.currentCardSubject.next(nextCard);
     this.currentSessionSubject.next([...this.sessionQueue]);
-    return card || null;
+    
+    console.log('Next card called. Remaining cards:', this.sessionQueue.length);
+    if (nextCard) {
+      console.log('Showing next card:', nextCard.spanishWord);
+    } else {
+      console.log('No more cards - session complete');
+    }
+    
+    return nextCard;
   }
 
   /**
@@ -76,7 +113,39 @@ export class CardService {
     const updatedCard = this.srsService.updateCard(card, response);
     await this.storageService.updateCard(updatedCard);
     
-    this.updateSessionStats();
+    // Track missed cards for review feature
+    if (!response.correct) {
+      // Add to missed cards if not already there
+      const alreadyMissed = this.missedCards.find(c => c.id === updatedCard.id);
+      if (!alreadyMissed) {
+        this.missedCards.push({ ...updatedCard });
+        console.log(`Added "${updatedCard.spanishWord}" to missed cards for review`);
+      }
+    }
+    
+    // Determine if card should reappear in session based on response
+    const shouldReappearInSession = this.shouldCardReappearInSession(response);
+    
+    if (shouldReappearInSession) {
+      // Re-add card to session queue for additional practice
+      const reappearanceDelay = this.getReappearanceDelay(response);
+      this.scheduleCardReappearance(updatedCard, reappearanceDelay);
+      
+      console.log(`Card "${updatedCard.spanishWord}" will reappear in ${reappearanceDelay} cards due to ${response.difficulty} response`);
+    }
+    
+    // Track unique cards studied
+    this.studiedCardIds.add(card.id);
+    
+    // Update session stats to reflect completed card
+    const currentStats = this.sessionStatsSubject.value;
+    this.sessionStatsSubject.next({
+      ...currentStats,
+      completedCards: this.studiedCardIds.size, // Count unique cards, not total responses
+      correctCards: response.correct ? currentStats.correctCards + 1 : currentStats.correctCards,
+      incorrectCards: !response.correct ? currentStats.incorrectCards + 1 : currentStats.incorrectCards,
+      totalCards: currentStats.totalCards || this.sessionQueue.length + currentStats.completedCards + 1
+    });
     
     // Move to next card
     this.nextCard();
@@ -146,10 +215,134 @@ export class CardService {
   }
 
   /**
+   * Determine if a card should reappear in the current session based on response
+   */
+  private shouldCardReappearInSession(response: CardResponse): boolean {
+    // Incorrect cards should always reappear
+    if (!response.correct) {
+      return true;
+    }
+    
+    // Hard cards should reappear for additional practice
+    if (response.difficulty === 'hard') {
+      return true;
+    }
+    
+    // Easy and good cards are done for this session
+    return false;
+  }
+
+  /**
+   * Get the delay (in number of cards) before a card reappears
+   */
+  private getReappearanceDelay(response: CardResponse): number {
+    if (!response.correct) {
+      // Incorrect cards reappear soon for immediate reinforcement
+      return Math.min(3, Math.floor(this.sessionQueue.length / 4));
+    }
+    
+    if (response.difficulty === 'hard') {
+      // Hard cards reappear later in the session
+      return Math.min(8, Math.floor(this.sessionQueue.length / 2));
+    }
+    
+    return 0; // Should not be called for easy/good cards
+  }
+
+  /**
+   * Schedule a card to reappear in the session queue
+   */
+  private scheduleCardReappearance(card: Card, delay: number): void {
+    // Calculate insertion position based on delay
+    const insertPosition = Math.min(delay, this.sessionQueue.length);
+    
+    // Insert the card back into the queue at the calculated position
+    this.sessionQueue.splice(insertPosition, 0, { ...card });
+    
+    // Update the session queue observable
+    this.currentSessionSubject.next([...this.sessionQueue]);
+  }
+
+  /**
    * Get remaining cards in session
    */
   getRemainingCards(): number {
     return this.sessionQueue.length;
+  }
+
+  /**
+   * Get current deck ID from active session
+   */
+  getCurrentDeckId(): string | null {
+    if (this.sessionQueue.length > 0) {
+      return this.sessionQueue[0].deckId;
+    }
+    return this.currentDeckId;
+  }
+
+  /**
+   * Get current session stats (public accessor)
+   */
+  getCurrentSessionStats() {
+    return this.sessionStatsSubject.value;
+  }
+
+  /**
+   * Get missed cards from last session
+   */
+  getMissedCards(): Card[] {
+    return [...this.missedCards];
+  }
+
+  /**
+   * Check if there are missed cards available for review
+   */
+  hasMissedCards(): boolean {
+    return this.missedCards.length > 0;
+  }
+
+  /**
+   * Start a review session with missed cards only
+   */
+  async startMissedCardsReview(): Promise<void> {
+    console.log('=== MISSED CARDS REVIEW SESSION ===');
+    console.log('Starting review session with missed cards:', this.missedCards.length);
+    
+    if (this.missedCards.length === 0) {
+      console.log('No missed cards available for review');
+      return;
+    }
+    
+    // Use missed cards as the session queue
+    this.sessionQueue = [...this.missedCards];
+    
+    // Clear studied cards set for accurate unique card counting in review session
+    this.studiedCardIds.clear();
+    
+    // Initialize session stats
+    this.sessionStatsSubject.next({
+      totalCards: this.sessionQueue.length,
+      completedCards: 0,
+      correctCards: 0,
+      incorrectCards: 0
+    });
+    
+    this.currentSessionSubject.next([...this.sessionQueue]);
+    
+    // Show the first card without removing it from queue yet
+    if (this.sessionQueue.length > 0) {
+      this.currentCardSubject.next(this.sessionQueue[0]);
+    }
+    
+    console.log('Missed cards review session started with', this.sessionQueue.length, 'cards');
+  }
+
+  /**
+   * Clear missed cards (called when starting a new regular session)
+   */
+  private clearMissedCards(): void {
+    this.missedCards = [];
+    console.log('Cleared missed cards for new session');
   }
 
   /**

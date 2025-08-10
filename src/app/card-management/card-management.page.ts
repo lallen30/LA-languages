@@ -69,6 +69,9 @@ export class CardManagementPage implements OnInit {
       this.cards = [...freshCards]; // Create new array reference
       this.filteredCards = [...this.cards]; // Create new filtered array reference
       
+      // Force change detection to ensure UI updates
+      this.cdr.detectChanges();
+      
       console.log('DEBUG: Loaded', this.cards.length, 'cards, filtered to', this.filteredCards.length);
     } catch (error) {
       console.error('Error loading deck and cards:', error);
@@ -343,6 +346,8 @@ export class CardManagementPage implements OnInit {
           handler: async () => {
             await this.storageService.deleteCard(card.id);
             await this.loadDeckAndCards(this.deck!.id);
+            // Force change detection to ensure UI updates
+            this.cdr.detectChanges();
           }
         }
       ]
@@ -536,6 +541,79 @@ export class CardManagementPage implements OnInit {
       await toast.present();
     } catch (error) {
       console.error('Error updating fill-blank card:', error);
+    }
+  }
+
+  async resetAllCardsProgress() {
+    if (!this.deck || this.cards.length === 0) {
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Reset All Progress',
+      message: `Are you sure you want to reset ALL ${this.cards.length} cards in "${this.deck.name}"?
+
+This will reset all progress and mark every card as new.
+
+⚠️ This action cannot be undone.`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Reset All',
+          role: 'destructive',
+          handler: async () => {
+            await this.performResetAllCards();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private async performResetAllCards() {
+    const loading = await this.loadingController.create({
+      message: 'Resetting all cards...'
+    });
+    await loading.present();
+
+    try {
+      // Reset all cards
+      for (const card of this.cards) {
+        card.isNew = true;
+        card.repetitions = 0;
+        card.easeFactor = 2.5;
+        card.interval = 1;
+        card.nextReview = new Date();
+        
+        await this.storageService.updateCard(card);
+      }
+
+      // Reload the deck and cards to reflect changes
+      await this.loadDeckAndCards(this.deck!.id);
+
+      await loading.dismiss();
+
+      // Show success message
+      const toast = await this.loadingController.create({
+        message: `Successfully reset progress for ${this.cards.length} cards!`,
+        duration: 3000
+      });
+      await toast.present();
+
+      console.log(`Reset progress for ${this.cards.length} cards in deck "${this.deck!.name}"`);
+    } catch (error) {
+      await loading.dismiss();
+      console.error('Error resetting all cards:', error);
+      
+      const errorToast = await this.loadingController.create({
+        message: 'Error resetting cards. Please try again.',
+        duration: 3000
+      });
+      await errorToast.present();
     }
   }
 }

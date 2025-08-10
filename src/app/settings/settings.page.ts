@@ -35,11 +35,26 @@ export class SettingsPage implements OnInit {
     background: '#ffffff',
     cardBackground: '#f8f9fa',
     headerBackground: '#ffffff',
+    footerBackground: '#ffffff',
+    itemBackground: '#ffffff',
     textPrimary: '#000000',
     textSecondary: '#666666',
+    cardText: '#000000',
     headerText: '#000000',
+    footerText: '#000000',
+    itemText: '#000000',
     buttonBackground: '#3880ff',
-    buttonText: '#ffffff'
+    buttonText: '#ffffff',
+    outlinedButtonColor: '#eb445a',
+    // Flashcard Action Bar Colors
+    hardButtonBackground: '#eb445a',
+    hardButtonText: '#ffffff',
+    goodButtonBackground: '#ffc409',
+    goodButtonText: '#000000',
+    easyButtonBackground: '#2dd36f',
+    easyButtonText: '#ffffff',
+    incorrectButtonBackground: '#ff4757',
+    incorrectButtonText: '#ffffff'
   };
 
   darkColorScheme = {
@@ -49,11 +64,26 @@ export class SettingsPage implements OnInit {
     background: '#121212',
     cardBackground: '#1e1e1e',
     headerBackground: '#1f1f1f',
+    footerBackground: '#1f1f1f',
+    itemBackground: '#1e1e1e',
     textPrimary: '#ffffff',
     textSecondary: '#b0b0b0',
+    cardText: '#ffffff',
     headerText: '#ffffff',
+    footerText: '#ffffff',
+    itemText: '#ffffff',
     buttonBackground: '#428cff',
-    buttonText: '#ffffff'
+    buttonText: '#ffffff',
+    outlinedButtonColor: '#d33447',
+    // Flashcard Action Bar Colors (Dark Mode)
+    hardButtonBackground: '#d33447',
+    hardButtonText: '#ffffff',
+    goodButtonBackground: '#e6b000',
+    goodButtonText: '#000000',
+    easyButtonBackground: '#28ba62',
+    easyButtonText: '#ffffff',
+    incorrectButtonBackground: '#d63031',
+    incorrectButtonText: '#ffffff'
   };
 
   // Current active color scheme (switches based on dark mode)
@@ -73,6 +103,9 @@ export class SettingsPage implements OnInit {
     { value: 'medium', label: 'Medium (balanced)' },
     { value: 'high', label: 'High (best quality)' }
   ];
+
+  // Accordion state management
+  expandedCard: string | null = 'appearance'; // Default to Appearance card being expanded
 
   constructor(
     private storageService: StorageService,
@@ -503,7 +536,10 @@ export class SettingsPage implements OnInit {
     root.style.setProperty('--ion-card-background', this.currentColorScheme.cardBackground);
     root.style.setProperty('--ion-item-background', this.currentColorScheme.cardBackground);
     root.style.setProperty('--ion-toolbar-background', this.currentColorScheme.headerBackground);
-    root.style.setProperty('--ion-tab-bar-background', this.currentColorScheme.headerBackground);
+    root.style.setProperty('--ion-tab-bar-background', this.currentColorScheme.footerBackground);
+    
+    // Custom footer background variable
+    root.style.setProperty('--app-footer-background', this.currentColorScheme.footerBackground);
     
     // Text colors - map to proper Ionic text color variables
     root.style.setProperty('--ion-text-color', this.currentColorScheme.textPrimary);
@@ -519,7 +555,15 @@ export class SettingsPage implements OnInit {
     
     // Header text colors
     root.style.setProperty('--ion-toolbar-color', this.currentColorScheme.headerText);
-    root.style.setProperty('--ion-tab-bar-color', this.currentColorScheme.headerText);
+    root.style.setProperty('--ion-tab-bar-color', this.currentColorScheme.footerText);
+    
+    // Custom text color variables
+    root.style.setProperty('--app-card-text-color', this.currentColorScheme.cardText);
+    root.style.setProperty('--app-footer-text-color', this.currentColorScheme.footerText);
+    root.style.setProperty('--app-item-text-color', this.currentColorScheme.itemText);
+    
+    // Custom item background variable
+    root.style.setProperty('--app-item-background', this.currentColorScheme.itemBackground);
     
     // Button colors - create custom button color variables
     root.style.setProperty('--ion-color-button', this.currentColorScheme.buttonBackground);
@@ -528,6 +572,24 @@ export class SettingsPage implements OnInit {
     root.style.setProperty('--ion-color-button-contrast-rgb', this.hexToRgb(this.currentColorScheme.buttonText));
     root.style.setProperty('--ion-color-button-shade', this.darkenColor(this.currentColorScheme.buttonBackground, 0.12));
     root.style.setProperty('--ion-color-button-tint', this.lightenColor(this.currentColorScheme.buttonBackground, 0.1));
+    
+    // Outlined button color - for outline buttons like "Reset to Default"
+    root.style.setProperty('--ion-color-danger', this.currentColorScheme.outlinedButtonColor);
+    root.style.setProperty('--ion-color-danger-rgb', this.hexToRgb(this.currentColorScheme.outlinedButtonColor));
+    root.style.setProperty('--ion-color-danger-contrast', '#ffffff');
+    root.style.setProperty('--ion-color-danger-contrast-rgb', '255,255,255');
+    root.style.setProperty('--ion-color-danger-shade', this.darkenColor(this.currentColorScheme.outlinedButtonColor, 0.12));
+    root.style.setProperty('--ion-color-danger-tint', this.lightenColor(this.currentColorScheme.outlinedButtonColor, 0.1));
+    
+    // Flashcard Action Bar Colors - create custom CSS variables
+    root.style.setProperty('--review-hard-bg', this.currentColorScheme.hardButtonBackground);
+    root.style.setProperty('--review-hard-text', this.currentColorScheme.hardButtonText);
+    root.style.setProperty('--review-good-bg', this.currentColorScheme.goodButtonBackground);
+    root.style.setProperty('--review-good-text', this.currentColorScheme.goodButtonText);
+    root.style.setProperty('--review-easy-bg', this.currentColorScheme.easyButtonBackground);
+    root.style.setProperty('--review-easy-text', this.currentColorScheme.easyButtonText);
+    root.style.setProperty('--review-incorrect-bg', this.currentColorScheme.incorrectButtonBackground);
+    root.style.setProperty('--review-incorrect-text', this.currentColorScheme.incorrectButtonText);
     
     console.log('DEBUG: Applied comprehensive custom colors to CSS variables');
   }
@@ -602,11 +664,26 @@ export class SettingsPage implements OnInit {
         background: '#121212',
         cardBackground: '#1e1e1e',
         headerBackground: '#1f1f1f',
+        footerBackground: '#1f1f1f',
+        itemBackground: '#1e1e1e',
         textPrimary: '#ffffff',
         textSecondary: '#b0b0b0',
+        cardText: '#ffffff',
         headerText: '#ffffff',
+        footerText: '#ffffff',
+        itemText: '#ffffff',
         buttonBackground: '#428cff',
-        buttonText: '#ffffff'
+        buttonText: '#ffffff',
+        outlinedButtonColor: '#d33447',
+        // Flashcard Action Bar Colors (Dark Mode)
+        hardButtonBackground: '#d33447',
+        hardButtonText: '#ffffff',
+        goodButtonBackground: '#e6b000',
+        goodButtonText: '#000000',
+        easyButtonBackground: '#28ba62',
+        easyButtonText: '#ffffff',
+        incorrectButtonBackground: '#d63031',
+        incorrectButtonText: '#ffffff'
       };
       this.saveSetting('darkColorScheme', this.darkColorScheme);
     } else {
@@ -617,11 +694,26 @@ export class SettingsPage implements OnInit {
         background: '#ffffff',
         cardBackground: '#f8f9fa',
         headerBackground: '#ffffff',
+        footerBackground: '#ffffff',
+        itemBackground: '#ffffff',
         textPrimary: '#000000',
         textSecondary: '#666666',
+        cardText: '#000000',
         headerText: '#000000',
+        footerText: '#000000',
+        itemText: '#000000',
         buttonBackground: '#3880ff',
-        buttonText: '#ffffff'
+        buttonText: '#ffffff',
+        outlinedButtonColor: '#eb445a',
+        // Flashcard Action Bar Colors
+        hardButtonBackground: '#eb445a',
+        hardButtonText: '#ffffff',
+        goodButtonBackground: '#ffc409',
+        goodButtonText: '#000000',
+        easyButtonBackground: '#2dd36f',
+        easyButtonText: '#ffffff',
+        incorrectButtonBackground: '#ff4757',
+        incorrectButtonText: '#ffffff'
       };
       this.saveSetting('lightColorScheme', this.lightColorScheme);
     }
@@ -633,6 +725,24 @@ export class SettingsPage implements OnInit {
   async previewColors() {
     this.applyColors();
     this.showToast('Color preview applied!', 'success');
+  }
+
+  // Accordion functionality
+  toggleCard(cardName: string) {
+    if (this.expandedCard === cardName) {
+      this.expandedCard = null; // Collapse if already expanded
+    } else {
+      this.expandedCard = cardName; // Expand this card and collapse others
+    }
+  }
+
+  isCardExpanded(cardName: string): boolean {
+    return this.expandedCard === cardName;
+  }
+
+  openBuyMeCoffee() {
+    // Open PayPal donation link in external browser
+    window.open('https://paypal.me/lallen300', '_blank');
   }
 
   async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {

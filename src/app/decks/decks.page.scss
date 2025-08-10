@@ -1,3 +1,66 @@
+// Header button styling
+ion-header ion-buttons {
+  ion-button {
+    margin: 0 4px;
+    
+    // Circular buttons (refresh and import)
+    &[fill="clear"] {
+      --border-radius: 50%;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      width: 40px;
+      height: 40px;
+      
+      ion-icon {
+        font-size: 22px;
+      }
+      
+      // Hover effect
+      &:hover {
+        --background: rgba(var(--ion-color-primary-rgb), 0.1);
+      }
+      
+      // Active/pressed state
+      &:active {
+        --background: rgba(var(--ion-color-primary-rgb), 0.2);
+      }
+    }
+    
+    // Circular button (add button) - matches other buttons
+    &:not([fill="clear"]) {
+      --border-radius: 50%;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      width: 40px;
+      height: 40px;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+      
+      // Enhanced circular shadow for primary button
+      box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+      border-radius: 50%;
+      
+      // Hover effect
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+      }
+      
+      // Active/pressed state
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(var(--ion-color-primary-rgb), 0.3);
+      }
+    }
+  }
+}
+
 .decks-container {
   padding: 16px;
   min-height: 100%;
@@ -78,17 +141,59 @@
 
 .deck-actions-list {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
   
   ion-button {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --border-radius: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    
+    // Outline button styling - ensure icons match border colors
+    &[fill="outline"] {
+      // Make icons match the outline border color with !important to override Ionic defaults
+      &[color="primary"] ion-icon {
+        color: var(--ion-color-primary) !important;
+      }
+      
+      &[color="success"] ion-icon {
+        color: var(--ion-color-success) !important;
+      }
+      
+      &[color="medium"] ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+      
+      &[color="danger"] ion-icon {
+        color: var(--ion-color-danger) !important;
+      }
+      
+      // For buttons without color attribute (Edit button)
+      &:not([color]) ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+    }
     
     ion-icon {
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    
+    // Hover effect
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    
+    // Active/pressed state
+    &:active {
+      transform: translateY(0);
+      transition: all 0.1s ease;
     }
   }
 }

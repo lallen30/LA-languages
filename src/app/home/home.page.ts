@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Card, CardResponse } from '../models/card.model';
+import { Deck } from '../models/deck.model';
 import { CardService } from '../services/card.service';
 import { TtsService } from '../services/tts.service';
 import { SessionStateService } from '../services/session-state.service';
@@ -11,18 +12,17 @@ import { StorageService } from '../services/storage.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { 
-  arrowBack, 
-  language, 
-  volumeHigh, 
-  closeCircle, 
-  refreshCircle, 
-  checkmarkCircle,
-  libraryOutline,
-  play,
-  add,
-  create,
-  createOutline,
-  trashOutline
+  chevronBack,
+  volumeHigh,
+  refresh,
+  checkmark,
+  close,
+  thumbsDown,
+  thumbsUp,
+  copy,
+  library,
+  folder,
+  addCircle
 } from 'ionicons/icons';
 
 @Component({
@@ -36,6 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
   currentCard: Card | null = null;
   isFlipped = false;
   showTranslation = false;
+  showAnswer = false;
   sessionProgress = { completed: 0, total: 0, percentage: 0 };
   isSessionActive = false;
   autoSpeakEnabled = false;
@@ -48,22 +49,24 @@ export class HomePage implements OnInit, OnDestroy {
     private sessionStateService: SessionStateService,
     private storageService: StorageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private actionSheetController: ActionSheetController,
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {
     // Register all required icons
     addIcons({
-      arrowBack,
-      language,
-      volumeHigh,
-      closeCircle,
-      refreshCircle,
-      checkmarkCircle,
-      libraryOutline,
-      play,
-      add,
-      create,
-      createOutline,
-      trashOutline
+      'chevron-back': chevronBack,
+      'volume-high': volumeHigh,
+      'refresh': refresh,
+      'checkmark': checkmark,
+      'close': close,
+      'thumbs-down': thumbsDown,
+      'thumbs-up': thumbsUp,
+      'copy': copy,
+      'library': library,
+      'folder': folder,
+      'add-circle': addCircle
     });
   }
 
@@ -83,10 +86,16 @@ export class HomePage implements OnInit, OnDestroy {
     // Subscribe to current card
     this.subscriptions.push(
       this.cardService.currentCard$.subscribe(card => {
+        const wasSessionActive = this.isSessionActive;
         this.currentCard = card;
         this.isFlipped = false;
         this.showTranslation = false;
         this.updateSessionStatus();
+        
+        // Check if session just completed
+        if (wasSessionActive && !this.isSessionActive && card === null) {
+          this.handleSessionCompletion();
+        }
       })
     );
 
@@ -159,7 +168,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
-  async markCorrect(difficulty: 'easy' | 'normal' | 'hard' = 'normal') {
+  async markCorrect(difficulty: 'easy' | 'normal' | 'hard') {
     if (!this.currentCard) return;
     
     const response: CardResponse = {
@@ -175,15 +184,308 @@ export class HomePage implements OnInit, OnDestroy {
     
     const response: CardResponse = {
       correct: false,
-      difficulty: 'normal'
+      difficulty: 'hard' // Default to hard for incorrect responses
     };
     
     await this.cardService.processCardResponse(this.currentCard, response);
   }
 
-  markLater() {
+  async handleSessionCompletion() {
+    console.log('Session completed - showing completion summary');
+    
+    // Get final session stats
+    const sessionStats = this.cardService.getSessionProgress();
+    const finalStats = this.cardService.getCurrentSessionStats();
+    
+    // Clear the deckId parameter from URL
+    this.router.navigate(['/tabs/home'], { replaceUrl: true });
+    
+    // Show completion alert with stats and options
+    const alert = await this.alertController.create({
+      header: 'Study Session Complete! 🎉',
+      subHeader: 'Session Summary:',
+
+      message: `Session Summary:
+
+• Cards studied: ${finalStats.completedCards}
+• Correct answers: ${finalStats.correctCards}
+• Incorrect answers: ${finalStats.incorrectCards}
+• Accuracy: ${(finalStats.correctCards + finalStats.incorrectCards) > 0 ? Math.round((finalStats.correctCards / (finalStats.correctCards + finalStats.incorrectCards)) * 100) : 0}%`,
+      buttons: [
+        {
+          text: 'Review Missed Cards',
+          handler: () => {
+            this.reviewMissedCards();
+          }
+        },
+        {
+          text: 'Study More Cards',
+          handler: () => {
+            this.studyMoreCards();
+          }
+        },
+        {
+          text: 'Finish',
+          role: 'cancel',
+          handler: () => {
+            this.goToDecks();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async reviewMissedCards() {
+    console.log('Starting review of missed cards');
+    
+    // Check if there are missed cards available
+    if (!this.cardService.hasMissedCards()) {
+      const toast = await this.toastController.create({
+        message: 'No missed cards available for review',
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      this.goToDecks();
+      return;
+    }
+    
+    // Start missed cards review session
+    try {
+      await this.cardService.startMissedCardsReview();
+      
+      const toast = await this.toastController.create({
+        message: `Starting review of ${this.cardService.getMissedCards().length} missed cards`,
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      
+      console.log('Missed cards review session started successfully');
+    } catch (error) {
+      console.error('Error starting missed cards review:', error);
+      
+      const toast = await this.toastController.create({
+        message: 'Error starting review session',
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      this.goToDecks();
+    }
+  }
+
+  async studyMoreCards() {
+    // Get the current deck ID from the last session
+    const currentDeckId = this.cardService.getCurrentDeckId();
+    if (currentDeckId) {
+      // Start a new session with the same deck
+      await this.startStudySession(currentDeckId);
+    } else {
+      const toast = await this.toastController.create({
+        message: 'Unable to continue - please select a deck to study',
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      this.goToDecks();
+    }
+  }
+
+  async showCopyCardOptions() {
     if (!this.currentCard) return;
-    this.cardService.markCardLater(this.currentCard);
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Copy Card To Deck',
+      buttons: [
+        {
+          text: 'Select Existing Deck',
+          icon: 'folder',
+          handler: () => {
+            this.showDeckSelection();
+          }
+        },
+        {
+          text: 'Create New Deck',
+          icon: 'add-circle',
+          handler: () => {
+            this.createNewDeckForCard();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await actionSheet.present();
+  }
+
+  async showDeckSelection() {
+    if (!this.currentCard) return;
+    
+    // Get all decks
+    const allDecks = await this.storageService.getAllDecks();
+    const currentDeckId = this.currentCard.deckId;
+    
+    // Filter out the current deck
+    const otherDecks = allDecks.filter((deck: Deck) => deck.id !== currentDeckId);
+    
+    if (otherDecks.length === 0) {
+      const alert = await this.alertController.create({
+        header: 'No Other Decks',
+        message: 'You need to create another deck first before copying cards.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Select Deck',
+      buttons: [
+        ...otherDecks.map((deck: Deck) => ({
+          text: deck.name,
+          icon: 'library',
+          handler: () => {
+            this.copyCardToDeck(deck.id);
+          }
+        })),
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await actionSheet.present();
+  }
+
+  async createNewDeckForCard() {
+    if (!this.currentCard) return;
+    
+    const alert = await this.alertController.create({
+      header: 'Create New Deck',
+      inputs: [
+        {
+          name: 'deckName',
+          type: 'text',
+          placeholder: 'Enter deck name'
+        },
+        {
+          name: 'description',
+          type: 'text',
+          placeholder: 'Enter description (optional)'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Create & Copy',
+          handler: async (data: any) => {
+            if (data.deckName.trim()) {
+              const newDeckId = await this.createDeckAndCopyCard(data.deckName.trim(), data.description?.trim() || '');
+              if (newDeckId) {
+                const toast = await this.toastController.create({
+                  message: `Card copied to new deck "${data.deckName}"`,
+                  duration: 2000,
+                  color: 'success'
+                });
+                await toast.present();
+              }
+            }
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
+  }
+
+  async copyCardToDeck(targetDeckId: string) {
+    if (!this.currentCard) return;
+    
+    try {
+      // Create a copy of the card with new ID and deck
+      const cardCopy = {
+        ...this.currentCard,
+        id: this.generateId(),
+        deckId: targetDeckId,
+        // Reset SRS data for the copy
+        easeFactor: 2.5,
+        interval: 1,
+        repetitions: 0,
+        lastReviewed: new Date(),
+        nextReview: new Date(),
+        isNew: true,
+        skipCount: 0
+      };
+      
+      await this.cardService.addCard(cardCopy);
+      
+      const toast = await this.toastController.create({
+        message: 'Card copied successfully!',
+        duration: 2000,
+        color: 'success'
+      });
+      await toast.present();
+    } catch (error) {
+      console.error('Error copying card:', error);
+      const toast = await this.toastController.create({
+        message: 'Error copying card',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
+  async createDeckAndCopyCard(deckName: string, description: string): Promise<string | null> {
+    if (!this.currentCard) return null;
+    
+    try {
+      // Create new deck with all required fields
+      const newDeck: Deck = {
+        id: this.generateId(),
+        name: deckName,
+        description: description,
+        language: 'es', // Default to Spanish, could be made configurable
+        cardCount: 0,
+        createdAt: new Date(),
+        masteredCards: 0,
+        newCards: 0,
+        reviewCards: 0,
+        color: '#3880ff' // Default blue color
+      };
+      
+      await this.storageService.saveDeck(newDeck);
+      
+      // Copy card to new deck
+      await this.copyCardToDeck(newDeck.id);
+      
+      return newDeck.id;
+    } catch (error) {
+      console.error('Error creating deck and copying card:', error);
+      const toast = await this.toastController.create({
+        message: 'Error creating deck',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+      return null;
+    }
+  }
+
+  private generateId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
   endSession() {

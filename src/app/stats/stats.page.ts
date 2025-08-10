@@ -29,10 +29,11 @@ export class StatsPage implements OnInit {
   constructor(private storageService: StorageService) {}
 
   async ngOnInit() {
-    await this.loadStats();
+    // Don't load stats here to avoid double loading
   }
 
   async ionViewWillEnter() {
+    // Load stats when the view is about to enter
     await this.loadStats();
   }
 
@@ -56,6 +57,7 @@ export class StatsPage implements OnInit {
       console.log('DEBUG: Decks after deduplication:', uniqueDecks.length);
       console.log('DEBUG: Decks after language filtering:', filteredDecks.length);
       
+      // Clear existing deck stats to prevent duplicates
       this.deckStats = [];
       
       for (const deck of filteredDecks) {
@@ -98,7 +100,10 @@ export class StatsPage implements OnInit {
     const masteredCards = cards.filter(c => !c.isNew && c.repetitions >= 3).length;
     const reviewCards = cards.filter(c => !c.isNew && c.nextReview <= new Date()).length;
     
-    const completionPercentage = totalCards > 0 ? Math.round((masteredCards / totalCards) * 100) : 0;
+    // Calculate completion percentage based on cards that have been studied at least once
+    // This provides more meaningful progress for users who are just starting
+    const studiedCards = cards.filter(c => !c.isNew || c.repetitions > 0).length;
+    const completionPercentage = totalCards > 0 ? Math.round((studiedCards / totalCards) * 100) : 0;
     
     const easeFactors = cards.filter(c => !c.isNew).map(c => c.easeFactor);
     const averageEaseFactor = easeFactors.length > 0 
