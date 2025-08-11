@@ -1,0 +1,163 @@
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+}
+
+ion-card {
+  margin-bottom: 16px;
+  
+  ion-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ion-color-primary);
+    
+    ion-icon {
+      font-size: 1.2em;
+    }
+  }
+  
+  h4 {
+    color: var(--ion-color-primary);
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  ul, ol {
+    margin: 8px 0;
+    padding-left: 20px;
+    
+    li {
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+  }
+  
+  p {
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+}
+
+// Response guide styling
+.response-guide {
+  .response-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    
+    ion-button {
+      min-width: 80px;
+      --height: 32px;
+    }
+    
+    span {
+      flex: 1;
+      font-size: 0.9em;
+      line-height: 1.3;
+    }
+  }
+}
+
+// Completion options styling
+.completion-options {
+  .option-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    
+    ion-button {
+      min-width: 140px;
+      --height: 32px;
+      flex-shrink: 0;
+    }
+    
+    span {
+      flex: 1;
+      font-size: 0.9em;
+      line-height: 1.3;
+      margin-top: 2px;
+    }
+  }
+}
+
+// Tips list styling
+.tips-list {
+  .tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--ion-color-light);
+    border-radius: 8px;
+    
+    ion-icon {
+      font-size: 1.2em;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    
+    div {
+      flex: 1;
+      
+      strong {
+        color: var(--ion-color-primary);
+        display: block;
+        margin-bottom: 4px;
+      }
+      
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Note styling
+ion-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--ion-color-light);
+  
+  ion-icon {
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  
+  &[color="primary"] {
+    background: var(--ion-color-primary-tint);
+    color: var(--ion-color-primary-shade);
+  }
+  
+  &[color="success"] {
+    background: var(--ion-color-success-tint);
+    color: var(--ion-color-success-shade);
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .tips-list .tip-item {
+    background: var(--ion-color-dark);
+  }
+  
+  ion-note {
+    background: var(--ion-color-dark);
+    
+    &[color="primary"] {
+      background: rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+    
+    &[color="success"] {
+      background: rgba(var(--ion-color-success-rgb), 0.2);
+    }
+  }
+}

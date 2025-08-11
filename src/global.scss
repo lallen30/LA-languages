@@ -190,9 +190,8 @@ body.dark {
  */
 
 .ios body.dark {
-  --ion-background-color: #000000;
-  --ion-background-color-rgb: 0,0,0;
-
+  /* Background colors now managed dynamically by Settings page */
+  
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255,255,255;
 
@@ -216,9 +215,7 @@ body.dark {
   --ion-color-step-900: #e6e6e6;
   --ion-color-step-950: #f2f2f2;
 
-  --ion-item-background: #000000;
-
-  --ion-card-background: #1c1c1d;
+  /* Item and card backgrounds now managed dynamically by Settings page */
 }
 
 .ios body.dark ion-modal {
@@ -234,8 +231,7 @@ body.dark {
  */
 
 .md body.dark {
-  --ion-background-color: #121212;
-  --ion-background-color-rgb: 18,18,18;
+  /* Background colors now managed dynamically by Settings page */
 
   --ion-text-color: #ffffff;
   --ion-text-color-rgb: 255,255,255;
@@ -262,13 +258,7 @@ body.dark {
   --ion-color-step-900: #e7e7e7;
   --ion-color-step-950: #f3f3f3;
 
-  --ion-item-background: #1e1e1e;
-
-  --ion-toolbar-background: #1f1f1f;
-
-  --ion-tab-bar-background: #1f1f1f;
-
-  --ion-card-background: #1e1e1e;
+  /* Item, toolbar, tab bar, and card backgrounds now managed dynamically by Settings page */
 }
 
 /*
@@ -294,8 +284,6 @@ ion-card-content {
 }
 
 // Apply footer colors to tab bar and footer elements
-// Temporarily commented out to fix tab bar visibility issue
-/*
 ion-tab-bar {
   --background: var(--app-footer-background, var(--ion-toolbar-background, var(--ion-background-color))) !important;
   --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
@@ -304,9 +292,24 @@ ion-tab-bar {
 // Apply footer text color to tab buttons
 ion-tab-button {
   --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
-  --color-selected: var(--app-footer-text-color, var(--ion-color-primary)) !important;
+  --color-selected: var(--ion-color-primary) !important;
+  
+  // Ensure inactive tab button text and icons use footer text color
+  ion-label {
+    color: var(--app-footer-text-color, var(--ion-text-color)) !important;
+  }
+  
+  ion-icon {
+    color: var(--app-footer-text-color, var(--ion-text-color)) !important;
+  }
+  
+  // Selected tab uses primary color
+  &.tab-selected {
+    ion-label, ion-icon {
+      color: var(--ion-color-primary) !important;
+    }
+  }
 }
-*/
 
 // Apply card text color to card titles and content
 ion-card-title, ion-card-subtitle {
@@ -355,11 +358,7 @@ ion-label {
   color: var(--app-item-text-color) !important;
 }
 
-// Tab bar visibility fix
-ion-tab-bar {
-  --color: var(--ion-text-color) !important;
-  --color-selected: var(--ion-color-primary) !important;
-}
+// Tab bar visibility fix - removed conflicting color rules as they're handled above
 
 // Review Action Bar - Dynamic colors using CSS variables
 .review-tab-bar {

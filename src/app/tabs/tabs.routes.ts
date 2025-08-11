@@ -32,6 +32,11 @@ export const routes: Routes = [
           import('../card-management/card-management.page').then((m) => m.CardManagementPage),
       },
       {
+        path: 'help',
+        loadComponent: () =>
+          import('../help/help.page').then((m) => m.HelpPage),
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full',

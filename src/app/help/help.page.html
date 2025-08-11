@@ -1,0 +1,247 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Help & Guide</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Help & Guide</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Spaced Repetition System -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="brain" slot="start"></ion-icon>
+        Spaced Repetition System
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>This app uses a scientifically-proven <strong>spaced repetition algorithm</strong> to help you learn more effectively by showing cards at optimal intervals.</p>
+      
+      <h4>How It Works:</h4>
+      <ul>
+        <li><strong>New cards</strong> appear immediately for learning</li>
+        <li><strong>Easy cards</strong> reappear after longer intervals (days/weeks)</li>
+        <li><strong>Good cards</strong> reappear at standard intervals</li>
+        <li><strong>Hard cards</strong> reappear sooner for more practice</li>
+        <li><strong>"I don't know" cards</strong> reset to day 1 and need relearning</li>
+      </ul>
+
+      <ion-note color="primary">
+        <ion-icon name="information-circle" slot="start"></ion-icon>
+        The algorithm automatically adjusts based on your performance to optimize long-term retention.
+      </ion-note>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Study Session Guide -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="school" slot="start"></ion-icon>
+        Study Session Guide
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h4>During Study Sessions:</h4>
+      <div class="response-guide">
+        <div class="response-item">
+          <ion-button size="small" color="success" fill="outline">Easy</ion-button>
+          <span>You knew the answer immediately and confidently</span>
+        </div>
+        <div class="response-item">
+          <ion-button size="small" color="primary" fill="outline">Good</ion-button>
+          <span>You knew the answer after thinking briefly</span>
+        </div>
+        <div class="response-item">
+          <ion-button size="small" color="warning" fill="outline">Hard</ion-button>
+          <span>You struggled but eventually remembered</span>
+        </div>
+        <div class="response-item">
+          <ion-button size="small" color="danger" fill="outline">I don't know</ion-button>
+          <span>You couldn't remember or got it wrong</span>
+        </div>
+      </div>
+
+      <h4>Intra-Session Repetition:</h4>
+      <p>Cards marked as <strong>Hard</strong> or <strong>I don't know</strong> will reappear within the same study session for immediate reinforcement:</p>
+      <ul>
+        <li><strong>Hard cards</strong> reappear after ~8 cards for additional practice</li>
+        <li><strong>"I don't know" cards</strong> reappear after ~3 cards for quick review</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Session Completion -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+        Session Completion
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>When you finish a study session, you'll see a summary with three options:</p>
+      
+      <div class="completion-options">
+        <div class="option-item">
+          <ion-button size="small" color="tertiary" fill="outline">Review Missed Cards</ion-button>
+          <span>Practice only the cards you marked "I don't know" for focused learning</span>
+        </div>
+        <div class="option-item">
+          <ion-button size="small" color="primary" fill="outline">Study More Cards</ion-button>
+          <span>Continue with more cards from the same deck</span>
+        </div>
+        <div class="option-item">
+          <ion-button size="small" color="medium" fill="outline">Finish</ion-button>
+          <span>Return to the Decks page</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Settings Guide -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="settings" slot="start"></ion-icon>
+        Settings & Customization
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h4>Max Cards Per Session:</h4>
+      <p>Control how many cards you study in each session (5-500 cards). The app will show:</p>
+      <ul>
+        <li><strong>Due cards</strong> that are ready for review</li>
+        <li><strong>New cards</strong> to fill up to your maximum</li>
+      </ul>
+      
+      <ion-note color="success">
+        <ion-icon name="bulb" slot="start"></ion-icon>
+        <strong>Tip:</strong> Start with 20 cards per session and adjust based on your available time and energy.
+      </ion-note>
+
+      <h4>Other Customizations:</h4>
+      <ul>
+        <li><strong>Auto-speak on card flip:</strong> Automatically pronounce words when you flip cards</li>
+        <li><strong>Color themes:</strong> Customize button colors and appearance</li>
+        <li><strong>Text-to-speech:</strong> Configure voice and language settings</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Tips & Best Practices -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="star" slot="start"></ion-icon>
+        Tips & Best Practices
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="tips-list">
+        <div class="tip-item">
+          <ion-icon name="time" color="primary"></ion-icon>
+          <div>
+            <strong>Study consistently:</strong> Daily 10-15 minute sessions are more effective than long, infrequent sessions.
+          </div>
+        </div>
+        
+        <div class="tip-item">
+          <ion-icon name="trending-up" color="success"></ion-icon>
+          <div>
+            <strong>Be honest with responses:</strong> Choose the difficulty that truly reflects your knowledge for optimal scheduling.
+          </div>
+        </div>
+        
+        <div class="tip-item">
+          <ion-icon name="refresh" color="warning"></ion-icon>
+          <div>
+            <strong>Use "Review Missed Cards":</strong> Immediately practice difficult cards for better retention.
+          </div>
+        </div>
+        
+        <div class="tip-item">
+          <ion-icon name="analytics" color="tertiary"></ion-icon>
+          <div>
+            <strong>Check your stats:</strong> Monitor progress and accuracy in the Stats tab to track improvement.
+          </div>
+        </div>
+        
+        <div class="tip-item">
+          <ion-icon name="volume-high" color="medium"></ion-icon>
+          <div>
+            <strong>Use audio features:</strong> Enable auto-speak to improve pronunciation and listening skills.
+          </div>
+        </div>
+        
+        <div class="tip-item">
+          <ion-icon name="library" color="primary"></ion-icon>
+          <div>
+            <strong>Organize your decks:</strong> Create focused decks by topic or difficulty level for targeted learning.
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Card Management -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="create" slot="start"></ion-icon>
+        Card Management
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h4>Managing Your Cards:</h4>
+      <ul>
+        <li><strong>Manage Deck:</strong> View, edit, or delete individual cards</li>
+        <li><strong>Reset Progress:</strong> Reset individual cards or entire decks to start fresh</li>
+        <li><strong>Search Cards:</strong> Find specific cards within your decks</li>
+      </ul>
+      
+      <h4>Card Types:</h4>
+      <ul>
+        <li><strong>Picture-Word:</strong> Image with Spanish word and English translation</li>
+        <li><strong>Fill-in-the-Blank:</strong> Complete sentences with missing words</li>
+        <li><strong>Translation:</strong> Translate between languages in both directions</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Getting Started -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="rocket" slot="start"></ion-icon>
+        Getting Started
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ol>
+        <li><strong>Create a deck</strong> or import existing cards</li>
+        <li><strong>Add cards</strong> using the + button on the Decks page</li>
+        <li><strong>Start studying</strong> by tapping the Study button</li>
+        <li><strong>Answer honestly</strong> using Easy, Good, Hard, or "I don't know"</li>
+        <li><strong>Review missed cards</strong> for immediate reinforcement</li>
+        <li><strong>Study daily</strong> to maintain momentum and see progress</li>
+      </ol>
+      
+      <ion-note color="success">
+        <ion-icon name="heart" slot="start"></ion-icon>
+        Remember: Learning is a journey. Be patient with yourself and celebrate small victories!
+      </ion-note>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

@@ -496,6 +496,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   goToDecks() {
+    // End the session and restore tab bar
+    this.cardService.endSession();
+    this.updateSessionStatus();
+    this.sessionStateService.setSessionActive(false);
+    
+    // Navigate to decks page
     this.router.navigate(['/tabs/decks']);
   }
 

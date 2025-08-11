@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { ColorPickerPopoverComponent } from '../components/color-picker-popover.component';
 import { ColorPickerOverlayService } from '../services/color-picker-overlay.service';
 import { TtsService } from '../services/tts.service';
@@ -115,7 +116,8 @@ export class SettingsPage implements OnInit {
     private toastController: ToastController,
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private colorPickerOverlayService: ColorPickerOverlayService
+    private colorPickerOverlayService: ColorPickerOverlayService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -740,9 +742,12 @@ export class SettingsPage implements OnInit {
     return this.expandedCard === cardName;
   }
 
+  openHelp() {
+    this.router.navigate(['/tabs/help']);
+  }
+
   openBuyMeCoffee() {
-    // Open PayPal donation link in external browser
-    window.open('https://paypal.me/lallen300', '_blank');
+    window.open('https://buymeacoffee.com/lallen30', '_blank');
   }
 
   async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {

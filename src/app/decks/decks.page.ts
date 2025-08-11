@@ -1078,14 +1078,14 @@ export class DecksPage implements OnInit {
       buttons: [
         {
           text: 'Import from Device',
-          icon: 'document-outline',
+          icon: 'cloud-upload',
           handler: () => {
             this.importDeck();
           }
         },
         {
           text: 'Import from URL',
-          icon: 'cloud-download-outline',
+          icon: 'download',
           handler: () => {
             this.importFromUrl();
           }
