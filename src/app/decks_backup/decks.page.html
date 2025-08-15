@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Decks</ion-title>
+    <ion-button slot="end" fill="clear" (click)="refreshDecks()">
+      <ion-icon name="refresh" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" fill="clear" (click)="showImportOptions()">
+      <ion-icon name="cloud-upload-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" fill="clear" (click)="isCreateDeckActionSheetOpen = true">
+      <ion-icon name="add" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="no-padding decks-container">
+    <ion-list *ngIf="!isLoading && filteredDecks.length > 0"> 
+      <ion-item-sliding *ngFor="let deck of filteredDecks; let i = index">
+        <ion-item button (click)="openDeckActionSheet(deck)">
+          <ion-label>
+            <h2 class="deck-title">{{ deck.name }}</h2>
+            <p class="deck-subtitle">{{ deck.description }}</p>
+            <p class="deck-stats">{{ deck.cardCount || 0 }} cards • {{ deck.masteredCards || 0 }} mastered <br /> test test test</p>
+          </ion-label>
+        </ion-item>
+        
+        <ion-item-options slot="end">
+          <ion-item-option color="warning" (click)="startSession(deck)">
+            <ion-icon slot="icon-only" name="play-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="tertiary" (click)="openAddCardActionSheet(deck)">
+            <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="primary" expandable="true" (click)="openDeckActionSheet(deck)">
+            <ion-icon slot="icon-only" name="library-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredDecks.length === 0" class="empty-state">
+      <ion-icon name="library-outline" class="empty-icon"></ion-icon>
+      <h2>No Decks Yet</h2>
+      <p>Create your first deck to start learning!</p>
+      
+      <ion-button expand="block" (click)="openCreateDeckActionSheet()" class="create-deck-btn">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Create Your First Deck
+      </ion-button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-container no-padding">
+      <ion-spinner></ion-spinner>
+      <p>Loading decks...</p>
+    </div>
+  </div>
+
+  <!-- Deck Action Sheet -->
+  <ion-action-sheet
+    [isOpen]="isDeckActionSheetOpen"
+    header="Deck Actions"
+    [buttons]="deckActionSheetButtons"
+    (didDismiss)="setDeckActionSheetOpen(false)">
+  </ion-action-sheet>
+
+  <!-- Add Card Action Sheet -->
+  <ion-action-sheet
+    [isOpen]="isAddCardActionSheetOpen"
+    header="Add Card Type"
+    [buttons]="addCardActionSheetButtons"
+    (didDismiss)="setAddCardActionSheetOpen(false)">
+  </ion-action-sheet>
+
+  <!-- Create Deck Action Sheet -->
+  <ion-action-sheet
+    [isOpen]="isCreateDeckActionSheetOpen"
+    header="Create New Deck"
+    [buttons]="createDeckActionSheetButtons"
+    (didDismiss)="setCreateDeckActionSheetOpen(false)">
+  </ion-action-sheet>
+
+  <!-- Import Action Sheet -->
+  <ion-action-sheet
+    [isOpen]="isImportActionSheetOpen"
+    header="Import Deck"
+    [buttons]="importActionSheetButtons"
+    (didDismiss)="setImportActionSheetOpen(false)">
+  </ion-action-sheet>
+</ion-content>

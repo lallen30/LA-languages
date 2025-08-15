@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Decks copy</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="manualRefresh()" fill="clear">
+        <ion-icon name="refresh" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showImportOptions()" fill="clear">
+        <ion-icon name="cloud-upload-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="createNewDeck()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Decks copy</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="decks-container">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Loading decks...</p>
+    </div>
+
+    <!-- Decks List -->
+    <ion-list *ngIf="!isLoading && filteredDecks.length > 0" class="decks-list">
+      <ion-item 
+        *ngFor="let deck of filteredDecks; let i = index" 
+        class="deck-item"
+        button
+        (click)="openDeckActions(deck)">
+        
+        <!-- Deck Color Indicator -->
+        <div class="deck-color-indicator" [style.background-color]="getDeckColor(i)" slot="start"></div>
+        
+        <!-- Deck Info -->
+        <ion-label>
+          <h2 class="deck-title">{{ deck.name }}</h2>
+          <p class="deck-subtitle">{{ deck.description }}</p>
+          <p class="deck-stats">{{ deck.cardCount }} cards • {{ deck.masteredCards }} mastered <br /> test test test</p>
+        </ion-label>
+        
+        <!-- Actions -->
+        <div class="deck-actions-list" slot="end">
+          <!-- Study Button -->
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            color="primary"
+            (click)="startStudying(deck); $event.stopPropagation()">
+            <ion-icon name="play-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Add Card Button -->
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            color="success"
+            (click)="showAddCardOptions(deck); $event.stopPropagation()">
+            <ion-icon name="add-outline"></ion-icon>
+          </ion-button>
+          
+          <!-- Manage Cards Button -->
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            color="medium"
+            (click)="navigateToCardManagement(deck); $event.stopPropagation()">
+            <ion-icon name="library-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredDecks.length === 0" class="empty-state">
+      <ion-icon name="library-outline" class="empty-icon"></ion-icon>
+      <h2>No Decks Yet</h2>
+      <p>Create your first deck to start learning!</p>
+      
+      <ion-button expand="block" (click)="createNewDeck()" class="create-deck-btn">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Create Your First Deck
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

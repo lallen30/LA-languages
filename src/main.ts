@@ -39,7 +39,12 @@ import {
   download,
   cloudUpload,
   trash,
-  informationCircle
+  informationCircle,
+  chevronForward,
+  chevronDown,
+  home,
+  settings,
+  barChart
 } from 'ionicons/icons';
 
 import { routes } from './app/app.routes';
@@ -81,7 +86,12 @@ addIcons({
   download,
   'cloud-upload': cloudUpload,
   trash,
-  'information-circle': informationCircle
+  'information-circle': informationCircle,
+  'chevron-forward': chevronForward,
+  'chevron-down': chevronDown,
+  home,
+  settings,
+  'bar-chart': barChart
 });
 
 bootstrapApplication(AppComponent, {

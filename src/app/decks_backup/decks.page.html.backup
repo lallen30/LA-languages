@@ -1,0 +1,92 @@
+<ion-header [translucent]="true" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
+  <ion-toolbar style="display: flex !important; visibility: visible !important; opacity: 1 !important;">
+    <ion-title style="display: block !important; visibility: visible !important; opacity: 1 !important;">Decks</ion-title>
+    <ion-buttons slot="end" style="display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 9999 !important;">
+      <ion-button (click)="manualRefresh()" fill="clear" style="display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;">
+        <ion-icon name="refresh" slot="icon-only" style="display: block !important; visibility: visible !important; opacity: 1 !important;"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showImportOptions()" fill="clear" style="display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;">
+        <ion-icon name="cloud-upload-outline" slot="icon-only" style="display: block !important; visibility: visible !important; opacity: 1 !important;"></ion-icon>
+      </ion-button>
+      <ion-button (click)="createNewDeck()" style="display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;">
+        <ion-icon name="add" style="display: block !important; visibility: visible !important; opacity: 1 !important;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="decks-container">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Loading decks...</p>
+    </div>
+
+    <!-- No decks message -->
+    <div *ngIf="!isLoading && filteredDecks.length === 0" class="no-decks">
+      <ion-icon name="library-outline" class="no-decks-icon"></ion-icon>
+      <h2>No decks found</h2>
+      <p>Create your first deck to get started!</p>
+      <ion-button (click)="createNewDeck()" fill="solid" color="primary">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Create Deck
+      </ion-button>
+    </div>
+
+    <!-- Decks list -->
+    <div *ngIf="!isLoading && filteredDecks.length > 0">
+      <!-- Language filter -->
+      <ion-item class="language-filter">
+        <ion-select 
+          [(ngModel)]="selectedLanguage" 
+          (ionChange)="applyLanguageFilter()"
+          placeholder="Select Language"
+          interface="popover">
+          <ion-select-option *ngFor="let lang of languages" [value]="lang.code">
+            {{ lang.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Deck items -->
+      <ion-item *ngFor="let deck of filteredDecks" class="deck-item">
+        <div class="deck-content">
+          <div class="deck-header">
+            <h3 class="deck-name">{{ deck.name }}</h3>
+            <p class="deck-description">{{ deck.description }}</p>
+          </div>
+          
+          <div class="deck-stats">
+            <span class="card-count">{{ deck.cardCount || 0 }} cards</span>
+            <span class="mastered-count">{{ deck.masteredCards || 0 }} mastered</span>
+          </div>
+          
+          <div class="deck-actions">
+            <ion-button 
+              (click)="startSession(deck)" 
+              fill="clear" 
+              size="small"
+              [disabled]="!deck.cardCount || deck.cardCount === 0">
+              <ion-icon name="play" slot="icon-only"></ion-icon>
+            </ion-button>
+            
+            <ion-button 
+              (click)="showAddCardOptions(deck)" 
+              fill="clear" 
+              size="small">
+              <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
+            
+            <ion-button 
+              (click)="showDeckOptions(deck)" 
+              fill="clear" 
+              size="small">
+              <ion-icon name="library-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-item>
+    </div>
+  </div>
+</ion-content>

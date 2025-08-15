@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Test Page (Perfect Spacing)</ion-title>
+    <ion-button slot="end" fill="clear" (click)="refreshDecks()">
+      <ion-icon name="refresh" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button slot="end" fill="clear" (click)="openCreateDeckActionSheet()">
+      <ion-icon name="add" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item-sliding *ngFor="let deck of filteredDecks">
+      <ion-item button (click)="openDeckActionSheet(deck)">
+        <ion-avatar slot="start">
+          <img alt="Deck" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ deck.name }}</h2>
+          <p>{{ deck.description }}</p>
+          <p>{{ deck.cardCount }} cards • {{ deck.masteredCards }} mastered</p>
+        </ion-label>
+        <ion-icon name="ellipsis-vertical" slot="end"></ion-icon>
+      </ion-item>
+
+      <ion-item-options slot="end">
+        <ion-item-option (click)="startSession(deck)" color="primary">
+          <ion-icon name="play-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+        <ion-item-option (click)="openAddCardActionSheet(deck)" color="secondary">
+          <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+        <ion-item-option (click)="deleteDeck(deck)" color="danger">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+
+<!-- Main Deck Action Sheet -->
+<ion-action-sheet
+  [isOpen]="isDeckActionSheetOpen"
+  [buttons]="deckActionSheetButtons"
+  (didDismiss)="isDeckActionSheetOpen = false">
+</ion-action-sheet>
+
+<!-- Add Card Action Sheet -->
+<ion-action-sheet
+  [isOpen]="isAddCardActionSheetOpen"
+  [buttons]="addCardActionSheetButtons"
+  (didDismiss)="isAddCardActionSheetOpen = false">
+</ion-action-sheet>
+
+<!-- Create Deck Action Sheet -->
+<ion-action-sheet
+  [isOpen]="isCreateDeckActionSheetOpen"
+  [buttons]="createDeckActionSheetButtons"
+  (didDismiss)="isCreateDeckActionSheetOpen = false">
+</ion-action-sheet>
+
+<!-- Import Action Sheet -->
+<ion-action-sheet
+  [isOpen]="isImportActionSheetOpen"
+  [buttons]="importActionSheetButtons"
+  (didDismiss)="isImportActionSheetOpen = false">
+</ion-action-sheet>

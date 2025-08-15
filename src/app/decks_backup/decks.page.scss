@@ -1,0 +1,893 @@
+// Header button styling - iOS compatible
+ion-header .header-buttons {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  background: #f8f8f8 !important;
+  border-bottom: 1px solid #c8c7cc !important;
+  min-height: 44px !important;
+  height: auto !important;
+  /* Add safe area padding for iOS status bar */
+  padding-top: env(safe-area-inset-top) !important;
+  padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  
+  .header-btn {
+    background: var(--ion-color-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: var(--ion-color-primary-shade);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(var(--ion-color-primary-rgb), 0.3);
+    }
+    
+    ion-icon {
+      font-size: 22px;
+    }
+  }
+}
+
+ion-item::part(detail-icon) {
+  transform: rotate(180deg);
+}
+
+.decks-container {
+  padding: 0;
+  min-height: 100%;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+.decks-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  
+  ion-item-sliding {
+    margin-bottom: 0;
+    
+    ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 0;
+    --border-radius: 0;
+    --background: transparent;
+    --border-width: 0;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    transition: none !important;
+    background: transparent !important;
+    border: none !important;
+    
+    &:hover {
+      --background: #f8f9fa;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+    }
+    
+    &:active {
+      transform: translateY(0) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
+    }
+  }
+}
+
+.deck-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 80px;
+}
+
+.deck-color-indicator {
+  width: 6px !important;
+  height: 60px !important;
+  border-radius: 3px !important;
+  margin-right: 16px !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.deck-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--ion-color-dark) !important;
+  margin: 0 0 4px 0 !important;
+  line-height: 1.3 !important;
+}
+
+.deck-subtitle {
+  font-size: 14px !important;
+  color: var(--ion-color-medium) !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.4 !important;
+}
+
+.deck-stats {
+  font-size: 12px !important;
+  color: var(--ion-color-medium-shade) !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+}
+
+.deck-actions-list {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  
+  ion-button {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --border-radius: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    
+    // Outline button styling - ensure icons match border colors
+    &[fill="outline"] {
+      // Make icons match the outline border color with !important to override Ionic defaults
+      &[color="primary"] ion-icon {
+        color: var(--ion-color-primary) !important;
+      }
+      
+      &[color="success"] ion-icon {
+        color: var(--ion-color-success) !important;
+      }
+      
+      &[color="medium"] ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+      
+      &[color="danger"] ion-icon {
+        color: var(--ion-color-danger) !important;
+      }
+      
+      // For buttons without color attribute
+      &:not([color]) ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+    }
+    
+    ion-icon {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    
+    // Hover effect
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    
+    // Active/pressed state
+    &:active {
+      transform: translateY(0);
+      transition: all 0.1s ease;
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    font-size: 16px;
+    color: var(--ion-color-medium);
+    margin: 0 0 32px 0;
+    line-height: 1.4;
+  }
+  
+  .create-deck-btn {
+    --padding-start: 24px;
+    --padding-end: 24px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-weight: 600;
+  }
+}
+
+// DIAGNOSTIC TEST: Force exact positioning like Example page
+@media (max-width: 768px) {
+  ion-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    min-height: 44px !important;
+    height: auto !important;
+    /* Add safe area padding for iOS status bar */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  }
+}
+ion-toolbar {
+    background: #f8f8f8 !important;
+    color: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    margin: 0 !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+// DIAGNOSTIC: Force ion-content to have zero top spacing
+@media (max-width: 768px) {
+  ion-content {
+    --padding-top: 0 !important;
+    --margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    top: 0 !important;
+  }
+  
+  .no-padding {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  ion-list {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    --margin-top: 0 !important;
+    --padding-top: 0 !important;
+  }
+}
+
+.deck-header {
+  display: flex;
+  padding: 20px;
+  
+  .deck-color-bar {
+    width: 4px;
+    height: 60px;
+    border-radius: 2px;
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+  
+  .deck-info {
+    flex: 1;
+    
+    .deck-title {
+      margin: 0 0 6px 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      line-height: 1.2;
+    }
+    
+    .deck-description {
+      margin: 0 0 12px 0;
+      color: var(--ion-color-primary);
+      font-size: 15px;
+      line-height: 1.3;
+    }
+    
+    .deck-stats {
+      font-size: 13px;
+      color: var(--ion-color-medium-shade);
+      font-weight: 500;
+    }
+  }
+}
+
+.deck-actions {
+  display: flex;
+  border-top: 1px solid var(--ion-color-light);
+  
+  .action-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 16px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 25%;
+      height: 50%;
+      width: 1px;
+      background: var(--ion-color-light);
+    }
+    
+    &.play-btn {
+      color: var(--ion-color-primary);
+      &:hover { background: var(--ion-color-primary-tint); }
+    }
+    
+    &.add-btn {
+      color: var(--ion-color-success);
+      &:hover { background: var(--ion-color-success-tint); }
+    }
+    
+    &.manage-btn {
+      color: var(--ion-color-medium);
+      &:hover { background: var(--ion-color-light); }
+    }
+  }
+}
+
+// Modal Styling
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  animation: modalSlideIn 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header h2 {
+  margin: 0;
+  padding: 24px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+  text-align: center;
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-input, .modal-textarea {
+  width: 100%;
+  border: 2px solid var(--ion-color-light);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  background: var(--ion-color-light-tint);
+  margin-bottom: 16px;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--ion-color-primary);
+    background: white;
+  }
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px;
+}
+
+.modal-btn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  
+  &.cancel-btn {
+    background: var(--ion-color-light);
+    color: var(--ion-color-medium-shade);
+  }
+  
+  &.create-btn {
+    background: var(--ion-color-primary);
+    color: white;
+    
+    &:disabled {
+      background: var(--ion-color-light);
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+// Menu Styling
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+}
+
+.menu-content {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  background: white;
+  border-radius: 12px;
+  min-width: 200px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  color: var(--ion-color-dark);
+  cursor: pointer;
+  
+  &:hover {
+    background: var(--ion-color-light-tint);
+  }
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--ion-color-light);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.deck-list {
+  margin-bottom: 20px;
+  
+  .deck-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: var(--ion-color-light, #f8f9fa);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    .deck-color {
+      width: 4px;
+      height: 40px;
+      border-radius: 2px;
+      margin-right: 16px;
+    }
+    
+    .deck-info {
+      flex: 1;
+      
+      h3 {
+        margin: 0 0 4px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ion-color-dark, #222);
+      }
+      
+      p {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        color: var(--ion-color-medium, #666);
+      }
+      
+      .deck-stats {
+        font-size: 12px;
+        color: var(--ion-color-medium, #666);
+      }
+    }
+    
+    .deck-action-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
+      color: var(--ion-color-primary, #3880ff);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.2);
+      }
+      
+      &:active {
+        background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.3);
+      }
+    }
+  }
+}
+
+.add-deck-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--ion-color-primary, #3880ff);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--ion-color-primary-shade, #3171e0);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    background: var(--ion-color-primary-shade, #3171e0);
+    transform: translateY(0);
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+  }
+}
+
+.decks-list {
+  margin: 0;
+  padding: 0;
+  
+  ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 0;
+    --border-radius: 0;
+    --background: var(--ion-background-color);
+    
+    &:not(:last-child) {
+      --border-width: 0 0 0.5px 0;
+      --border-color: var(--ion-color-step-150);
+    }
+    
+    &.partially-correct {
+      --background: var(--ion-color-warning);
+      --color: white;
+    }
+    
+    &:hover {
+      --background: var(--ion-color-step-50);
+    }
+  }
+}
+
+.deck-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deck-color-indicator {
+  width: 4px;
+  height: 40px;
+  border-radius: 2px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.deck-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+  margin: 0 0 2px 0;
+  line-height: 1.3;
+}
+
+.deck-subtitle {
+  font-size: 14px;
+  color: var(--ion-color-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.deck-stats {
+  font-size: 13px;
+  color: var(--ion-color-secondary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.deck-actions-list {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  
+  ion-button {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --border-radius: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    
+    // Outline button styling - ensure icons match border colors
+    &[fill="outline"] {
+      // Make icons match the outline border color with !important to override Ionic defaults
+      &[color="primary"] ion-icon {
+        color: var(--ion-color-primary) !important;
+      }
+      
+      &[color="success"] ion-icon {
+        color: var(--ion-color-success) !important;
+      }
+      
+      &[color="medium"] ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+      
+      &[color="danger"] ion-icon {
+        color: var(--ion-color-danger) !important;
+      }
+      
+      // For buttons without color attribute (Edit button)
+      &:not([color]) ion-icon {
+        color: var(--ion-color-medium) !important;
+      }
+    }
+    
+    ion-icon {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    
+    // Hover effect
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    
+    // Active/pressed state
+    &:active {
+      transform: translateY(0);
+      transition: all 0.1s ease;
+    }
+  }
+}
+
+.deck-info {
+  flex: 1;
+  
+  ion-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  ion-card-subtitle {
+    font-size: 14px;
+    opacity: 0.7;
+    line-height: 1.4;
+  }
+}
+
+.deck-stats {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--deck-color, var(--ion-color-primary));
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.due-cards {
+  margin: 12px 0;
+  padding: 8px 12px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  text-align: center;
+  
+  ion-text {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.deck-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  ion-button {
+    --border-radius: 12px;
+    margin: 0;
+  }
+}
+
+.action-row {
+  display: flex;
+  gap: 8px;
+  
+  ion-button {
+    flex: 1;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  min-height: 400px;
+  
+  .empty-icon {
+    font-size: 80px;
+    color: var(--ion-color-medium);
+    margin-bottom: 24px;
+  }
+  
+  h2 {
+    color: var(--ion-color-dark);
+    margin-bottom: 12px;
+    font-size: 24px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    margin-bottom: 32px;
+    line-height: 1.5;
+    max-width: 300px;
+  }
+}
+
+.create-deck-btn {
+  --border-radius: 12px;
+  max-width: 250px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .decks-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .deck-stats {
+    justify-content: space-around;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .due-cards {
+    background: var(--ion-color-dark-shade);
+  }
+}
+
+/* Removed duplicate iOS styles - using clean Example page approach above */
+
+/* Fix spacing gap between header and deck items - FINAL FIX */
+ion-content .decks-container {
+  padding: 0 !important; 
+  margin-top: 130px !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+  margin: 0 !important;
+}

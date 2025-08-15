@@ -14,7 +14,7 @@ export const routes: Routes = [
       {
         path: 'decks',
         loadComponent: () =>
-          import('../decks/decks.page').then((m) => m.DecksPage),
+          import('../decks_backup/decks.page').then((m) => m.DecksPage),
       },
       {
         path: 'stats',
@@ -35,6 +35,26 @@ export const routes: Routes = [
         path: 'help',
         loadComponent: () =>
           import('../help/help.page').then((m) => m.HelpPage),
+      },
+      {
+        path: 'example',
+        loadComponent: () =>
+          import('../example/example.page').then((m) => m.ExampleComponent),
+      },
+      {
+        path: 'test',
+        loadComponent: () =>
+          import('../test/test.page').then((m) => m.TestPage),
+      },
+      {
+        path: 'decks-copy',
+        loadComponent: () =>
+          import('../decks copy/decks.page').then((m) => m.DecksPage),
+      },
+      {
+        path: 'decks-original',
+        loadComponent: () =>
+          import('../decks/decks.page').then((m) => m.DecksPage),
       },
       {
         path: '',

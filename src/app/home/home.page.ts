@@ -501,8 +501,28 @@ export class HomePage implements OnInit, OnDestroy {
     this.updateSessionStatus();
     this.sessionStateService.setSessionActive(false);
     
-    // Navigate to decks page
+    // Navigate to decks page (decks_backup)
     this.router.navigate(['/tabs/decks']);
+  }
+
+  goToDecksOriginal() {
+    // Navigate to original decks page
+    this.router.navigate(['/tabs/decks-original']);
+  }
+
+  goToDecksCopy() {
+    // Navigate to decks copy page
+    this.router.navigate(['/tabs/decks-copy']);
+  }
+
+  goToDecksBackup() {
+    // Navigate to decks backup page
+    this.router.navigate(['/tabs/decks']);
+  }
+
+  goToExample() {
+    // Navigate to example page
+    this.router.navigate(['/tabs/example']);
   }
 
   private updateSessionStatus() {

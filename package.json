@@ -1,5 +1,5 @@
 {
-  "name": "flashcard-app",
+  "name": "fluentflip",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -24,6 +24,7 @@
     "@capacitor/app": "7.0.1",
     "@capacitor/core": "7.4.2",
     "@capacitor/haptics": "7.0.1",
+    "@capacitor/ios": "^7.4.2",
     "@capacitor/keyboard": "7.0.1",
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/status-bar": "7.0.1",

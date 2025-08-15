@@ -1,0 +1,10 @@
+.hidden {
+  display: none !important;
+}
+
+ion-tab-bar {
+  transition: transform 0.3s ease-in-out;
+}
+ion-tab-bar.hidden {
+  transform: translateY(100%);
+}/*# sourceMappingURL=tabs.page.css.map */

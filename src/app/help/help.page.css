@@ -1,0 +1,132 @@
+ion-content {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+}
+
+ion-card {
+  margin-bottom: 16px;
+}
+ion-card ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ion-color-primary);
+}
+ion-card ion-card-title ion-icon {
+  font-size: 1.2em;
+}
+ion-card h4 {
+  color: var(--ion-color-primary);
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+ion-card ul, ion-card ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+ion-card ul li, ion-card ol li {
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+ion-card p {
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.response-guide .response-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.response-guide .response-item ion-button {
+  min-width: 80px;
+  --height: 32px;
+}
+.response-guide .response-item span {
+  flex: 1;
+  font-size: 0.9em;
+  line-height: 1.3;
+}
+
+.completion-options .option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.completion-options .option-item ion-button {
+  min-width: 140px;
+  --height: 32px;
+  flex-shrink: 0;
+}
+.completion-options .option-item span {
+  flex: 1;
+  font-size: 0.9em;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.tips-list .tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+}
+.tips-list .tip-item ion-icon {
+  font-size: 1.2em;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.tips-list .tip-item div {
+  flex: 1;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+.tips-list .tip-item div strong {
+  color: var(--ion-color-primary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+ion-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--ion-color-light);
+}
+ion-note ion-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+ion-note[color=primary] {
+  background: var(--ion-color-primary-tint);
+  color: var(--ion-color-primary-shade);
+}
+ion-note[color=success] {
+  background: var(--ion-color-success-tint);
+  color: var(--ion-color-success-shade);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tips-list .tip-item {
+    background: var(--ion-color-dark);
+  }
+  ion-note {
+    background: var(--ion-color-dark);
+  }
+  ion-note[color=primary] {
+    background: rgba(var(--ion-color-primary-rgb), 0.2);
+  }
+  ion-note[color=success] {
+    background: rgba(var(--ion-color-success-rgb), 0.2);
+  }
+}/*# sourceMappingURL=help.page.css.map */

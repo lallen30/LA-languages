@@ -18,12 +18,35 @@
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
+
+
+
+
 /* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+/* Minimal iOS Fixes - Don't break Ionic's layout */
+.ios {
+  /* Basic iOS safe area support */
+  ion-content {
+    --padding-top: env(safe-area-inset-top);
+    --padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Ensure proper background colors */
+  ion-content {
+    --background: var(--ion-background-color, #ffffff);
+  }
+  
+  ion-header ion-toolbar {
+    --background: var(--ion-toolbar-background, #ffffff);
+    --color: var(--ion-toolbar-color, #000000);
+  }
+}
 
 /**
  * Ionic Dark Mode
@@ -494,4 +517,55 @@ ion-modal textarea::placeholder,
 ion-alert textarea::placeholder {
   color: var(--ion-color-medium, #000000) !important;
   opacity: 0.6;
+}
+
+// iOS Header Button Fixes - Universal approach for mobile devices
+@media (max-width: 768px) {
+  ion-header {
+    position: relative;
+    visibility: visible;
+    opacity: 1;
+    z-index: 1000;
+    padding-top: env(safe-area-inset-top);
+    padding-top: constant(safe-area-inset-top);
+    
+    ion-toolbar {
+      position: relative;
+      visibility: visible;
+      opacity: 1;
+      z-index: 1001;
+      
+      ion-title {
+        position: relative;
+        visibility: visible;
+        opacity: 1;
+        z-index: 1002;
+      }
+      
+      ion-buttons {
+        position: relative;
+        visibility: visible;
+        opacity: 1;
+        z-index: 1003;
+        
+        ion-button {
+          position: relative;
+          visibility: visible;
+          opacity: 1;
+          
+          ion-icon {
+            position: relative;
+            visibility: visible;
+            opacity: 1;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+  
+  // Ensure content has proper padding to account for header
+  ion-content {
+    padding-top: 0;
+  }
 }

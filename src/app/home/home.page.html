@@ -36,11 +36,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Flashcards</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Remove collapsible header that causes duplicate title on iOS -->
 
   <!-- Session Active -->
   <div *ngIf="isSessionActive && currentCard" class="session-container">
@@ -201,10 +197,26 @@
       <h2>Ready to Study?</h2>
       <p>Select a deck to start your flashcard session</p>
       
-      <ion-button expand="block" (click)="goToDecks()" class="start-btn">
-        <ion-icon name="play" slot="start"></ion-icon>
-        Browse Decks
+      <ion-button expand="block" fill="solid" color="primary" (click)="goToDecksOriginal()" class="start-btn">
+        <ion-icon name="library" slot="start"></ion-icon>
+        Decks (Original)
       </ion-button>
+      
+      <ion-button expand="block" fill="solid" color="secondary" (click)="goToDecksCopy()" class="start-btn">
+        <ion-icon name="copy" slot="start"></ion-icon>
+        Decks Copy
+      </ion-button>
+      
+      <ion-button expand="block" fill="solid" color="tertiary" (click)="goToDecksBackup()" class="start-btn">
+        <ion-icon name="folder" slot="start"></ion-icon>
+        Decks Backup
+      </ion-button>
+      
+      <ion-button expand="block" fill="solid" color="success" (click)="goToExample()" class="start-btn">
+        <ion-icon name="play" slot="start"></ion-icon>
+        View Example Page
+      </ion-button>
+      
     </div>
   </div>
 </ion-content>

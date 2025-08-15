@@ -337,10 +337,6 @@
   &.later-action:hover {
     --background: var(--ion-color-warning-tint);
   }
-  
-  &.gotit-action:hover {
-    --background: var(--ion-color-success-tint);
-  }
 }
 
 .no-session {
@@ -349,6 +345,20 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+}
+
+/* Universal content centering fix for mobile */
+@media (max-width: 768px) {
+  .no-session {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 80px) !important;
+    height: auto !important;
+    padding: 40px !important;
+    z-index: 100 !important;
+  }
 }
 
 .welcome-content {
@@ -378,6 +388,25 @@
   margin-top: 20px;
 }
 
+/* Universal button styling fix for mobile */
+@media (max-width: 768px) {
+  .start-btn {
+    background: #3880ff !important;
+    color: white !important;
+    font-weight: 600 !important;
+    height: 48px !important;
+    font-size: 16px !important;
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(56, 128, 255, 0.3) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+  }
+}
+
 // Responsive design
 @media (max-width: 768px) {
   .flashcard {
@@ -395,6 +424,64 @@
   
   .response-btn {
     width: 100%;
+  }
+}
+
+/* Universal Header Visibility Fix for mobile */
+@media (max-width: 768px) {
+  ion-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    min-height: 44px !important;
+    height: auto !important;
+    /* Add safe area padding for iOS status bar */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  }
+
+  ion-toolbar {
+    background: #f8f8f8 !important;
+    color: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    /* Ensure toolbar content is visible */
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  ion-title {
+    display: block !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    font-size: 17px !important;
+    color: #000 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    /* Ensure title is visible */
+    position: relative !important;
+    z-index: 1002 !important;
+  }
+
+  /* Adjust content to account for header */
+  .no-session {
+    position: fixed !important;
+    top: 60% !important; /* Move down to account for header */
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 80px) !important;
+    height: auto !important;
+    padding: 40px !important;
+    z-index: 100 !important;
   }
 }
 
