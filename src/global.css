@@ -27,6 +27,8 @@
   /* Ensure proper background colors */
 }
 .ios ion-content {
+  --overflow: hidden;
+  position: relative !important;
   --padding-top: env(safe-area-inset-top);
   --padding-bottom: env(safe-area-inset-bottom);
 }
@@ -306,68 +308,6 @@ ion-label {
   color: var(--app-item-text-color) !important;
 }
 
-.review-tab-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  display: flex;
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.review-tab-bar .review-tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 8px;
-  min-height: 70px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-.review-tab-bar .review-tab ion-icon {
-  font-size: 28px;
-  margin-bottom: 6px;
-}
-.review-tab-bar .review-tab .tab-label {
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0;
-}
-.review-tab-bar .review-tab.hard-tab {
-  background: var(--review-hard-bg, #eb445a);
-}
-.review-tab-bar .review-tab.hard-tab ion-icon, .review-tab-bar .review-tab.hard-tab .tab-label {
-  color: var(--review-hard-text, #ffffff);
-}
-.review-tab-bar .review-tab.good-tab {
-  background: var(--review-good-bg, #ffc409);
-}
-.review-tab-bar .review-tab.good-tab ion-icon, .review-tab-bar .review-tab.good-tab .tab-label {
-  color: var(--review-good-text, #000000);
-}
-.review-tab-bar .review-tab.easy-tab {
-  background: var(--review-easy-bg, #2dd36f);
-}
-.review-tab-bar .review-tab.easy-tab ion-icon, .review-tab-bar .review-tab.easy-tab .tab-label {
-  color: var(--review-easy-text, #ffffff);
-}
-.review-tab-bar .review-tab.copy-tab {
-  background: var(--review-copy-bg, #92949c);
-}
-.review-tab-bar .review-tab.copy-tab ion-icon, .review-tab-bar .review-tab.copy-tab .tab-label {
-  color: var(--review-copy-text, #ffffff);
-}
-.review-tab-bar .review-tab:hover, .review-tab-bar .review-tab:active {
-  opacity: 0.8;
-}
-.review-tab-bar .review-tab:focus {
-  outline: none;
-}
 
 ion-textarea {
   --color: var(--ion-color-medium) !important;
@@ -469,3 +409,4 @@ ion-alert textarea::placeholder {
     padding-top: 0;
   }
 }/*# sourceMappingURL=global.css.map */
+

@@ -1,5 +1,34 @@
+// iOS Modal fixes
+:host {
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+ion-header {
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1000 !important;
+}
+
+ion-content {
+  --overflow: auto !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+ion-footer {
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1000 !important;
+}
+
 .modal-content {
   padding: 16px;
+  min-height: 100vh;
+  position: relative;
 }
 
 .search-section {

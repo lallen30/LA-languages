@@ -28,7 +28,6 @@ import { pin, share, trash } from 'ionicons/icons';
     IonAvatar,
     IonContent,
     IonHeader,
-    IonIcon,
     IonItem,
     IonItemOption,
     IonItemOptions,
@@ -38,7 +37,6 @@ import { pin, share, trash } from 'ionicons/icons';
     IonTitle,
     IonToolbar,
     IonActionSheet,
-    IonButton
   ],
 })
 export class ExampleComponent {

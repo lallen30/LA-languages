@@ -61,12 +61,16 @@ export class ImageSelectionModalComponent implements OnInit {
     if (index > -1) {
       // Remove if already selected
       this.selectedImages.splice(index, 1);
+      console.log('📱 Selected image:', imageUrl);
     } else {
       // Add if not selected and under max limit
       if (this.selectedImages.length < this.maxSelection) {
         this.selectedImages.push(imageUrl);
+        console.log('📱 Selected image:', imageUrl);
       }
     }
+    
+    console.log('📱 Currently selected:', this.selectedImages.length, 'images');
   }
 
   isImageSelected(imageUrl: string): boolean {

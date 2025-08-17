@@ -22,7 +22,7 @@
           <ion-label>
             <h2 class="deck-title">{{ deck.name }}</h2>
             <p class="deck-subtitle">{{ deck.description }}</p>
-            <p class="deck-stats">{{ deck.cardCount || 0 }} cards • {{ deck.masteredCards || 0 }} mastered <br /> test test test</p>
+            <p class="deck-stats">{{ deck.cardCount || 0 }} cards • {{ deck.masteredCards || 0 }} mastered</p>
           </ion-label>
         </ion-item>
         
@@ -83,11 +83,49 @@
     (didDismiss)="setCreateDeckActionSheetOpen(false)">
   </ion-action-sheet>
 
-  <!-- Import Action Sheet -->
-  <ion-action-sheet
-    [isOpen]="isImportActionSheetOpen"
-    header="Import Deck"
-    [buttons]="importActionSheetButtons"
-    (didDismiss)="setImportActionSheetOpen(false)">
-  </ion-action-sheet>
+  <!-- Custom Import Modal -->
+  <div class="custom-modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Import Deck</h2>
+        <button class="close-btn" (click)="closeImportModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <p>Choose import method:</p>
+        <div class="import-options">
+          <button class="import-btn url-btn" (click)="showUrlInput()">
+            <ion-icon name="download-outline"></ion-icon>
+            Import from URL
+          </button>
+          <button class="import-btn device-btn" (click)="importFromDevice()">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            Import from Device
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom URL Input Modal -->
+  <div class="custom-modal-overlay" *ngIf="showUrlInputModal" (click)="closeUrlInputModal()">
+    <div class="custom-modal url-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Import from URL</h2>
+        <button class="close-btn" (click)="closeUrlInputModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <p>Enter the URL of the deck JSON file:</p>
+        <input 
+          type="url" 
+          [(ngModel)]="importUrl" 
+          placeholder="https://example.com/deck.json"
+          class="url-input">
+        <div class="modal-buttons">
+          <button class="cancel-btn" (click)="closeUrlInputModal()">Cancel</button>
+          <button class="import-btn" (click)="executeUrlImport()" [disabled]="!importUrl">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

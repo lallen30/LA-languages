@@ -12,7 +12,7 @@ export const routes: Routes = [
           import('../home/home.page').then((m) => m.HomePage),
       },
       {
-        path: 'decks',
+        path: 'decks_backup',
         loadComponent: () =>
           import('../decks_backup/decks.page').then((m) => m.DecksPage),
       },
@@ -52,9 +52,9 @@ export const routes: Routes = [
           import('../decks copy/decks.page').then((m) => m.DecksPage),
       },
       {
-        path: 'decks-original',
+        path: 'image-selection',
         loadComponent: () =>
-          import('../decks/decks.page').then((m) => m.DecksPage),
+          import('../image-selection/image-selection.page').then((m) => m.ImageSelectionPage),
       },
       {
         path: '',

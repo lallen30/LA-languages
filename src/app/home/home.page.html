@@ -35,18 +35,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="no-padding" [scrollY]="false">
   <!-- Remove collapsible header that causes duplicate title on iOS -->
 
   <!-- Session Active -->
-  <div *ngIf="isSessionActive && currentCard" class="session-container">
+  <div *ngIf="isSessionActive && currentCard" class="session-container no-padding">
     <!-- Progress Bar -->
     <div class="progress-container">
       <ion-progress-bar [value]="sessionProgress.percentage / 100"></ion-progress-bar>
-      <ion-text class="progress-text">
+      <div class="progress-text">
         {{ sessionProgress.completed }} / {{ sessionProgress.total }} cards
-      </ion-text>
+      </div>
     </div>
+    
+    
 
     <!-- Fill in the Blank Card -->
     <div *ngIf="currentCard.type === 'fill-blank'" class="card-container" (click)="flipCard()">
@@ -82,7 +84,7 @@
         <div class="card-front" *ngIf="!currentCard.showWordFirst">
           <div class="card-content">
             <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0">
-              <img *ngFor="let imageUrl of currentCard.imageUrls" 
+              <img *ngFor="let imageUrl of currentCard.imageUrls.slice(0, 4)" 
                    [src]="imageUrl" 
                    [alt]="currentCard.spanishWord"
                    class="grid-image">
@@ -97,7 +99,7 @@
         <div class="card-back" *ngIf="currentCard.showWordFirst">
           <div class="card-content">
             <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0">
-              <img *ngFor="let imageUrl of currentCard.imageUrls" 
+              <img *ngFor="let imageUrl of currentCard.imageUrls.slice(0, 4)" 
                    [src]="imageUrl" 
                    [alt]="currentCard.spanishWord"
                    class="grid-image">
@@ -166,7 +168,8 @@
       </ion-button>
     </div>
 
-    <!-- Review Actions Tab Bar -->
+    
+    <!-- Review Actions Tab Bar - Inside ion-content -->
     <div class="review-tab-bar" *ngIf="currentCard && !showAnswer">
       <button class="review-tab easy-tab" (click)="markCorrect('easy')">
         <ion-icon name="checkmark"></ion-icon>

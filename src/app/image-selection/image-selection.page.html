@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Select Image</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [disabled]="selectedImages.length === 0">
+        Done ({{ selectedImages.length }})
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="search-section">
+    <ion-item>
+      <ion-input 
+        [(ngModel)]="searchTerm" 
+        (ionInput)="onSearchChange()"
+        placeholder="Search for images..."
+        clearInput="true">
+      </ion-input>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        (click)="performSearch()"
+        [disabled]="isSearching">
+        <ion-icon name="search" *ngIf="!isSearching"></ion-icon>
+        <ion-spinner *ngIf="isSearching" name="crescent"></ion-spinner>
+      </ion-button>
+    </ion-item>
+  </div>
+
+  <div class="image-grid" *ngIf="images.length > 0">
+    <div 
+      class="image-item" 
+      *ngFor="let image of images; let i = index"
+      [class.selected]="isImageSelected(image)"
+      [class.disabled]="!isImageSelected(image) && !canSelectMore()"
+      (click)="selectImage(image)"
+    >
+      <img [src]="image" [alt]="searchTerm" />
+      <div class="selection-indicator" *ngIf="isImageSelected(image)">
+        <ion-icon name="checkmark-circle" color="primary"></ion-icon>
+        <div class="selection-number">{{ selectedImages.indexOf(image) + 1 }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="selection-info" *ngIf="images.length > 0">
+    <p>{{ selectedImages.length }} of {{ maxSelection }} images selected</p>
+  </div>
+
+  <div class="no-images" *ngIf="images.length === 0 && !isSearching">
+    <ion-icon name="image-outline" size="large"></ion-icon>
+    <p *ngIf="searchTerm">No images found for "{{ searchTerm }}"</p>
+    <p *ngIf="!searchTerm">Enter a search term to find images</p>
+  </div>
+
+  <div class="loading" *ngIf="isSearching">
+    <ion-spinner></ion-spinner>
+    <p>Searching for images...</p>
+  </div>
+</ion-content>

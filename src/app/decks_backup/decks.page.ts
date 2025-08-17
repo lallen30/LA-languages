@@ -1,10 +1,13 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { IonicModule, ActionSheetController, AlertController, ToastController } from '@ionic/angular';
+import { IonicModule, ActionSheetController, AlertController, ToastController, LoadingController, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
+import { ImageService } from '../services/image.service';
 import { addIcons } from 'ionicons';
+import { Deck } from '../models/deck.model';
+import { CardType } from '../models/card.model';
 import { 
   add, 
   refresh, 
@@ -34,16 +37,8 @@ import {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class DecksPage implements OnInit {
-  filteredDecks: any[] = [
-    {
-      id: '1',
-      name: 'Spanish Basics',
-      description: 'Essential Spanish phrases for beginners',
-      cardCount: 25,
-      masteredCards: 0,
-      language: 'es-ES'
-    }
-  ];
+  decks: Deck[] = [];
+  filteredDecks: any[] = [];
   
   selectedLanguage = 'es-ES';
   isLoading = false;
@@ -53,6 +48,11 @@ export class DecksPage implements OnInit {
   isAddCardActionSheetOpen = false;
   isCreateDeckActionSheetOpen = false;
   isImportActionSheetOpen = false;
+  
+  // Custom modal states
+  showImportModal = false;
+  showUrlInputModal = false;
+  importUrl = '';
   
   // Selected deck for actions
   selectedDeck: any = null;
@@ -69,7 +69,10 @@ export class DecksPage implements OnInit {
     private actionSheetController: ActionSheetController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private storageService: StorageService
+    private loadingController: LoadingController,
+    private modalController: ModalController,
+    private storageService: StorageService,
+    private imageService: ImageService
   ) {
     // Register required icons
     addIcons({
@@ -94,9 +97,96 @@ export class DecksPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.initializeDecksPage();
+    this.checkForReturnedData();
+  }
+
+  ionViewWillEnter() {
+    console.log('📱 DecksPage ionViewWillEnter - checking for returned data');
+    this.checkForReturnedData();
+  }
+
+  checkForReturnedData() {
+    // Check if returning from image selection with selected images
+    const navigation = this.router.getCurrentNavigation();
+    console.log('📱 Checking navigation state:', navigation?.extras?.state);
+    
+    // Also check history state as fallback
+    const historyState = history.state;
+    console.log('📱 Checking history state:', historyState);
+    
+    let state = navigation?.extras?.state || historyState;
+    
+    if (state?.['action'] === 'createPictureWordCard') {
+      const selectedImages = state['selectedImages'];
+      const searchTerm = state['searchTerm'];
+      const deckId = state['deckId'];
+      
+      console.log('📱 Returned from image selection with:', selectedImages?.length, 'images for term:', searchTerm);
+      
+      if (selectedImages && selectedImages.length > 0 && searchTerm && deckId) {
+        this.createPictureWordCardWithImages(searchTerm, selectedImages, deckId);
+        
+        // Clear the state to prevent duplicate processing
+        history.replaceState(null, '', window.location.href);
+      }
+    }
+  }
+
+  async initializeDecksPage() {
     console.log('DecksPage initialized');
-    console.log('Filtered decks:', this.filteredDecks);
+    
+    try {
+      // Load real decks from storage
+      const storedDecks = await this.storageService.getAllDecks();
+      console.log('📚 Loaded decks from storage:', storedDecks);
+      
+      if (storedDecks && storedDecks.length > 0) {
+        // Use real decks from storage
+        this.decks = storedDecks;
+        this.filteredDecks = [...storedDecks];
+        
+        // Update card counts for each deck
+        for (const deck of this.filteredDecks) {
+          const cards = await this.storageService.getCardsByDeck(deck.id);
+          deck.cardCount = cards.length;
+          console.log(`📚 Deck "${deck.name}" has ${cards.length} cards`);
+        }
+      } else {
+        // Fallback to mock data if no decks exist
+        console.log('📚 No decks found, creating default deck');
+        const defaultDeck: Deck = {
+          id: '1',
+          name: 'Spanish Basics',
+          description: 'Essential Spanish phrases for beginners',
+          language: 'Spanish',
+          cardCount: 0,
+          createdAt: new Date(),
+          masteredCards: 0,
+          newCards: 0,
+          reviewCards: 0,
+          color: '#3880ff'
+        };
+        
+        // Save the default deck to storage
+        await this.storageService.saveDeck(defaultDeck);
+        
+        // Update card count for default deck
+        const cards = await this.storageService.getCardsByDeck(defaultDeck.id);
+        defaultDeck.cardCount = cards.length;
+        
+        this.decks = [defaultDeck];
+        this.filteredDecks = [defaultDeck];
+      }
+      
+      console.log('📚 Final filtered decks:', this.filteredDecks);
+    } catch (error) {
+      console.error('📚 Error loading decks:', error);
+      // Fallback to empty array on error
+      this.decks = [];
+      this.filteredDecks = [];
+    }
   }
 
   // Utility methods
@@ -140,27 +230,39 @@ export class DecksPage implements OnInit {
   // Import functionality
   showImportOptions() {
     console.log('showImportOptions called');
-    // Use native confirm dialog for iOS compatibility
-    const choice = confirm('Import Deck\n\nChoose import method:\n\nOK = Import from URL\nCancel = Import from Device');
-    if (choice) {
-      this.importFromUrl();
+    this.showImportModal = true;
+  }
+
+  closeImportModal() {
+    this.showImportModal = false;
+  }
+
+  showUrlInput() {
+    console.log('showUrlInput called');
+    this.showImportModal = false;
+    this.showUrlInputModal = true;
+    this.importUrl = 'https://example.com/deck.json';
+  }
+
+  closeUrlInputModal() {
+    this.showUrlInputModal = false;
+    this.importUrl = '';
+  }
+
+  async importFromDevice() {
+    console.log('importFromDevice called');
+    this.showImportModal = false;
+    await this.importDeck();
+  }
+
+  async executeUrlImport() {
+    console.log('executeUrlImport called with URL:', this.importUrl);
+    if (this.importUrl && this.importUrl.trim()) {
+      const urlToImport = this.importUrl.trim();
+      this.closeUrlInputModal();
+      await this.downloadAndImportDeck(urlToImport);
     } else {
-      this.importDeck();
-    }
-  }
-
-  async importDeck() {
-    // Use native alert for iOS compatibility
-    alert('Import from Device\n\nImport from device feature coming soon!');
-  }
-
-  async importFromUrl() {
-    console.log('importFromUrl called');
-    // Use native prompt for iOS compatibility
-    const url = prompt('Import from URL\n\nEnter the URL of the deck JSON file:', 'https://example.com/deck.json');
-    console.log('URL entered:', url);
-    if (url && url.trim()) {
-      await this.fetchDeckFromUrl(url.trim());
+      console.log('No URL provided for import');
     }
   }
 
@@ -204,6 +306,7 @@ export class DecksPage implements OnInit {
 
   // Deck actions
   async startSession(deck: any) {
+    console.log('Study button: Starting session for deckId:', deck.id);
     this.router.navigate(['/tabs/home'], { 
       queryParams: { deckId: deck.id }
     });
@@ -377,29 +480,7 @@ export class DecksPage implements OnInit {
     }
   ];
 
-  importActionSheetButtons = [
-    {
-      text: 'Import from Device',
-      icon: 'cloud-upload-outline',
-      handler: () => {
-        console.log('Import from Device button clicked');
-        this.importDeck();
-      }
-    },
-    {
-      text: 'Import from URL',
-      icon: 'download-outline',
-      handler: () => {
-        console.log('Import from URL button clicked');
-        this.importFromUrl();
-      }
-    },
-    {
-      text: 'Cancel',
-      icon: 'close-outline',
-      role: 'cancel'
-    }
-  ];
+  // Removed importActionSheetButtons - using custom modals instead
 
   // Action sheet control methods
   openDeckActionSheet(deck: any) {
@@ -439,13 +520,233 @@ export class DecksPage implements OnInit {
   }
 
   // Additional methods for card management
-  addCardType(type: string) {
-    const alert = this.alertController.create({
-      header: 'Add Card',
-      message: `${type} card creation feature coming soon!`,
-      buttons: ['OK']
-    });
-    alert.then(a => a.present());
+  async addCardType(type: string) {
+    console.log('addCardType called with type:', type);
+    console.log('selectedDeck:', this.selectedDeck);
+    
+    if (!this.selectedDeck) {
+      console.log('No deck selected for adding card');
+      return;
+    }
+
+    console.log('Creating card of type:', type);
+    if (type === 'fill-blank') {
+      await this.createFillBlankCard(this.selectedDeck);
+    } else if (type === 'picture') {
+      await this.createPictureWordCard(this.selectedDeck);
+    } else if (type === 'translate') {
+      await this.createTranslateCard(this.selectedDeck);
+    }
+  }
+
+  async createFillBlankCard(deck: any) {
+    if (!this.selectedDeck) {
+      console.log('No deck selected');
+      return;
+    }
+
+    console.log('createFillBlankCard called for deck:', this.selectedDeck.name);
+    
+    // Use native prompts directly for iOS compatibility
+    const sentence = prompt('Complete sentence (e.g., "El gato está en la mesa"):');
+    if (sentence) {
+      const missingWord = prompt('Missing word (e.g., "gato"):');
+      if (missingWord) {
+        const translation = prompt('English translation:');
+        if (translation) {
+          this.saveFillBlankCard(sentence, missingWord, translation);
+        }
+      }
+    }
+  }
+
+  async createPictureWordCard(deck: any) {
+    console.log('createPictureWordCard called for deck:', deck.name);
+    
+    // Use native prompts directly for iOS compatibility
+    const word = prompt('Enter Spanish word (e.g., "árbol"):');
+    if (word) {
+      const translation = prompt('Enter English translation:');
+      if (translation) {
+        await this.openImageSelectionModal(deck, { word, translation });
+      }
+    }
+  }
+
+  async createTranslateCard(deck: any) {
+    console.log('createTranslateCard called for deck:', deck.name);
+    
+    // Use native prompts directly for iOS compatibility
+    const targetWord = prompt('Enter Spanish word (e.g., "casa"):');
+    if (targetWord) {
+      const englishWord = prompt('Enter English translation (e.g., "house"):');
+      if (englishWord) {
+        await this.saveTranslateCard(deck, { targetWord, englishWord });
+      }
+    }
+  }
+
+  async saveFillBlankCard(sentence: string, missingWord: string, translation: string) {
+    if (!this.selectedDeck) return;
+    
+    const sentenceFront = sentence.replace(missingWord, '___');
+    const sentenceBack = sentence.replace(missingWord, `**${missingWord}**`);
+    
+    const newCard = {
+      id: `card_${Date.now()}`,
+      deckId: this.selectedDeck.id,
+      type: 'fill-blank' as CardType,
+      sentenceFront,
+      sentenceBack,
+      missingWord: missingWord,
+      englishTranslation: translation,
+      imageUrls: [],
+      easeFactor: 2.5,
+      interval: 1,
+      repetitions: 0,
+      lastReviewed: new Date(),
+      nextReview: new Date(),
+      isNew: true,
+      skipCount: 0
+    };
+
+    await this.storageService.saveCard(newCard);
+    
+    // Update deck card count
+    this.selectedDeck.cardCount = (this.selectedDeck.cardCount || 0) + 1;
+    this.showToast('Fill-in-the-blank card created successfully!');
+    console.log('Fill-blank card saved:', newCard);
+  }
+
+
+  async openImageSelectionModal(deck: any, data: any) {
+    console.log('Opening native image selection for:', data.word);
+
+    try {
+      // Fetch images
+      console.log('Fetching images...');
+      const images = await this.imageService.fetchImages(data.word, 12);
+      console.log('Fetched', images.length, 'images for selection');
+
+      // Navigate to image selection page
+      console.log('📱 Navigating to image selection page for:', data.word);
+      this.router.navigate(['/tabs/image-selection'], {
+        state: {
+          searchTerm: data.word,
+          images: images,
+          deckId: deck.id,
+          cardData: data
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching images:', error);
+      // Fallback to creating card without images
+      this.savePictureWordCard(deck, data, []);
+    }
+  }
+
+
+  async createPictureWordCardWithImages(word: string, imageUrls: string[], deckId: string) {
+    try {
+      const deck = this.decks.find(d => d.id === deckId);
+      if (!deck) {
+        console.error('Deck not found:', deckId);
+        return;
+      }
+
+      const newCard = {
+        id: `card_${Date.now()}`,
+        deckId: deckId,
+        type: 'picture-word' as CardType,
+        spanishWord: word,
+        englishTranslation: '',
+        imageUrls: imageUrls.slice(0, 4),
+        showWordFirst: Math.random() > 0.5,
+        easeFactor: 2.5,
+        interval: 1,
+        repetitions: 0,
+        lastReviewed: new Date(),
+        nextReview: new Date(),
+        isNew: true,
+        skipCount: 0
+      };
+
+      // Save card using storage service
+      console.log('💾 Attempting to save card:', newCard);
+      try {
+        await this.storageService.saveCard(newCard);
+        console.log('💾 Card saved successfully to storage');
+        
+        // Verify the card was saved by retrieving it
+        const savedCards = await this.storageService.getCardsByDeck(deckId);
+        console.log('💾 Verification - Cards in deck after save:', savedCards.length);
+        
+        // Update deck card count in UI
+        const deckToUpdate = this.filteredDecks.find(d => d.id === deckId);
+        if (deckToUpdate) {
+          deckToUpdate.cardCount = savedCards.length;
+          console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
+        }
+        
+        this.showToast(`Picture Word card created with ${imageUrls.length} images!`);
+        console.log('✅ Picture Word card created with', imageUrls.length, 'images:', word);
+      } catch (saveError) {
+        console.error('💾 Failed to save card:', saveError);
+        this.showToast('Error saving card. Please try again.');
+      }
+    } catch (error: any) {
+      console.error('Error creating picture word card with selected images:', error);
+    }
+  }
+
+  async savePictureWordCard(deck: any, data: any, imageUrls: string[] = []) {
+    const newCard = {
+      id: `card_${Date.now()}`,
+      deckId: deck.id,
+      type: 'picture-word' as CardType,
+      spanishWord: data.word,
+      englishTranslation: data.translation,
+      imageUrls: imageUrls,
+      showWordFirst: Math.random() > 0.5,
+      easeFactor: 2.5,
+      interval: 1,
+      repetitions: 0,
+      lastReviewed: new Date(),
+      nextReview: new Date(),
+      isNew: true,
+      skipCount: 0
+    };
+
+    await this.storageService.saveCard(newCard);
+    
+    // Update deck card count
+    deck.cardCount = (deck.cardCount || 0) + 1;
+    this.showToast('Picture word card created successfully!');
+  }
+
+  async saveTranslateCard(deck: any, data: any) {
+    const newCard = {
+      id: `card_${Date.now()}`,
+      deckId: deck.id,
+      type: 'translate' as CardType,
+      targetLanguageWord: data.targetWord,
+      englishTranslation: data.englishWord,
+      showTargetLanguageFirst: Math.random() < 0.5,
+      imageUrls: [],
+      easeFactor: 2.5,
+      interval: 1,
+      repetitions: 0,
+      lastReviewed: new Date(),
+      nextReview: new Date(),
+      isNew: true,
+      skipCount: 0
+    };
+
+    await this.storageService.saveCard(newCard);
+    
+    // Update deck card count
+    deck.cardCount = (deck.cardCount || 0) + 1;
+    this.showToast('Translation card created successfully!');
   }
 
   async createDeck() {
@@ -489,4 +790,255 @@ export class DecksPage implements OnInit {
     });
     await alert.present();
   }
+
+  /**
+   * Import a deck from a JSON file (simplified version)
+   */
+  async importDeck() {
+    console.log('importDeck method called');
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = async (event: any) => {
+      console.log('File input change event triggered');
+      const file = event.target.files[0];
+      if (!file) {
+        console.log('No file selected');
+        return;
+      }
+      console.log('File selected:', file.name, file.size, 'bytes');
+      
+      try {
+        const text = await file.text();
+        console.log('File content:', text.substring(0, 200) + '...');
+        
+        const importData = JSON.parse(text);
+        console.log('Parsed import data:', importData);
+        
+        // Simple validation - check if we have either a direct name or deck object with name
+        if (!importData.name && (!importData.deck || !importData.deck.name)) {
+          console.error('Validation failed - importData:', importData);
+          throw new Error('Invalid deck file format - missing deck name');
+        }
+        
+        // Create simplified deck object
+        const deckName = importData.name || importData.deck?.name || 'Imported Deck';
+        const cardCount = importData.cards ? importData.cards.length : 0;
+        
+        console.log('Creating deck:', deckName, 'with', cardCount, 'cards');
+        
+        const newDeck = {
+          id: Date.now().toString(),
+          name: deckName,
+          description: importData.description || importData.deck?.description || 'Imported deck',
+          cardCount: cardCount,
+          masteredCards: 0,
+          language: importData.language || importData.deck?.language || this.selectedLanguage
+        };
+        
+        console.log('New deck object:', newDeck);
+        console.log('Current filteredDecks before push:', this.filteredDecks);
+        
+        this.filteredDecks.push(newDeck);
+        
+        console.log('Current filteredDecks after push:', this.filteredDecks);
+        
+        this.showToast(`Successfully imported "${deckName}" with ${cardCount} cards!`);
+        
+      } catch (error) {
+        console.error('Import failed:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error details:', errorMessage);
+        this.showToast(`Import failed: ${errorMessage}`);
+      }
+    };
+    
+    console.log('About to trigger file input click');
+    input.click();
+    console.log('File input click triggered');
+  }
+
+  /**
+   * Import from URL (simplified version)
+   */
+  async importFromUrl() {
+    const alert = await this.alertController.create({
+      header: 'Import from URL',
+      message: 'Enter the URL to a deck JSON file:',
+      inputs: [
+        {
+          name: 'url',
+          type: 'url',
+          placeholder: 'https://example.com/deck.json'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Import',
+          handler: async (data) => {
+            console.log('Import button clicked with data:', data);
+            if (data.url && data.url.trim()) {
+              console.log('Starting URL import for:', data.url.trim());
+              await this.downloadAndImportDeck(data.url.trim());
+            } else {
+              console.log('No URL provided in alert data');
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  /**
+   * Download and import deck from URL (simplified version)
+   */
+  async downloadAndImportDeck(url: string) {
+    console.log('downloadAndImportDeck called with URL:', url);
+    
+    // Skip loading controller on iOS - it causes the function to hang
+    console.log('Skipping loading controller, proceeding directly to fetch...');
+
+    try {
+      console.log('Starting fetch request to:', url);
+      const response = await fetch(url);
+      console.log('Fetch response received:', response.status, response.statusText, response.ok);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+      }
+      
+      console.log('Response OK, getting response text...');
+      const responseText = await response.text();
+      console.log('Response text received, length:', responseText.length);
+      console.log('Response text preview:', responseText.substring(0, 200));
+      
+      console.log('Parsing JSON...');
+      const importData = JSON.parse(responseText);
+      console.log('JSON parsed successfully:', importData);
+      
+      // Simple validation - check if we have either a direct name or deck object with name
+      if (!importData.name && (!importData.deck || !importData.deck.name)) {
+        console.log('Validation failed - no deck name found');
+        throw new Error('Invalid deck format - missing deck name');
+      }
+
+      console.log('Validation passed, creating deck object...');
+
+      // Create simplified deck object
+      const deckName = importData.name || importData.deck?.name || 'Imported Deck';
+      const cardCount = importData.cards ? importData.cards.length : 0;
+      
+      const newDeck = {
+        id: Date.now().toString(),
+        name: deckName,
+        description: importData.description || importData.deck?.description || 'Imported deck',
+        cardCount: cardCount,
+        masteredCards: 0,
+        language: importData.language || importData.deck?.language || this.selectedLanguage
+      };
+      
+      console.log('Adding new deck to filteredDecks:', newDeck);
+      console.log('Current filteredDecks before:', this.filteredDecks);
+      
+      this.filteredDecks.push(newDeck);
+      
+      console.log('Current filteredDecks after:', this.filteredDecks);
+      
+      this.showToast(`Successfully imported "${deckName}" with ${cardCount} cards!`);
+
+    } catch (error) {
+      console.error('URL import failed:', error);
+      console.error('Error type:', typeof error);
+      console.error('Error message:', error instanceof Error ? error.message : String(error));
+      
+      const alert = await this.alertController.create({
+        header: 'Import Failed',
+        message: `Failed to download or parse deck from URL: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  }
+  
+    /**
+     * Navigate to card management page for the deck
+     */
+    async navigateToCardManagement(deck: Deck) {
+      console.log('Navigating to card management for deck:', deck.name);
+      this.router.navigate(['/tabs/card-management', deck.id]);
+    }
+
+    /**
+     * Create sample cards for the mock deck so Study button works
+     */
+    async createSampleCardsForMockDeck() {
+      const now = new Date();
+      const sampleCards = [
+        {
+          id: 'card1',
+          deckId: '1',
+          type: 'fill-blank' as CardType,
+          sentenceFront: 'Hola, ¿cómo ___?',
+          sentenceBack: 'Hola, ¿cómo **estás**?',
+          missingWord: 'estás',
+          englishTranslation: 'Hello, how are you?',
+          imageUrls: [],
+          isNew: true,
+          repetitions: 0,
+          easeFactor: 2.5,
+          interval: 1,
+          lastReviewed: now,
+          skipCount: 0,
+          nextReview: now
+        },
+        {
+          id: 'card2',
+          deckId: '1',
+          type: 'fill-blank' as CardType,
+          sentenceFront: 'Me ___ Juan.',
+          sentenceBack: 'Me **llamo** Juan.',
+          missingWord: 'llamo',
+          englishTranslation: 'My name is Juan.',
+          imageUrls: [],
+          isNew: true,
+          repetitions: 0,
+          easeFactor: 2.5,
+          interval: 1,
+          lastReviewed: now,
+          skipCount: 0,
+          nextReview: now
+        },
+        {
+          id: 'card3',
+          deckId: '1',
+          type: 'fill-blank' as CardType,
+          sentenceFront: '¿Dónde ___ el baño?',
+          sentenceBack: '¿Dónde **está** el baño?',
+          missingWord: 'está',
+          englishTranslation: 'Where is the bathroom?',
+          imageUrls: [],
+          isNew: true,
+          repetitions: 0,
+          easeFactor: 2.5,
+          interval: 1,
+          lastReviewed: now,
+          skipCount: 0,
+          nextReview: now
+        }
+      ];
+
+      // Store the sample cards using the correct StorageService methods
+      for (const card of sampleCards) {
+        await this.storageService.saveCard(card);
+      }
+      
+      console.log('Created sample cards for mock deck');
+    }
 }
