@@ -122,11 +122,14 @@ export class DecksPage implements OnInit {
       const selectedImages = state['selectedImages'];
       const searchTerm = state['searchTerm'];
       const deckId = state['deckId'];
+      const cardData = state['cardData']; // Extract the card data containing translation
       
       console.log('📱 Returned from image selection with:', selectedImages?.length, 'images for term:', searchTerm);
+      console.log('📱 Card data from navigation:', cardData);
       
       if (selectedImages && selectedImages.length > 0 && searchTerm && deckId) {
-        this.createPictureWordCardWithImages(searchTerm, selectedImages, deckId);
+        const translation = cardData?.translation || '';
+        this.createPictureWordCardWithImages(searchTerm, selectedImages, deckId, translation);
         
         // Clear the state to prevent duplicate processing
         history.replaceState(null, '', window.location.href);
@@ -646,7 +649,7 @@ export class DecksPage implements OnInit {
   }
 
 
-  async createPictureWordCardWithImages(word: string, imageUrls: string[], deckId: string) {
+  async createPictureWordCardWithImages(word: string, imageUrls: string[], deckId: string, translation: string = '') {
     try {
       const deck = this.decks.find(d => d.id === deckId);
       if (!deck) {
@@ -659,7 +662,7 @@ export class DecksPage implements OnInit {
         deckId: deckId,
         type: 'picture-word' as CardType,
         spanishWord: word,
-        englishTranslation: '',
+        englishTranslation: translation,
         imageUrls: imageUrls.slice(0, 4),
         showWordFirst: Math.random() > 0.5,
         easeFactor: 2.5,

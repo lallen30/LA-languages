@@ -22,7 +22,9 @@ import {
   copy,
   library,
   folder,
-  addCircle
+  addCircle,
+  languageOutline,
+  language
 } from 'ionicons/icons';
 
 @Component({
@@ -66,7 +68,9 @@ export class HomePage implements OnInit, OnDestroy {
       'copy': copy,
       'library': library,
       'folder': folder,
-      'add-circle': addCircle
+      'add-circle': addCircle,
+      'language-outline': languageOutline,
+      'language': language
     });
   }
 
@@ -567,5 +571,53 @@ export class HomePage implements OnInit, OnDestroy {
 
   get remainingCards(): number {
     return this.cardService.getRemainingCards();
+  }
+
+  async translateText() {
+    console.log('=== translateText() called ===');
+    console.log('currentCard:', this.currentCard);
+    console.log('showTranslation before:', this.showTranslation);
+    
+    if (!this.currentCard) {
+      console.log('ERROR: No current card');
+      return;
+    }
+    
+    console.log('Card type:', this.currentCard.type);
+    console.log('Card englishTranslation:', this.currentCard.englishTranslation);
+    console.log('Card targetLanguageWord:', this.currentCard.targetLanguageWord);
+    console.log('Card spanishWord:', this.currentCard.spanishWord);
+    
+    // Check if card has translation data
+    const hasTranslation = this.currentCard.englishTranslation || this.currentCard.targetLanguageWord;
+    console.log('hasTranslation:', hasTranslation);
+    
+    if (!hasTranslation) {
+      console.log('ERROR: No translation data available');
+      const toast = await this.toastController.create({
+        message: 'No translation available for this card',
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      return;
+    }
+
+    // Toggle the translation display inline
+    this.showTranslation = !this.showTranslation;
+    console.log('showTranslation after toggle:', this.showTranslation);
+    
+    // Show feedback to user
+    const message = this.showTranslation ? 'Translation shown' : 'Translation hidden';
+    console.log('Toast message:', message);
+    
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: 'bottom'
+    });
+    await toast.present();
+    
+    console.log('=== translateText() completed ===');
   }
 }

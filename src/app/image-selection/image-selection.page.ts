@@ -90,6 +90,7 @@ export class ImageSelectionPage implements OnInit {
           selectedImages: this.selectedImages,
           searchTerm: this.searchTerm,
           deckId: this.deckId || '1', // Default to deck 1 if missing
+          cardData: this.cardData, // Include the card data with translation
           action: 'createPictureWordCard'
         };
         
