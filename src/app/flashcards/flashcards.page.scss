@@ -1,0 +1,562 @@
+.session-container {
+  padding: 8px;
+  padding-bottom: 20px; // Space for bottom action bar
+  display: flex;
+  flex-direction: column;
+  position: relative !important;
+  height: 79vh !important;
+}
+
+:host .progress-container {
+  margin: -60px 0 10px 0;
+}
+
+:host .progress-container .progress-text {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: var(--ion-color-danger);
+}
+
+
+.card-container {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  perspective: 1000px;
+  margin: 0;
+  padding: 0;
+  height: 400px !important;
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+  
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: var(--ion-color-primary-contrast) !important;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  margin: 0;
+  text-align: center !important;
+}
+
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card-content {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  overflow: hidden;
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    position: relative;
+    width: 100% !important;
+    text-align: center !important;
+    pointer-events: none; // Avoid blocking clicks
+  }
+  
+  .hint {
+    color: var(--ion-color-medium);
+    font-style: italic;
+    margin: 0 24px 4px 24px;
+  }
+  
+  .translation {
+    color: var(--ion-color-light);
+    font-size: 32px;
+    text-align: center;
+    font-weight: 500;
+    margin: 4px 24px 8px 24px;
+    padding: 16px 8px;
+    background: var(--ion-color-primary-tint);
+    border-radius: 8px;
+    border: 2px solid var(--ion-color-light-shade);
+    z-index: 100;
+    width: 100% !important;
+    pointer-events: none; // Avoid blocking clicks
+  }
+}
+
+.grid-image {
+  max-height: 200px !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.highlighted-word {
+  color: var(--ion-color-primary);
+  font-weight: bold;
+}
+
+.images-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.card-image {
+  margin: 10px 0 10px 0;
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--ion-color-light-shade);
+}
+
+.images-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  width: 100%;
+  height: 50%;
+  flex: 1;
+  margin: 10px 0 0 0;
+  padding: 0;
+  max-height: 200px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--ion-color-primary-contrast);
+    max-height: 200px;
+  }
+  
+  .image-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--ion-color-primary-contrast);
+    min-height: 120px;
+    max-height: 200px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      max-height: 200px;
+    }
+  }
+}
+
+.no-images {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--ion-color-medium);
+  margin: 20px 0;
+  
+  ion-icon {
+    margin-bottom: 8px;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+.translation-btn {
+  margin: 8px 0;
+  --border-radius: 20px;
+  
+  ion-icon {
+    margin-right: 4px;
+  }
+}
+
+// Centered Listen Button Above Tabs
+.listen-button-container {
+  position: fixed !important;
+  bottom: calc(env(safe-area-inset-bottom) + 108px) !important; /* sits above 92px bar + 12-16px gap */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 2147483646 !important; /* just under the review bar's z-index */
+  pointer-events: auto !important; /* allow taps */
+}
+
+.listen-button {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --border-radius: 50%;
+  --background: var(--ion-color-tertiary);
+  --color: white;
+  min-height: 64px;
+  min-width: 64px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 50% !important;
+  
+  ion-icon {
+    font-size: 32px;
+  }
+  
+  &:hover {
+    --background: var(--ion-color-tertiary-shade);
+    transform: scale(1.05);
+  }
+}
+
+.bottom-action-bar {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+  position: relative;
+}
+
+.review-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  background: var(--ion-background-color, rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 2147483647; // ensure topmost on iOS
+  padding: 0;
+  height: 92px;
+  pointer-events: auto;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  padding-bottom: env(safe-area-inset-bottom);
+  /* DEBUG: visualize the bar */
+  outline: 2px solid rgba(255, 0, 0, 0.6);
+}
+
+.review-content {
+  /* Ensure content doesn't sit behind the fixed review bar */
+  --padding-bottom: calc(env(safe-area-inset-bottom) + 112px);
+}
+
+.action-icon-btn {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --border-radius: 50%;
+  min-height: 56px;
+  min-width: 56px;
+  
+  ion-icon {
+    font-size: 28px;
+  }
+  
+  &.translation-action {
+    --color: var(--ion-color-primary);
+    
+    &:hover {
+      --background: var(--ion-color-primary-tint);
+    }
+  }
+  
+  &.speak-action {
+    --color: var(--ion-color-tertiary);
+    
+    &:hover {
+      --background: var(--ion-color-tertiary-tint);
+    }
+  }
+  
+  &.forgot-action:hover {
+    --background: var(--ion-color-danger-tint);
+  }
+  
+  &.later-action:hover {
+    --background: var(--ion-color-warning-tint);
+  }
+}
+
+.no-session {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Universal content centering fix for mobile */
+@media (max-width: 768px) {
+  .no-session {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 80px) !important;
+    height: auto !important;
+    padding: 40px !important;
+    z-index: 100 !important;
+  }
+}
+
+// Mobile responsive styles
+@media (max-width: 768px) {
+  .session-container {
+    padding: 4px;
+    padding-bottom: 80px;
+  }
+  
+  .progress-container {
+    margin-bottom: 0;
+    
+    .progress-text {
+      margin-top: 0;
+    }
+  }
+  
+  .flashcard {
+    height: 440px;
+  }
+  
+  .card-content {
+    padding: 0;
+    
+    
+    .hint {
+      margin: 0 16px 2px 16px;
+    }
+    
+    .translation {
+      margin: 8px 0;
+    }
+  }
+  
+  .images-grid {
+    height: 100%;
+    gap: 2px;
+    
+    .image-item {
+      min-height: 100px;
+    }
+  }
+  
+  .listen-button-container {
+    bottom: calc(env(safe-area-inset-bottom) + 108px) !important;
+  }
+  
+  .response-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+}
+
+/* Universal Header Visibility Fix for mobile */
+@media (max-width: 768px) {
+  ion-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    min-height: 44px !important;
+    height: auto !important;
+    /* Add safe area padding for iOS status bar */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  }
+
+  ion-toolbar {
+    background: #f8f8f8 !important;
+    color: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    /* Ensure toolbar content is visible */
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  ion-title {
+    display: block !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+    font-size: 17px !important;
+    color: #000 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    /* Ensure title is visible */
+    position: relative !important;
+    z-index: 1002 !important;
+  }
+
+  /* Adjust content to account for header */
+  .no-session {
+    position: fixed !important;
+    top: 60% !important; /* Move down to account for header */
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 80px) !important;
+    height: auto !important;
+    padding: 40px !important;
+    z-index: 100 !important;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .card-front,
+  .card-back {
+    background: var(--ion-color-dark);
+    color: var(--ion-color-light);
+  }
+  
+  .card-content h2 {
+    color: var(--ion-color-light);
+  }
+}
+
+.review-tab-bar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  z-index: 2147483647 !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+  background: var(--ion-background-color, #ffffff) !important;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
+  height: 92px !important;
+  padding: 0 !important;
+}
+
+/* Tap optimizations for review buttons */
+.review-tab-bar .review-tab {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: pointer;
+  /* Full-height hit area */
+  height: 100%;
+  padding: 0 10px;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+:host .review-tab-bar .review-tab ion-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+:host .review-tab-bar .review-tab .tab-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+:host .review-tab-bar .review-tab.hard-tab {
+  background: var(--review-hard-bg, #eb445a);
+}
+:host .review-tab-bar .review-tab.hard-tab ion-icon, :host .review-tab-bar .review-tab.hard-tab .tab-label {
+  color: var(--review-hard-text, #ffffff);
+}
+:host .review-tab-bar .review-tab.good-tab {
+  background: var(--review-good-bg, #ffc409);
+}
+:host .review-tab-bar .review-tab.good-tab ion-icon, :host .review-tab-bar .review-tab.good-tab .tab-label {
+  color: var(--review-good-text, #000000);
+}
+:host .review-tab-bar .review-tab.easy-tab {
+  background: var(--review-easy-bg, #2dd36f);
+}
+:host .review-tab-bar .review-tab.easy-tab ion-icon, :host .review-tab-bar .review-tab.easy-tab .tab-label {
+  color: var(--review-easy-text, #ffffff);
+}
+:host .review-tab-bar .review-tab.again-tab {
+  background: var(--review-again-bg, #eb445a);
+}
+:host .review-tab-bar .review-tab.again-tab ion-icon, :host .review-tab-bar .review-tab.again-tab .tab-label {
+  color: var(--review-again-text, #ffffff);
+}
+:host .review-tab-bar .review-tab:hover, :host .review-tab-bar .review-tab:active {
+  opacity: 0.8;
+}
+:host .review-tab-bar .review-tab:focus {
+  outline: none;
+}
+:host .review-tab-bar .review-tab.easy-tab {
+  background: var(--review-easy-bg, #2dd36f);
+}
+:host .review-tab-bar .review-tab.easy-tab ion-icon, :host .review-tab-bar .review-tab.easy-tab .tab-label {
+  color: var(--review-easy-text, #ffffff);
+}
+:host .review-tab-bar .review-tab.copy-tab {
+  background: var(--review-copy-bg, #92949c);
+}
+:host .review-tab-bar .review-tab.copy-tab ion-icon, :host .review-tab-bar .review-tab.copy-tab .tab-label {
+  color: var(--review-copy-text, #ffffff);
+}
+:host .review-tab-bar .review-tab:hover, :host .review-tab-bar .review-tab:active {
+  opacity: 0.8;
+}
+:host .review-tab-bar .review-tab:focus {
+  outline: none;
+}

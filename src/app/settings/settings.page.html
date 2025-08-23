@@ -5,432 +5,177 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div class="settings-container">
 
-    <!-- Language & Text-to-Speech -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('text-to-speech')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('text-to-speech') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          Language & Text-to-Speech
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('text-to-speech')">
-        <ion-item>
-          <ion-icon name="language" slot="start"></ion-icon>
-          <ion-select 
-            [(ngModel)]="settings.ttsLanguage" 
-            (ionChange)="onTtsLanguageChange()"
-            placeholder="Select Language">
-            <ion-select-option *ngFor="let lang of availableLanguages" [value]="lang.code">
-              {{ lang.name }}
-            </ion-select-option>
-          </ion-select>
-          <ion-label slot="start">Language</ion-label>
-        </ion-item>
+    <!-- The list -->
+    <ion-list inset>
+      <ion-item button detail="true" (click)="openModalKey('tts')">
+        <ion-icon name="language" slot="start"></ion-icon>
+        <ion-label>Language & Text-to-Speech</ion-label>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="speedometer" slot="start"></ion-icon>
-          <ion-label>Speech Rate: {{ settings.ttsRate }}</ion-label>
-          <ion-range 
-            [(ngModel)]="settings.ttsRate"
-            (ionChange)="onTtsRateChange()"
-            min="0.5" 
-            max="2.0" 
-            step="0.1"
-            snaps="true">
-          </ion-range>
-        </ion-item>
+      <ion-item button detail="true" (click)="openModalKey('appearance')">
+        <ion-icon name="color-palette" slot="start"></ion-icon>
+        <ion-label>Appearance</ion-label>
+        <ion-note slot="end">{{ settings.darkMode ? 'Dark' : 'Light' }}</ion-note>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="musical-notes" slot="start"></ion-icon>
-          <ion-label>Pitch: {{ settings.ttsPitch }}</ion-label>
-          <ion-range 
-            [(ngModel)]="settings.ttsPitch"
-            (ionChange)="onTtsPitchChange()"
-            min="0.5" 
-            max="2.0" 
-            step="0.1"
-            snaps="true">
-          </ion-range>
-        </ion-item>
+      <ion-item button detail="true" (click)="openModalKey('study')">
+        <ion-icon name="school" slot="start"></ion-icon>
+        <ion-label>Study Settings</ion-label>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="volume-high" slot="start"></ion-icon>
-          <ion-label>Auto-speak on card flip</ion-label>
-          <ion-toggle [(ngModel)]="settings.autoSpeak" (ionChange)="onAutoSpeakChange()" slot="end"></ion-toggle>
-        </ion-item>
+      <ion-item button detail="true" (click)="openModalKey('images')">
+        <ion-icon name="image" slot="start"></ion-icon>
+        <ion-label>Images</ion-label>
+      </ion-item>
 
-        <ion-button expand="block" fill="outline" (click)="testTts()">
-          <ion-icon name="play" slot="start"></ion-icon>
-          Test Speech
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+      <ion-item button detail="true" (click)="openModalKey('data')">
+        <ion-icon name="server" slot="start"></ion-icon>
+        <ion-label>Data Management</ion-label>
+      </ion-item>
 
-
-
-    <!-- Color Customization -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('color-customization')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('color-customization') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          
-          Appearance &nbsp;
-          <span class="mode-indicator">{{ settings.darkMode ? '(Currently Dark Mode)' : '(Currently Light Mode)' }}</span>
-        </ion-card-title>
-        <!-- <ion-card-subtitle>Customize colors: Currently set to {{ settings.darkMode ? 'dark' : 'light' }} mode</ion-card-subtitle> -->
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('color-customization')">
-        <!-- Dark Mode Toggle -->
-        <ion-item>
-          <ion-icon name="moon" slot="start"></ion-icon>
-          <ion-label>Dark Mode</ion-label>
-          <ion-toggle [(ngModel)]="settings.darkMode" (ionChange)="onDarkModeChange()"></ion-toggle>
-        </ion-item>
-        
-        <!-- Primary Colors -->
-        <div class="color-section">
-          <h4>Primary Colors</h4>
-          <ion-item button (click)="openCustomColorPicker('primary', 'Primary Color', $event)">
-            <ion-label>Primary Color</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.primary"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('secondary', 'Secondary Color', $event)">
-            <ion-label>Secondary Color</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.secondary"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('tertiary', 'Tertiary Color', $event)">
-            <ion-label>Tertiary Color</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.tertiary"></div>
-            </div>
-          </ion-item>
-        </div>
-
-        <!-- Background Colors -->
-        <div class="color-section">
-          <h4>Background Colors</h4>
-          <ion-item button (click)="openCustomColorPicker('background', 'Page Background', $event)">
-            <ion-label>Page Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.background"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('cardBackground', 'Card Background', $event)">
-            <ion-label>Card Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.cardBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('itemBackground', 'Item Background', $event)">
-            <ion-label>Item Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.itemBackground"></div>
-            </div>
-          </ion-item>
-        </div>
-
-        <!-- Text Colors -->
-        <div class="color-section">
-          <h4>Text Colors</h4>
-          <ion-item button (click)="openCustomColorPicker('textPrimary', 'Primary Text', $event)">
-            <ion-label>Primary Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.textPrimary"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('textSecondary', 'Secondary Text', $event)">
-            <ion-label>Secondary Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.textSecondary"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('cardText', 'Card Text', $event)">
-            <ion-label>Card Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.cardText"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('itemText', 'Item Text', $event)">
-            <ion-label>Item Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.itemText"></div>
-            </div>
-          </ion-item>
-        </div>
-
-                <!-- Button Colors -->
-                <div class="color-section">
-                  <h4>Button Colors</h4>
-                  <ion-item button (click)="openCustomColorPicker('buttonBackground', 'Button Background', $event)">
-                    <ion-label>Button Background</ion-label>
-                    <div class="color-preview-container" slot="end">
-                      <div class="color-swatch" [style.background-color]="currentColorScheme.buttonBackground"></div>
-                    </div>
-                  </ion-item>
-                  <ion-item button (click)="openCustomColorPicker('buttonText', 'Button Text', $event)">
-                    <ion-label>Button Text</ion-label>
-                    <div class="color-preview-container" slot="end">
-                      <div class="color-swatch" [style.background-color]="currentColorScheme.buttonText"></div>
-                    </div>
-                  </ion-item>
-                  <ion-item button (click)="openCustomColorPicker('outlinedButtonColor', 'Outlined Button', $event)">
-                    <ion-label>Outlined Button</ion-label>
-                    <div class="color-preview-container" slot="end">
-                      <div class="color-swatch" [style.background-color]="currentColorScheme.outlinedButtonColor"></div>
-                    </div>
-                  </ion-item>
-                </div>
-
-        <!-- Button Colors -->
-        <div class="color-section">
-          <h4>Header/Footer Colors</h4>
-          <ion-item button (click)="openCustomColorPicker('headerBackground', 'Header Background', $event)">
-            <ion-label>Header Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.headerBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('headerText', 'Header Text', $event)">
-            <ion-label>Header Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.headerText"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('footerBackground', 'Footer Background', $event)">
-            <ion-label>Footer Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.footerBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('footerText', 'Footer Text', $event)">
-            <ion-label>Footer Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.footerText"></div>
-            </div>
-          </ion-item>
-          
-        </div>
-
-        <!-- Flashcard Action Bar Colors -->
-        <div class="color-section">
-          <h4>Flashcard Action Bar Colors</h4>
-          <!-- Updated section for flashcard review buttons -->
-          
-          <!-- Hard Button Colors -->
-          <ion-item button (click)="openCustomColorPicker('hardButtonBackground', 'Hard Button Background', $event)">
-            <ion-label>Hard Button Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.hardButtonBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('hardButtonText', 'Hard Button Text', $event)">
-            <ion-label>Hard Button Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.hardButtonText"></div>
-            </div>
-          </ion-item>
-          
-          <!-- Good Button Colors -->
-          <ion-item button (click)="openCustomColorPicker('goodButtonBackground', 'Good Button Background', $event)">
-            <ion-label>Good Button Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.goodButtonBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('goodButtonText', 'Good Button Text', $event)">
-            <ion-label>Good Button Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.goodButtonText"></div>
-            </div>
-          </ion-item>
-          
-          <!-- Easy Button Colors -->
-          <ion-item button (click)="openCustomColorPicker('easyButtonBackground', 'Easy Button Background', $event)">
-            <ion-label>Easy Button Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.easyButtonBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('easyButtonText', 'Easy Button Text', $event)">
-            <ion-label>Easy Button Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.easyButtonText"></div>
-            </div>
-          </ion-item>
-          
-          <!-- I Don't Know Button Colors -->
-          <ion-item button (click)="openCustomColorPicker('incorrectButtonBackground', 'I Don\'t Know Button Background', $event)">
-            <ion-label>I Don't Know Button Background</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.incorrectButtonBackground"></div>
-            </div>
-          </ion-item>
-          <ion-item button (click)="openCustomColorPicker('incorrectButtonText', 'I Don\'t Know Button Text', $event)">
-            <ion-label>I Don't Know Button Text</ion-label>
-            <div class="color-preview-container" slot="end">
-              <div class="color-swatch" [style.background-color]="currentColorScheme.incorrectButtonText"></div>
-            </div>
-          </ion-item>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="color-actions">
-          <ion-button expand="block" fill="outline" color="danger" (click)="resetColors()">
-            <ion-icon name="refresh" slot="start"></ion-icon>
-            Reset to Default
-          </ion-button>
-          <ion-button expand="block" (click)="previewColors()">
-            <ion-icon name="color-palette" slot="start"></ion-icon>
-            Apply Color Changes
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Study Settings -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('study-settings')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('study-settings') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          Study Settings
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('study-settings')">
-        <ion-item>
-          <ion-icon name="layers" slot="start"></ion-icon>
-          <ion-label>Max cards per session</ion-label>
-          <ion-input 
-            type="number" 
-            [(ngModel)]="settings.maxCardsPerSession"
-            (ionChange)="onMaxCardsChange()"
-            min="5" 
-            max="500"
-            placeholder="20"
-            slot="end">
-          </ion-input>
-        </ion-item>
-
-        <!-- <ion-item>
-          <ion-icon name="notifications" slot="start"></ion-icon>
-          <ion-label>Study reminders</ion-label>
-          <ion-toggle [(ngModel)]="settings.studyReminders" (ionChange)="onStudyRemindersChange()"></ion-toggle>
-        </ion-item> -->
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Images -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('images')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('images') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          Images
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('images')">
-        <ion-item>
-          <ion-icon name="image" slot="start"></ion-icon>
-          <ion-select 
-            [(ngModel)]="settings.imageQuality" 
-            (ionChange)="onImageQualityChange()"
-            placeholder="Select Quality">
-            <ion-select-option *ngFor="let quality of imageQualities" [value]="quality.value">
-              {{ quality.label }}
-            </ion-select-option>
-          </ion-select>
-          <ion-label slot="start">Image Quality</ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name="folder" slot="start"></ion-icon>
-          <ion-label>
-            <h3>Cache</h3>
-            <p>{{ getCacheSize() }}</p>
-          </ion-label>
-          <ion-button fill="outline" size="small" (click)="clearImageCache()">
-            Clear
-          </ion-button>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Data Management -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('data-management')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('data-management') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          Data Management
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('data-management')">
-        <div class="data-buttons">
-          <ion-button expand="block" fill="outline" (click)="exportData()">
-            <ion-icon name="download" slot="start"></ion-icon>
-            Export Data
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" (click)="importData()">
-            <ion-icon name="cloud-upload" slot="start"></ion-icon>
-            Import Data
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" color="warning" (click)="resetAllSettings()">
-            <ion-icon name="refresh" slot="start"></ion-icon>
-            Reset Settings
-          </ion-button>
-
-          <ion-button expand="block" fill="outline" color="danger" (click)="resetAllData()">
-            <ion-icon name="trash" slot="start"></ion-icon>
-            Delete All Data
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- App Info -->
-    <ion-card>
-      <ion-card-header (click)="toggleCard('about')" class="clickable-header">
-        <ion-card-title>
-          <ion-icon [name]="isCardExpanded('about') ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
-          About
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content *ngIf="isCardExpanded('about')">
-        <ion-item button (click)="openHelp()">
-          <ion-icon name="help-circle" slot="start"></ion-icon>
-          <ion-label>
-            <h3>Help & Guide</h3>
-            <p>Learn how to use the spaced repetition system</p>
-          </ion-label>
-          <ion-icon name="chevron-forward" slot="end"></ion-icon>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name="information-circle" slot="start"></ion-icon>
-          <ion-label>
-            <h3>LA Languages App</h3>
-          </ion-label>
-        </ion-item>
-        
-        <ion-item button (click)="openBuyMeCoffee()">
-          <ion-icon name="cafe" slot="start"></ion-icon>
-          <ion-label class="coffee">
-            <h3>Buy me a coffee<br />Support the development of this app</h3>
-          </ion-label>
-          <ion-icon name="open-outline" slot="end"></ion-icon>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
+      <ion-item button detail="true" (click)="openModalKey('about')">
+        <ion-icon name="information-circle" slot="start"></ion-icon>
+        <ion-label>About</ion-label>
+      </ion-item>
+      <ion-item button detail (click)="onDebugTap()">
+        <ion-label>DEBUG Tap</ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
+
+<!-- TTS Modal -->
+<ion-modal #ttsModal [isOpen]="modals.tts" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('tts')" (didDismiss)="closeModalKey('tts')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Language & TTS</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('tts')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-tts-modal
+        [isIOS]="isIOS"
+        [settings]="settings"
+        [availableLanguages]="availableLanguages"
+        (ttsLanguageChange)="onTtsLanguageChange()"
+        (ttsRateChange)="onTtsRateChange()"
+        (ttsPitchChange)="onTtsPitchChange()"
+        (autoSpeakChange)="onAutoSpeakChange()"
+        (testTtsClick)="testTts()"
+      ></app-tts-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Appearance Modal -->
+<ion-modal #appearanceModal [isOpen]="modals.appearance" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('appearance')" (didDismiss)="closeModalKey('appearance')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Appearance</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('appearance')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-appearance-modal
+        [settings]="settings"
+        (darkModeChange)="onDarkModeChange()"
+        (resetColorsClick)="resetColors()"
+        (previewColorsClick)="previewColors()"
+      ></app-appearance-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Study Settings Modal -->
+<ion-modal #studyModal [isOpen]="modals.study" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('study')" (didDismiss)="closeModalKey('study')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Study Settings</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('study')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-study-modal
+        [settings]="settings"
+        (maxCardsChange)="onMaxCardsChange()"
+      ></app-study-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Images Modal -->
+<ion-modal #imagesModal [isOpen]="modals.images" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('images')" (didDismiss)="closeModalKey('images')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Images</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('images')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-images-modal
+        [isIOS]="isIOS"
+        [settings]="settings"
+        [imageQualities]="imageQualities"
+        [cacheSize]="getCacheSize()"
+        (imageQualityChange)="onImageQualityChange()"
+        (clearImageCacheClick)="clearImageCache()"
+      ></app-images-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Data Management Modal -->
+<ion-modal #dataModal [isOpen]="modals.data" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('data')" (didDismiss)="closeModalKey('data')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Data Management</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('data')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-data-modal
+        (exportDataClick)="exportData()"
+        (importDataClick)="importData()"
+        (resetAllSettingsClick)="resetAllSettings()"
+        (resetAllDataClick)="resetAllData()"
+      ></app-data-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- About Modal -->
+<ion-modal #aboutModal [isOpen]="modals.about" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('about')" (didDismiss)="closeModalKey('about')">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>About</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModalKey('about')">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <app-about-modal
+        (helpClick)="openHelp()"
+        (buyCoffeeClick)="openBuyMeCoffee()"
+      ></app-about-modal>
+    </ion-content>
+  </ng-template>
+</ion-modal>

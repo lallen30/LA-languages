@@ -1,0 +1,23 @@
+<ion-list>
+  <ion-item button (click)="helpClick.emit()">
+    <ion-icon name="help-circle" slot="start"></ion-icon>
+    <ion-label>
+      <h3>Help & Guide</h3>
+      <p>Learn how to use the spaced repetition system</p>
+    </ion-label>
+    <ion-icon name="chevron-forward" slot="end"></ion-icon>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="information-circle" slot="start"></ion-icon>
+    <ion-label>
+      <h3>LA Languages App</h3>
+    </ion-label>
+  </ion-item>
+  <ion-item button (click)="buyCoffeeClick.emit()">
+    <ion-icon name="cafe" slot="start"></ion-icon>
+    <ion-label class="coffee">
+      <h3>Buy me a coffee<br />Support the development of this app</h3>
+    </ion-label>
+    <ion-icon name="open-outline" slot="end"></ion-icon>
+  </ion-item>
+</ion-list>

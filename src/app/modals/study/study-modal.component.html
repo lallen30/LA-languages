@@ -1,0 +1,14 @@
+<ion-list>
+  <ion-item>
+    <ion-icon name="layers" slot="start"></ion-icon>
+    <ion-label>Max cards per session</ion-label>
+    <ion-input
+      type="number"
+      [(ngModel)]="settings.maxCardsPerSession"
+      (ionChange)="maxCardsChange.emit()"
+      min="5"
+      max="500"
+      placeholder="20">
+    </ion-input>
+  </ion-item>
+</ion-list>

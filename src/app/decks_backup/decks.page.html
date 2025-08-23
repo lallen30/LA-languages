@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title>Decks</ion-title>
     <ion-button slot="end" fill="clear" (click)="refreshDecks()">
       <ion-icon name="refresh" slot="icon-only"></ion-icon>
@@ -19,6 +19,9 @@
     <ion-list *ngIf="!isLoading && filteredDecks.length > 0"> 
       <ion-item-sliding *ngFor="let deck of filteredDecks; let i = index">
         <ion-item button (click)="openDeckActionSheet(deck)">
+          <!-- Deck Color Indicator -->
+          <div class="deck-color-indicator" [style.background-color]="getDeckColor(deck.id)" slot="start"></div>
+          
           <ion-label>
             <h2 class="deck-title">{{ deck.name }}</h2>
             <p class="deck-subtitle">{{ deck.description }}</p>
@@ -27,14 +30,21 @@
         </ion-item>
         
         <ion-item-options slot="end">
+          <!-- Study -->
           <ion-item-option color="warning" (click)="startSession(deck)">
             <ion-icon slot="icon-only" name="play-outline"></ion-icon>
           </ion-item-option>
+          <!-- Add Card -->
           <ion-item-option color="tertiary" (click)="openAddCardActionSheet(deck)">
             <ion-icon slot="icon-only" name="add-outline"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="primary" expandable="true" (click)="openDeckActionSheet(deck)">
+          <!-- Manage Cards -->
+          <ion-item-option color="primary" (click)="navigateToCardManagement(deck)">
             <ion-icon slot="icon-only" name="library-outline"></ion-icon>
+          </ion-item-option>
+          <!-- More (opens full action sheet) -->
+          <ion-item-option color="medium" expandable="true" (click)="openDeckActionSheet(deck)">
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
@@ -84,6 +94,28 @@
   </ion-action-sheet>
 
   <!-- Custom Import Modal -->
+  <!-- Create Deck Modal -->
+  <div class="custom-modal-overlay" *ngIf="showCreateDeckModal" (click)="closeCreateDeckModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Create New Deck</h2>
+        <button class="close-btn" (click)="closeCreateDeckModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <label for="new-deck-name">Name</label>
+        <input id="new-deck-name" type="text" [(ngModel)]="newDeckName" class="modal-input" placeholder="Deck name" />
+
+        <label for="new-deck-desc">Description</label>
+        <textarea id="new-deck-desc" [(ngModel)]="newDeckDescription" class="modal-textarea" placeholder="Description (optional)"></textarea>
+
+        <div class="modal-buttons">
+          <button class="cancel-btn" (click)="closeCreateDeckModal()">Cancel</button>
+          <button class="modal-btn primary" (click)="saveNewDeck()" [disabled]="!(newDeckName && newDeckName.trim())">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="custom-modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -123,6 +155,67 @@
         <div class="modal-buttons">
           <button class="cancel-btn" (click)="closeUrlInputModal()">Cancel</button>
           <button class="import-btn" (click)="executeUrlImport()" [disabled]="!importUrl">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Deck Modal -->
+  <div class="custom-modal-overlay" *ngIf="showEditDeckModal" (click)="closeEditDeckModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Edit Deck</h2>
+        <button class="close-btn" (click)="closeEditDeckModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <label for="deck-name">Name</label>
+        <input id="deck-name" type="text" [(ngModel)]="editDeckName" class="modal-input" placeholder="Deck name" />
+
+        <label for="deck-desc">Description</label>
+        <textarea id="deck-desc" [(ngModel)]="editDeckDescription" class="modal-textarea" placeholder="Description (optional)"></textarea>
+
+        <div class="modal-buttons">
+          <button class="cancel-btn" (click)="closeEditDeckModal()">Cancel</button>
+          <button class="modal-btn primary" (click)="saveEditedDeck()" [disabled]="!(editDeckName && editDeckName.trim())">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Deck Modal -->
+  <div class="custom-modal-overlay" *ngIf="showDeleteDeckModal" (click)="closeDeleteDeckModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Delete Deck</h2>
+        <button class="close-btn" (click)="closeDeleteDeckModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <p>Are you sure you want to delete
+          <strong>{{ deckToDelete?.name }}</strong>?
+          This action cannot be undone.</p>
+        <div class="modal-buttons">
+          <button class="cancel-btn" (click)="closeDeleteDeckModal()">Cancel</button>
+          <button class="modal-btn danger" (click)="confirmDeleteDeck()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Statistics Modal -->
+  <div class="custom-modal-overlay" *ngIf="showStatsModal" (click)="closeStatsModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Deck Statistics</h2>
+        <button class="close-btn" (click)="closeStatsModal()">×</button>
+      </div>
+      <div class="modal-content stats-modal">
+        <h3 class="deck-title">{{ statsDeckName }}</h3>
+        <div class="stats-row"><strong>Total Cards:</strong> {{ statsTotal }}</div>
+        <div class="stats-row"><strong>Mastered:</strong> {{ statsMastered }}</div>
+        <div class="stats-row"><strong>Remaining:</strong> {{ statsRemaining }}</div>
+        <div class="stats-row"><strong>Progress:</strong> {{ statsProgress }}%</div>
+        <div class="modal-buttons">
+          <button class="modal-btn primary stats-btn" (click)="closeStatsModal()">OK</button>
         </div>
       </div>
     </div>

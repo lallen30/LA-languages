@@ -1,0 +1,24 @@
+<ion-list>
+  <ion-item>
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Image Quality</ion-label>
+    <ion-select
+      [interface]="isIOS ? 'action-sheet' : 'popover'"
+      [(ngModel)]="settings.imageQuality"
+      (ionChange)="imageQualityChange.emit()">
+      <ion-select-option *ngFor="let quality of imageQualities" [value]="quality.value">
+        {{ quality.label }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="folder" slot="start"></ion-icon>
+    <ion-label>
+      <h3>Cache</h3>
+      <p>{{ cacheSize }}</p>
+    </ion-label>
+    <ion-button fill="outline" size="small" (click)="clearImageCacheClick.emit()" slot="end">
+      Clear
+    </ion-button>
+  </ion-item>
+</ion-list>

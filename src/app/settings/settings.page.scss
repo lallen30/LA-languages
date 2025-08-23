@@ -382,3 +382,30 @@ ion-label.coffee h3 {
 ion-label.coffee h3:hover {
   color: var(--ion-color-medium);
 }
+
+// Optional: ensure items are comfortably tall on iOS
+.ios ion-item {
+  --min-height: 52px;
+}
+
+/* iOS stacking and touch fixes */
+ion-card { position: relative; }
+ion-card-header { position: relative; z-index: 1; }
+ion-card-content { position: relative; z-index: 2; overflow: visible; }
+
+/* Disable hover transforms on touch devices to avoid hit-testing issues */
+@media (hover: none) {
+  ion-card { transform: none !important; }
+  .clickable-header:hover,
+  .color-swatch:hover,
+  .color-preview-button:hover { transform: none !important; }
+}
+
+/* Restore comfortable end padding for end-slotted controls */
+ion-item { --inner-padding-end: 16px; }
+
+/* Natural alignment for inputs/selects (prevents odd hitboxes) */
+ion-select, ion-input { text-align: initial; }
+
+/* iOS range gesture handling */
+.ios ion-range { touch-action: pan-x pinch-zoom; }

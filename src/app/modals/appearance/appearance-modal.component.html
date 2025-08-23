@@ -1,0 +1,23 @@
+<ion-list>
+  <ion-item>
+    <ion-icon name="moon" slot="start"></ion-icon>
+    <ion-label>Dark Mode</ion-label>
+    <ion-toggle
+      [(ngModel)]="settings.darkMode"
+      (ionChange)="darkModeChange.emit()"
+      slot="end">
+    </ion-toggle>
+  </ion-item>
+
+  <!-- Color controls can be extended later; keeping actions for now -->
+  <div class="color-actions">
+    <ion-button expand="block" fill="outline" color="danger" (click)="resetColorsClick.emit()">
+      <ion-icon name="refresh" slot="start"></ion-icon>
+      Reset to Default
+    </ion-button>
+    <ion-button expand="block" (click)="previewColorsClick.emit()">
+      <ion-icon name="color-palette" slot="start"></ion-icon>
+      Apply Color Changes
+    </ion-button>
+  </div>
+</ion-list>

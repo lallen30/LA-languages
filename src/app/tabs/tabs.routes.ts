@@ -12,6 +12,11 @@ export const routes: Routes = [
           import('../home/home.page').then((m) => m.HomePage),
       },
       {
+        path: 'flashcards',
+        loadComponent: () =>
+          import('../flashcards/flashcards.page').then((m) => m.FlashcardsPage),
+      },
+      {
         path: 'decks_backup',
         loadComponent: () =>
           import('../decks_backup/decks.page').then((m) => m.DecksPage),

@@ -411,7 +411,7 @@ export class CardManagementPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/tabs/decks']);
+    this.router.navigate(['/tabs/decks_backup']);
   }
 
   getCardStatusText(card: Card): string {

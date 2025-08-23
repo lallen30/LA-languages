@@ -8,6 +8,9 @@ import { ImageService } from '../services/image.service';
 import { addIcons } from 'ionicons';
 import { Deck } from '../models/deck.model';
 import { CardType } from '../models/card.model';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import { 
   add, 
   refresh, 
@@ -42,6 +45,12 @@ export class DecksPage implements OnInit {
   
   selectedLanguage = 'es-ES';
   isLoading = false;
+  // Edit Deck modal state
+  showEditDeckModal = false;
+  editDeckName = '';
+  editDeckDescription = '';
+  // Prevent selectedDeck from being cleared by action sheet dismissal while editing
+  private lockSelectedDeck = false;
   
   // Action sheet states
   isDeckActionSheetOpen = false;
@@ -53,6 +62,19 @@ export class DecksPage implements OnInit {
   showImportModal = false;
   showUrlInputModal = false;
   importUrl = '';
+  showStatsModal = false;
+  // Delete Deck modal
+  showDeleteDeckModal = false;
+  deckToDelete: any = null;
+  // Create Deck modal
+  showCreateDeckModal = false;
+  newDeckName = '';
+  newDeckDescription = '';
+  statsDeckName = '';
+  statsTotal = 0;
+  statsMastered = 0;
+  statsRemaining = 0;
+  statsProgress = 0;
   
   // Selected deck for actions
   selectedDeck: any = null;
@@ -244,7 +266,6 @@ export class DecksPage implements OnInit {
     console.log('showUrlInput called');
     this.showImportModal = false;
     this.showUrlInputModal = true;
-    this.importUrl = 'https://example.com/deck.json';
   }
 
   closeUrlInputModal() {
@@ -310,87 +331,245 @@ export class DecksPage implements OnInit {
   // Deck actions
   async startSession(deck: any) {
     console.log('Study button: Starting session for deckId:', deck.id);
-    this.router.navigate(['/tabs/home'], { 
+    this.router.navigate(['/tabs/flashcards'], { 
       queryParams: { deckId: deck.id }
     });
   }
 
   async editDeck(deck: any) {
-    const alert = await this.alertController.create({
-      header: 'Edit Deck',
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          placeholder: 'Deck name',
-          value: deck.name
+    // Open custom modal instead of alert
+    // Ensure action sheet is closed so it doesn't block interactions under iOS
+    this.lockSelectedDeck = true; // keep selection through action sheet dismissal
+    this.isDeckActionSheetOpen = false;
+    this.selectedDeck = deck;
+    this.editDeckName = deck?.name || '';
+    this.editDeckDescription = deck?.description || '';
+    this.showEditDeckModal = true;
+  }
+
+  closeEditDeckModal() {
+    this.showEditDeckModal = false;
+    this.lockSelectedDeck = false;
+  }
+
+  async saveEditedDeck() {
+    console.log('📝 saveEditedDeck clicked');
+    if (!this.selectedDeck) {
+      console.warn('No selectedDeck when saving');
+      return;
+    }
+    const name = (this.editDeckName || '').trim();
+    if (!name) {
+      this.showToast('Please enter a deck name');
+      return;
+    }
+    // Apply changes
+    this.selectedDeck.name = name;
+    this.selectedDeck.description = this.editDeckDescription || '';
+
+    // Persist (best-effort)
+    try {
+      await this.storageService.saveDeck(this.selectedDeck);
+    } catch (e) {
+      console.warn('saveDeck failed (non-fatal for UI):', e);
+    }
+
+    // Trigger UI change detection by rebinding array
+    const idx = this.filteredDecks.findIndex((d: any) => d.id === this.selectedDeck.id);
+    if (idx > -1) {
+      // Replace with a shallow clone to update reference
+      this.filteredDecks[idx] = { ...this.selectedDeck };
+      this.filteredDecks = [...this.filteredDecks];
+    }
+
+    this.showToast('Deck updated successfully!');
+    this.showEditDeckModal = false;
+    this.lockSelectedDeck = false;
+  }
+
+  async exportDeck(deck: Deck) {
+    try {
+      console.log('Exporting deck:', deck.name);
+
+      // Get all cards for this deck
+      const cards = await this.storageService.getCardsByDeck(deck.id);
+
+      // Create export data structure matching original implementation
+      const exportData = {
+        deck: {
+          name: deck.name,
+          description: deck.description,
+          language: (deck as any).language || this.selectedLanguage,
+          color: (deck as any).color,
+          createdAt: deck.createdAt
         },
-        {
-          name: 'description',
-          type: 'textarea',
-          placeholder: 'Description',
-          value: deck.description
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Save',
-          handler: (data) => {
-            if (data.name && data.name.trim()) {
-              deck.name = data.name.trim();
-              deck.description = data.description || '';
-              this.showToast('Deck updated successfully!');
-            }
-          }
-        }
-      ]
-    });
-    await alert.present();
+        cards: cards,
+        exportedAt: new Date().toISOString(),
+        version: '1.0'
+      };
+
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const safeName = deck.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      const datePart = new Date().toISOString().split('T')[0];
+      const fileName = `deck-${safeName}-${datePart}.json`;
+
+      if (Capacitor.getPlatform() === 'web') {
+        // Web: trigger anchor download
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        // Native (iOS/Android): write file and present share sheet
+        await Filesystem.writeFile({
+          path: fileName,
+          data: dataStr,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8
+        });
+
+        // Get a URI suitable for sharing
+        const uriResult = await Filesystem.getUri({ path: fileName, directory: Directory.Documents });
+
+        // Present share sheet using files array (recommended for iOS local files)
+        await Share.share({
+          title: 'Export Deck',
+          text: `Deck: ${deck.name}`,
+          files: [uriResult.uri],
+          dialogTitle: 'Share deck JSON'
+        });
+      }
+
+      const toast = await this.toastController.create({
+        message: `Deck "${deck.name}" exported successfully!`,
+        duration: 2000,
+        color: 'success'
+      });
+      await toast.present();
+      console.log('Deck exported successfully:', deck.name);
+    } catch (error) {
+      console.error('Error exporting deck:', error);
+      const toast = await this.toastController.create({
+        message: 'Export failed. Please try again.',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
   }
 
   async viewStats(deck: any) {
-    const progress = deck.cardCount > 0 ? Math.round((deck.masteredCards / deck.cardCount) * 100) : 0;
-    const alert = await this.alertController.create({
-      header: 'Deck Statistics',
-      message: `
-        <strong>${deck.name}</strong><br><br>
-        Total Cards: ${deck.cardCount}<br>
-        Mastered: ${deck.masteredCards}<br>
-        Remaining: ${deck.cardCount - deck.masteredCards}<br>
-        Progress: ${progress}%
-      `,
-      buttons: ['OK']
-    });
-    await alert.present();
+    if (!deck) return;
+    const total = deck.cardCount || 0;
+    const mastered = deck.masteredCards || 0;
+    const remaining = Math.max(total - mastered, 0);
+    const progress = total > 0 ? Math.round((mastered / total) * 100) : 0;
+
+    // Populate modal fields
+    this.statsDeckName = deck.name;
+    this.statsTotal = total;
+    this.statsMastered = mastered;
+    this.statsRemaining = remaining;
+    this.statsProgress = progress;
+
+    // Close any action sheet under iOS and show modal
+    this.isDeckActionSheetOpen = false;
+    this.showStatsModal = true;
+  }
+
+  closeStatsModal() {
+    this.showStatsModal = false;
   }
 
   async deleteDeck(deck: any) {
-    const alert = await this.alertController.create({
-      header: 'Delete Deck',
-      message: `Are you sure you want to delete "${deck.name}"? This action cannot be undone.`,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Delete',
-          role: 'destructive',
-          handler: () => {
-            const index = this.filteredDecks.indexOf(deck);
-            if (index > -1) {
-              this.filteredDecks.splice(index, 1);
-              this.showToast('Deck deleted successfully!');
-            }
-          }
-        }
-      ]
-    });
-    await alert.present();
+    // Close action sheet first to avoid iOS presentation conflicts
+    this.isDeckActionSheetOpen = false;
+    this.deckToDelete = deck;
+    // Defer opening custom modal so it isn't stacked under the sheet
+    setTimeout(() => {
+      this.showDeleteDeckModal = true;
+    }, 250);
+  }
+
+  closeDeleteDeckModal() {
+    this.showDeleteDeckModal = false;
+    this.deckToDelete = null;
+  }
+
+  async confirmDeleteDeck() {
+    if (!this.deckToDelete) {
+      this.closeDeleteDeckModal();
+      return;
+    }
+    const deck = this.deckToDelete;
+    try {
+      // Persist deletion (also removes cards for this deck)
+      await this.storageService.deleteDeck(deck.id);
+
+      // Update UI arrays (reassign to trigger change detection)
+      this.decks = this.decks.filter((d: any) => d.id !== deck.id);
+      this.filteredDecks = this.filteredDecks.filter((d: any) => d.id !== deck.id);
+
+      // Clear selection
+      if (this.selectedDeck && this.selectedDeck.id === deck.id) {
+        this.selectedDeck = null;
+      }
+
+      this.showToast('Deck deleted successfully!');
+    } catch (e) {
+      console.error('Failed to delete deck:', e);
+      this.showToast('Failed to delete deck. Please try again.');
+    } finally {
+      this.closeDeleteDeckModal();
+    }
+  }
+
+  // Create Deck - Custom Modal version
+  openCreateDeckModal() {
+    console.log('📦 Opening Create Deck modal');
+    this.newDeckName = '';
+    this.newDeckDescription = '';
+    this.showCreateDeckModal = true;
+  }
+
+  closeCreateDeckModal() {
+    this.showCreateDeckModal = false;
+  }
+
+  async saveNewDeck() {
+    const name = (this.newDeckName || '').trim();
+    if (!name) {
+      this.showToast('Please enter a deck name');
+      return;
+    }
+
+    const id = Date.now().toString();
+    const newDeck: any = {
+      id,
+      name,
+      description: this.newDeckDescription || '',
+      language: this.selectedLanguage,
+      cardCount: 0,
+      masteredCards: 0,
+      createdAt: new Date(),
+      color: this.getDeckColor(id)
+    };
+
+    try {
+      await this.storageService.saveDeck(newDeck);
+    } catch (e) {
+      console.warn('saveDeck failed (non-fatal):', e);
+    }
+
+    this.decks = [...this.decks, newDeck];
+    this.filteredDecks = [...this.filteredDecks, newDeck];
+    this.showCreateDeckModal = false;
+    this.showToast('Deck created successfully!');
   }
 
   // Action sheet button configurations
@@ -401,6 +580,24 @@ export class DecksPage implements OnInit {
       handler: () => {
         if (this.selectedDeck) {
           this.startSession(this.selectedDeck);
+        }
+      }
+    },
+    {
+      text: 'Add Card',
+      icon: 'add-outline',
+      handler: () => {
+        if (this.selectedDeck) {
+          this.openAddCardActionSheet(this.selectedDeck);
+        }
+      }
+    },
+    {
+      text: 'Manage Cards',
+      icon: 'library-outline',
+      handler: () => {
+        if (this.selectedDeck) {
+          this.navigateToCardManagement(this.selectedDeck);
         }
       }
     },
@@ -419,6 +616,15 @@ export class DecksPage implements OnInit {
       handler: () => {
         if (this.selectedDeck) {
           this.viewStats(this.selectedDeck);
+        }
+      }
+    },
+    {
+      text: 'Export Deck',
+      icon: 'download-outline',
+      handler: () => {
+        if (this.selectedDeck) {
+          this.exportDeck(this.selectedDeck);
         }
       }
     },
@@ -473,7 +679,10 @@ export class DecksPage implements OnInit {
       text: 'Create New Deck',
       icon: 'add-outline',
       handler: () => {
-        this.createDeck();
+        // Close sheet and defer to avoid presenting over action sheet on iOS
+        console.log('🟢 Create New Deck action tapped');
+        this.isCreateDeckActionSheetOpen = false;
+        setTimeout(() => this.ngZone.run(() => this.openCreateDeckModal()), 400);
       }
     },
     {
@@ -494,7 +703,10 @@ export class DecksPage implements OnInit {
   setDeckActionSheetOpen(isOpen: boolean) {
     this.isDeckActionSheetOpen = isOpen;
     if (!isOpen) {
-      this.selectedDeck = null;
+      // Only clear when we're not in an operation that needs the selection
+      if (!this.lockSelectedDeck) {
+        this.selectedDeck = null;
+      }
     }
   }
 
@@ -753,6 +965,10 @@ export class DecksPage implements OnInit {
   }
 
   async createDeck() {
+    console.log('➕ createDeck invoked');
+    // Ensure the create deck action sheet is closed (iOS layering issue)
+    this.isCreateDeckActionSheetOpen = false;
+
     const alert = await this.alertController.create({
       header: 'Create New Deck',
       inputs: [
@@ -774,19 +990,32 @@ export class DecksPage implements OnInit {
         },
         {
           text: 'Create',
-          handler: (data) => {
-            if (data.name && data.name.trim()) {
-              const newDeck = {
-                id: Date.now().toString(),
-                name: data.name.trim(),
-                description: data.description || '',
-                cardCount: 0,
-                masteredCards: 0,
-                language: this.selectedLanguage
-              };
-              this.filteredDecks.push(newDeck);
-              this.showToast('Deck created successfully!');
+          handler: async (data) => {
+            const name = (data.name || '').trim();
+            if (!name) return;
+
+            const id = Date.now().toString();
+            const newDeck: any = {
+              id,
+              name,
+              description: data.description || '',
+              language: this.selectedLanguage,
+              cardCount: 0,
+              masteredCards: 0,
+              createdAt: new Date(),
+              color: this.getDeckColor(id)
+            };
+
+            try {
+              await this.storageService.saveDeck(newDeck);
+            } catch (e) {
+              console.warn('saveDeck failed (non-fatal):', e);
             }
+
+            // Update UI arrays with new references to trigger change detection
+            this.decks = [...this.decks, newDeck];
+            this.filteredDecks = [...this.filteredDecks, newDeck];
+            this.showToast('Deck created successfully!');
           }
         }
       ]
@@ -873,7 +1102,7 @@ export class DecksPage implements OnInit {
         {
           name: 'url',
           type: 'url',
-          placeholder: 'https://example.com/deck.json'
+          placeholder: 'https://example.com/deck.json',
         }
       ],
       buttons: [

@@ -36,6 +36,18 @@
     --padding-top: env(safe-area-inset-top);
     --padding-bottom: env(safe-area-inset-bottom);
   }
+
+/* TEMP: Force modals to be visible and on top for diagnostics */
+ion-modal {
+  z-index: 100000 !important;
+}
+ion-modal::part(backdrop) {
+  display: block !important;
+  opacity: 0.35 !important;
+}
+ion-modal::part(content) {
+  opacity: 1 !important;
+}
   
   /* Ensure proper background colors */
   ion-content {

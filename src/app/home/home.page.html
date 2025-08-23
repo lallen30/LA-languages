@@ -1,251 +1,33 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <!-- Show back button during session -->
-    <ion-buttons slot="start" *ngIf="isSessionActive">
-      <ion-button (click)="goToDecks()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    
-    <!-- Show title when no session active -->
-    <ion-title *ngIf="!isSessionActive">Flashcards</ion-title>
-    
-    <!-- Show progress during session -->
-    <ion-title *ngIf="isSessionActive">
-      {{ sessionProgress.completed }} / {{ sessionProgress.total }}
-    </ion-title>
-    
-    <!-- Header Action Buttons -->
-    <ion-buttons slot="end" *ngIf="isSessionActive">
-      <!-- Copy Button -->
-      <ion-button 
-        fill="clear" 
-        (click)="showCopyCardOptions()">
-        <ion-icon name="copy"></ion-icon>
-      </ion-button>
-      
-      <!-- Translation Toggle Button -->
-      <ion-button 
-        *ngIf="currentCard?.englishTranslation"
-        fill="clear" 
-        (click)="showTranslation = !showTranslation">
-        <ion-icon name="language"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="no-padding" [scrollY]="false">
-  <!-- Remove collapsible header that causes duplicate title on iOS -->
-
-  <!-- Session Active -->
-  <div *ngIf="isSessionActive && currentCard" class="session-container no-padding">
-    <!-- Progress Bar -->
-    <div class="progress-container">
-      <ion-progress-bar [value]="sessionProgress.percentage / 100"></ion-progress-bar>
-      <div class="progress-text">
-        {{ sessionProgress.completed }} / {{ sessionProgress.total }} cards
-      </div>
-      <!-- DEBUG: Show translation state -->
-      <!-- <div style="background: red; color: white; padding: 5px; font-size: 12px;">
-        DEBUG: showTranslation = {{ showTranslation }}
-      </div> -->
-    </div>
+<ion-content [fullscreen]="true">
+  <div class="welcome-content">
+    <ion-icon name="library-outline" class="welcome-icon"></ion-icon>
+    <h2>Ready to Study?</h2>
+    <p>Select a deck to start your flashcard session</p>
     
+    <ion-button expand="block" fill="solid" color="primary" (click)="goToFlashcards()" class="start-btn">
+      <ion-icon name="library" slot="start"></ion-icon>
+      Start Flashcards
+    </ion-button>
     
-
-    <!-- Fill in the Blank Card -->
-    <div *ngIf="currentCard.type === 'fill-blank'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
-        <div class="card-front">
-          <div class="card-content">
-            <h2>{{ currentCard.sentenceFront }}</h2>
-            <p class="hint">Tap to reveal answer</p>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-back">
-          <div class="card-content">
-            <h2 [innerHTML]="highlightedBack"></h2>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Picture Word Card -->
-    <div *ngIf="currentCard.type === 'picture-word'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
-        <!-- Show Spanish word first or images first based on showWordFirst -->
-        <div class="card-front" *ngIf="currentCard.showWordFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.spanishWord }}</h2>
-            <p class="hint">Tap to see images</p>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-front" *ngIf="!currentCard.showWordFirst">
-          <div class="card-content">
-            <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0; else noImages">
-              <img 
-                *ngFor="let imageUrl of currentCard.imageUrls.slice(0, 4)" 
-                [src]="imageUrl" 
-                [alt]="currentCard.spanishWord"
-                (error)="$event.target.style.display='none'"
-                class="card-image"
-              />
-            </div>
-            <ng-template #noImages>
-              <div class="no-images">
-                <ion-icon name="image-outline" size="large"></ion-icon>
-                <p>No images available</p>
-              </div>
-            </ng-template>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-            <!-- <p class="hint">Tap to see word</p> -->
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="currentCard.showWordFirst">
-          <div class="card-content">
-            <div class="images-grid" *ngIf="currentCard.imageUrls && currentCard.imageUrls.length > 0">
-              <img *ngFor="let imageUrl of currentCard.imageUrls.slice(0, 4)" 
-                   [src]="imageUrl" 
-                   [alt]="currentCard.spanishWord"
-              />
-            </div>
-            <div *ngIf="!currentCard.imageUrls || currentCard.imageUrls.length === 0" class="no-images">
-              <ion-icon name="image-outline" size="large"></ion-icon>
-              <p>No images available</p>
-            </div>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="!currentCard.showWordFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.spanishWord }}</h2>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Translate Card -->
-    <div *ngIf="currentCard.type === 'translate'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
-        <!-- Show target language first or English first based on showTargetLanguageFirst -->
-        <div class="card-front" *ngIf="currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.targetLanguageWord }}</h2>
-            <p class="hint">Translate to English</p>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-front" *ngIf="!currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.englishTranslation }}</h2>
-            <p class="hint">Translate to target language</p>
-            <p *ngIf="showTranslation && currentCard.targetLanguageWord" class="translation">
-              {{ currentCard.targetLanguageWord }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.englishTranslation }}</h2>
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="!currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.targetLanguageWord }}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Centered Listen Button Above Tabs -->
-    <div class="listen-button-container">
-      <ion-button 
-        fill="clear" 
-        size="large"
-        class="listen-button"
-        (click)="speak()">
-        <ion-icon name="volume-high" size="large"></ion-icon>
-      </ion-button>
-    </div>
-
+    <ion-button expand="block" fill="solid" color="secondary" (click)="goToDecksCopy()" class="start-btn">
+      <ion-icon name="copy" slot="start"></ion-icon>
+      Decks Copy
+    </ion-button>
     
-    <!-- Review Actions Tab Bar - Inside ion-content -->
-    <div class="review-tab-bar" *ngIf="currentCard && !showAnswer">
-      <button class="review-tab easy-tab" (click)="markCorrect('easy')">
-        <ion-icon name="checkmark"></ion-icon>
-        <span class="tab-label">Easy</span>
-      </button>
-      
-      <button class="review-tab good-tab" (click)="markCorrect('normal')">
-        <ion-icon name="thumbs-up"></ion-icon>
-        <span class="tab-label">Good</span>
-      </button>
-      
-      <button class="review-tab hard-tab" (click)="markCorrect('hard')">
-        <ion-icon name="thumbs-down"></ion-icon>
-        <span class="tab-label">Hard</span>
-      </button>
-      
-      <button class="review-tab incorrect-tab" (click)="markIncorrect()">
-        <ion-icon name="close"></ion-icon>
-        <span class="tab-label">I don't know</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- No Active Session -->
-  <div *ngIf="!isSessionActive" class="no-session">
-    <div class="welcome-content">
-      <ion-icon name="library-outline" class="welcome-icon"></ion-icon>
-      <h2>Ready to Study?</h2>
-      <p>Select a deck to start your flashcard session</p>
-      
-      <ion-button expand="block" fill="solid" color="primary" (click)="goToDecksOriginal()" class="start-btn">
-        <ion-icon name="library" slot="start"></ion-icon>
-        Decks (Original)
-      </ion-button>
-      
-      <ion-button expand="block" fill="solid" color="secondary" (click)="goToDecksCopy()" class="start-btn">
-        <ion-icon name="copy" slot="start"></ion-icon>
-        Decks Copy
-      </ion-button>
-      
-      <ion-button expand="block" fill="solid" color="tertiary" (click)="goToDecksBackup()" class="start-btn">
-        <ion-icon name="folder" slot="start"></ion-icon>
-        Decks Backup
-      </ion-button>
-      
-      <ion-button expand="block" fill="solid" color="success" (click)="goToExample()" class="start-btn">
-        <ion-icon name="play" slot="start"></ion-icon>
-        View Example Page
-      </ion-button>
-      
-    </div>
+    <ion-button expand="block" fill="solid" color="tertiary" (click)="goToDecksBackup()" class="start-btn">
+      <ion-icon name="folder" slot="start"></ion-icon>
+      Decks Backup
+    </ion-button>
+    
+    <ion-button expand="block" fill="solid" color="success" (click)="goToExample()" class="start-btn">
+      <ion-icon name="play" slot="start"></ion-icon>
+      View Example Page
+    </ion-button>
   </div>
 </ion-content>

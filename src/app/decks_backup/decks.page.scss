@@ -7,7 +7,7 @@ ion-header .header-buttons {
 }
 .header-btn {
   background: var(--ion-color-primary); color: white; border: none; border-radius: 50%;
-  width: 40px; height: 40px; font-size: 22px; cursor: pointer;
+  width: 40px; height: 40px; font-size: 22px; cursor: pointer; transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
   transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;
 }
@@ -41,8 +41,7 @@ ion-item::part(detail-icon) {
 
 .import-options {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-direction: column; gap: 12px;
 }
 
 .import-btn {
@@ -965,3 +964,14 @@ ion-content .decks-container {
 .selection-indicator ion-icon { font-size: 20px; }
 .image-selection-buttons { display: flex; gap: 10px; }
 .image-selection-buttons ion-button { flex: 1; }
+
+.stats-btn {
+  margin-top: 12px !important;
+}
+
+.stats-modal{
+  margin-bottom: 20px !important;
+}
+.stats-row{
+  margin: 10px 0;
+}

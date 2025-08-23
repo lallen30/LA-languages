@@ -1,0 +1,53 @@
+<ion-list>
+  <ion-item>
+    <ion-icon name="language" slot="start"></ion-icon>
+    <ion-label>Language</ion-label>
+    <ion-select
+      [interface]="isIOS ? 'action-sheet' : 'popover'"
+      [(ngModel)]="settings.ttsLanguage"
+      (ionChange)="ttsLanguageChange.emit()">
+      <ion-select-option *ngFor="let lang of availableLanguages" [value]="lang.code">
+        {{ lang.name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon name="speedometer" slot="start"></ion-icon>
+    <ion-range
+      [label]="'Speech Rate: ' + settings.ttsRate"
+      labelPlacement="start"
+      min="0.5" max="2.0" step="0.1" snaps
+      [(ngModel)]="settings.ttsRate"
+      (ionChange)="ttsRateChange.emit()">
+    </ion-range>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-icon name="musical-notes" slot="start"></ion-icon>
+    <ion-range
+      [label]="'Pitch: ' + settings.ttsPitch"
+      labelPlacement="start"
+      min="0.5" max="2.0" step="0.1" snaps
+      [(ngModel)]="settings.ttsPitch"
+      (ionChange)="ttsPitchChange.emit()">
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-icon name="volume-high" slot="start"></ion-icon>
+    <ion-label>Auto-speak on card flip</ion-label>
+    <ion-toggle
+      [(ngModel)]="settings.autoSpeak"
+      (ionChange)="autoSpeakChange.emit()"
+      slot="end">
+    </ion-toggle>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-button expand="block" fill="outline" (click)="testTtsClick.emit()">
+      <ion-icon name="play" slot="start"></ion-icon>
+      Test Speech
+    </ion-button>
+  </ion-item>
+</ion-list>

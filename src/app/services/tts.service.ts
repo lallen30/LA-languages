@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class TtsService {
   private synth: SpeechSynthesis;
   private voices: SpeechSynthesisVoice[] = [];
-  private currentLanguage = 'es-ES';
+  private currentLanguage = 'es-MX';
   private speechRate = 1.0;
   private speechPitch = 1.0;
 

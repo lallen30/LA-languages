@@ -1,22 +1,82 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController, ToastController, ModalController, PopoverController } from '@ionic/angular';
+import { IonicModule, AlertController, ToastController, ModalController, PopoverController, IonContent } from '@ionic/angular';
+import { IonModal } from '@ionic/angular/standalone';
+import { TtsModalComponent } from '../modals/tts/tts-modal.component';
+import { AppearanceModalComponent } from '../modals/appearance/appearance-modal.component';
+import { StudyModalComponent } from '../modals/study/study-modal.component';
+import { ImagesModalComponent } from '../modals/images/images-modal.component';
+import { DataModalComponent } from '../modals/data/data-modal.component';
+import { AboutModalComponent } from '../modals/about/about-modal.component';
 import { Router } from '@angular/router';
 import { ColorPickerPopoverComponent } from '../components/color-picker-popover.component';
 import { ColorPickerOverlayService } from '../services/color-picker-overlay.service';
 import { TtsService } from '../services/tts.service';
 import { ImageService } from '../services/image.service';
 import { StorageService } from '../services/storage.service';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+import { addIcons } from 'ionicons';
+import { language, colorPalette, school, server, informationCircle, image } from 'ionicons/icons';
+
+// Register icons at module import time so they are available before first render
+try {
+  addIcons({
+    'language': language,
+    'color-palette': colorPalette,
+    'school': school,
+    'server': server,
+    'information-circle': informationCircle,
+    'image': image,
+  });
+} catch {}
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    IonModal,
+    TtsModalComponent,
+    AppearanceModalComponent,
+    StudyModalComponent,
+    ImagesModalComponent,
+    DataModalComponent,
+    AboutModalComponent,
+  ]
 })
-export class SettingsPage implements OnInit {
+
+export class SettingsPage implements OnInit, AfterViewInit {
+  @ViewChild(IonContent, { read: ElementRef, static: true }) contentEl!: ElementRef<HTMLElement>;
+  // In Angular, template refs on web components resolve to ElementRef
+  @ViewChild('ttsModal', { read: ElementRef, static: false }) ttsModalRef!: ElementRef<any>;
+  @ViewChild('appearanceModal', { read: ElementRef, static: false }) appearanceModalRef!: ElementRef<any>;
+  @ViewChild('studyModal', { read: ElementRef, static: false }) studyModalRef!: ElementRef<any>;
+  @ViewChild('imagesModal', { read: ElementRef, static: false }) imagesModalRef!: ElementRef<any>;
+  @ViewChild('dataModal', { read: ElementRef, static: false }) dataModalRef!: ElementRef<any>;
+  @ViewChild('aboutModal', { read: ElementRef, static: false }) aboutModalRef!: ElementRef<any>;
+  presentingEl!: HTMLElement;
+  modals: {
+    tts: boolean;
+    appearance: boolean;
+    study: boolean;
+    images: boolean;
+    data: boolean;
+    about: boolean;
+  } = {
+    tts: false,
+    appearance: false,
+    study: false,
+    images: false,
+    data: false,
+    about: false,
+  };
   settings = {
     darkMode: false,
     ttsLanguage: 'es-ES',
@@ -105,8 +165,7 @@ export class SettingsPage implements OnInit {
     { value: 'high', label: 'High (best quality)' }
   ];
 
-  // Accordion state management
-  expandedCard: string | null = 'appearance'; // Default to Appearance card being expanded
+  
 
   constructor(
     private storageService: StorageService,
@@ -117,11 +176,119 @@ export class SettingsPage implements OnInit {
     private modalController: ModalController,
     private popoverController: PopoverController,
     private colorPickerOverlayService: ColorPickerOverlayService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  async ngOnInit() {
-    await this.loadSettings();
+  // Platform helpers
+  get isIOS(): boolean {
+    return Capacitor.getPlatform() === 'ios';
+  }
+
+  
+
+  ngOnInit() {
+    // Register specific Ionicons used on this page to avoid runtime icon load warnings
+    try {
+      addIcons({
+        'language': language,
+        'color-palette': colorPalette,
+        'school': school,
+        'server': server,
+        'information-circle': informationCircle,
+        'image': image,
+      });
+    } catch (e) {
+      console.warn('Ionicons addIcons failed (possibly already registered):', e);
+    }
+    this.loadSettings();
+  }
+
+  ngAfterViewInit() {
+    // Set presenting element after view init so the element exists
+    this.presentingEl = this.contentEl?.nativeElement ?? document.body;
+    // Diagnostics for modal refs
+    console.log('Modal refs after view init:', {
+      tts: this.ttsModalRef,
+      appearance: this.appearanceModalRef,
+      study: this.studyModalRef,
+      images: this.imagesModalRef,
+      data: this.dataModalRef,
+      about: this.aboutModalRef,
+    });
+    // Verify custom element registration and upgrade
+    const ce = (window as any).customElements?.get?.('ion-modal');
+    console.log('customElements.get(\'ion-modal\') =>', ce);
+    const firstModal: any = document.querySelector('ion-modal');
+    console.log('First ion-modal element present:', !!firstModal, 'has present():', typeof firstModal?.present);
+  }
+
+  onModalDidPresent(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
+    console.log('didPresent', key);
+  }
+
+  onDebugTap() {
+    console.log('DEBUG: onDebugTap triggered');
+    this.showToast('Debug tap working', 'success');
+  }
+
+  // New helpers for [isOpen] pattern
+  openModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
+    if (!(key in this.modals)) {
+      console.error('openModalKey: unknown key', key);
+      return;
+    }
+    this.modals[key] = true;
+    console.log('openModalKey ->', key, this.modals);
+    // Ensure change detection runs so the modal sees the new isOpen value
+    this.cdr.detectChanges();
+  }
+
+  closeModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
+    if (!(key in this.modals)) {
+      console.error('closeModalKey: unknown key', key);
+      return;
+    }
+    this.modals[key] = false;
+    console.log('closeModalKey ->', key, this.modals);
+    this.cdr.detectChanges();
+  }
+
+  async openModal(modalRef: any) {
+    try {
+      // Prefer passed ref; fallback to known ViewChilds if a string key is provided
+      let ref: any = modalRef;
+      if (typeof modalRef === 'string') {
+        ref = (this as any)[modalRef];
+      }
+      const modalEl: any = ref?.el ?? ref?.nativeElement ?? ref;
+      if (!modalEl || typeof modalEl.present !== 'function') {
+        console.error('Open modal failed: invalid modalRef/modalEl', { ref, modalRef, modalElType: typeof modalEl, keys: Object.keys(modalEl || {}) });
+        return;
+      }
+      await modalEl.present();
+    } catch (e) {
+      console.error('Open modal failed with error:', e);
+      this.showToast('Unable to open modal', 'danger');
+    }
+  }
+
+  async closeModal(modalRef: any) {
+    try {
+      let ref: any = modalRef;
+      if (typeof modalRef === 'string') {
+        ref = (this as any)[modalRef];
+      }
+      const modalEl: any = ref?.el ?? ref?.nativeElement ?? ref;
+      if (!modalEl || typeof modalEl.dismiss !== 'function') {
+        console.error('Close modal failed: invalid modalRef/modalEl', { ref, modalRef, modalElType: typeof modalEl, keys: Object.keys(modalEl || {}) });
+        return;
+      }
+      await modalEl.dismiss();
+    } catch (e) {
+      console.error('Close modal failed with error:', e);
+      this.showToast('Unable to close modal', 'danger');
+    }
   }
 
   async loadSettings() {
@@ -310,22 +477,51 @@ export class SettingsPage implements OnInit {
     try {
       const data = await this.storageService.exportData();
       const dataStr = JSON.stringify(data, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      
-      // Create download link
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `flashcards-backup-${new Date().toISOString().split('T')[0]}.json`;
-      link.click();
-      
-      URL.revokeObjectURL(url);
+      const fileName = `flashcards-backup-${new Date().toISOString().split('T')[0]}.json`;
+
+      const platform = Capacitor.getPlatform();
+
+      if (platform === 'ios' || platform === 'android') {
+        // Write to Documents then share
+        await Filesystem.writeFile({
+          path: fileName,
+          data: dataStr,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+        const { uri } = await Filesystem.getUri({ path: fileName, directory: Directory.Documents });
+        // iOS prefers url; Android supports files
+        if (platform === 'ios') {
+          await Share.share({
+            title: 'Export Data',
+            text: 'Flashcards backup',
+            url: uri,
+          });
+        } else {
+          await Share.share({
+            title: 'Export Data',
+            text: 'Flashcards backup',
+            files: [uri],
+          });
+        }
+      } else {
+        // Web download
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+  
       await this.showToast('Data exported successfully');
     } catch (error) {
       console.error('Export failed:', error);
       await this.showToast('Export failed', 'danger');
     }
   }
+  
 
   async importData() {
     const input = document.createElement('input');
@@ -729,18 +925,7 @@ export class SettingsPage implements OnInit {
     this.showToast('Color preview applied!', 'success');
   }
 
-  // Accordion functionality
-  toggleCard(cardName: string) {
-    if (this.expandedCard === cardName) {
-      this.expandedCard = null; // Collapse if already expanded
-    } else {
-      this.expandedCard = cardName; // Expand this card and collapse others
-    }
-  }
-
-  isCardExpanded(cardName: string): boolean {
-    return this.expandedCard === cardName;
-  }
+  
 
   openHelp() {
     this.router.navigate(['/tabs/help']);
@@ -756,7 +941,7 @@ export class SettingsPage implements OnInit {
     try {
       const result = await this.colorPickerOverlayService.open(colorName, currentColor);
       
-      if (result.saved && result.color) {
+      if (result && result.saved && result.color) {
         const newColor = result.color;
         (this.currentColorScheme as any)[colorKey] = newColor;
         
@@ -772,9 +957,17 @@ export class SettingsPage implements OnInit {
         // Apply colors immediately
         this.applyColors();
         this.showToast(`${colorName} updated to ${newColor}`, 'success');
+      } else if (Capacitor.getPlatform() === 'ios') {
+        // Fallback on iOS if overlay was cancelled or returned no result
+        this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
       }
     } catch (error) {
       console.error('Error opening color picker:', error);
+      // On iOS, fall back to native color input if overlay fails
+      if (Capacitor.getPlatform() === 'ios') {
+        this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
+        return;
+      }
       this.showToast('Error opening color picker', 'danger');
     }
   }
