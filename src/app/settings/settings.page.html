@@ -9,38 +9,35 @@
 
     <!-- The list -->
     <ion-list inset>
-      <ion-item button detail="true" (click)="openModalKey('tts')">
+      <ion-item button detail="false" (click)="openModalKey('tts')">
         <ion-icon name="language" slot="start"></ion-icon>
         <ion-label>Language & Text-to-Speech</ion-label>
       </ion-item>
 
-      <ion-item button detail="true" (click)="openModalKey('appearance')">
+      <ion-item button detail="false" (click)="openModalKey('appearance')">
         <ion-icon name="color-palette" slot="start"></ion-icon>
         <ion-label>Appearance</ion-label>
         <ion-note slot="end">{{ settings.darkMode ? 'Dark' : 'Light' }}</ion-note>
       </ion-item>
 
-      <ion-item button detail="true" (click)="openModalKey('study')">
+      <ion-item button detail="false" (click)="openModalKey('study')">
         <ion-icon name="school" slot="start"></ion-icon>
         <ion-label>Study Settings</ion-label>
       </ion-item>
 
-      <ion-item button detail="true" (click)="openModalKey('images')">
+      <ion-item button detail="false" (click)="openModalKey('images')">
         <ion-icon name="image" slot="start"></ion-icon>
         <ion-label>Images</ion-label>
       </ion-item>
 
-      <ion-item button detail="true" (click)="openModalKey('data')">
+      <ion-item button detail="false" (click)="openModalKey('data')">
         <ion-icon name="server" slot="start"></ion-icon>
         <ion-label>Data Management</ion-label>
       </ion-item>
 
-      <ion-item button detail="true" (click)="openModalKey('about')">
+      <ion-item button detail="false" (click)="openModalKey('about')">
         <ion-icon name="information-circle" slot="start"></ion-icon>
         <ion-label>About</ion-label>
-      </ion-item>
-      <ion-item button detail (click)="onDebugTap()">
-        <ion-label>DEBUG Tap</ion-label>
       </ion-item>
     </ion-list>
   </div>

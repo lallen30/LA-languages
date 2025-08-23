@@ -227,10 +227,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
     console.log('didPresent', key);
   }
 
-  onDebugTap() {
-    console.log('DEBUG: onDebugTap triggered');
-    this.showToast('Debug tap working', 'success');
-  }
 
   // New helpers for [isOpen] pattern
   openModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
