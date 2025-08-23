@@ -47,11 +47,6 @@ export const routes: Routes = [
           import('../example/example.page').then((m) => m.ExampleComponent),
       },
       {
-        path: 'test',
-        loadComponent: () =>
-          import('../test/test.page').then((m) => m.TestPage),
-      },
-      {
         path: 'decks-copy',
         loadComponent: () =>
           import('../decks copy/decks.page').then((m) => m.DecksPage),
