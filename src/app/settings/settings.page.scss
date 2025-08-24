@@ -1,11 +1,63 @@
-.settings-container {
-  padding: 16px;
-  padding-bottom: 100px; // Extra space for tab bar
-}
 
-ion-card {
-  border-radius: 16px;
-  margin-bottom: 16px;
+@media (max-width: 768px) {
+  .settings-container {
+    margin-top: 130px !important;
+    padding: 16px !important;
+    height: 100% !important;
+  }
+  ion-list {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    --background: var(--app-item-background) !important;
+    --color: var(--app-item-text-color) !important;
+    background: var(--app-item-background) !important;
+    color: var(--app-item-text-color) !important;
+    
+  }
+  ion-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    min-height: 44px !important;
+    height: auto !important;
+    /* Add safe area padding for iOS status bar */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  }
+
+  ion-toolbar {
+    background: #f8f8f8 !important;
+    color: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    height: auto !important;
+    padding: 8px 16px !important;
+    /* Ensure toolbar content is visible */
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  ion-title {
+    display: block !important;
+    text-align: left !important;
+    font-size: 22px !important;
+    color: #000 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    /* Ensure title is visible */
+    position: relative !important;
+    z-index: 1002 !important;
+  }
 }
 
 ion-card-title {
@@ -17,12 +69,9 @@ ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
   --inner-padding-end: 0;
-  --border-radius: 12px;
   margin-bottom: 8px;
   
-  &:last-child {
-    margin-bottom: 0;
-  }
+  width: 100%;
   
   ion-icon[slot="start"] {
     margin-right: 16px;
@@ -41,150 +90,13 @@ ion-item {
   }
 }
 
-ion-range {
-  padding: 8px 0;
-}
 
-ion-select,
-ion-input {
-  text-align: right;
-}
-
-.data-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  
-  ion-button {
-    --border-radius: 12px;
-    margin: 0;
-  }
-}
-
-// Color picker styles
-.color-preview-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.color-swatch {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 2px solid var(--ion-color-light);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  
-  &:hover {
-    transform: scale(1.05);
-    border-color: var(--ion-color-primary);
-  }
-}
-
-.color-hex {
-  font-family: 'Courier New', monospace;
-  font-size: 14px;
-  color: var(--ion-color-medium);
-  font-weight: 500;
-  min-width: 70px;
-}
-
-// Color picker modal styles
-:global(ion-modal.color-picker-modal) {
-  --width: 600px;
-  --max-width: 95vw;
-  --height: auto;
-  --max-height: 90vh;
-  --border-radius: 16px;
-  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-:global(ion-modal.color-picker-modal .modal-wrapper) {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 600px !important;
-  max-width: 95vw !important;
-  height: auto !important;
-  max-height: 90vh !important;
-  border-radius: 16px !important;
-  margin: 0 !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-}
-
-:global(ion-modal.color-picker-modal) {
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-:global(ion-modal.color-picker-modal ion-content) {
+ion-content {
   --padding-top: 0;
   --padding-bottom: 0;
   --padding-start: 0;
   --padding-end: 0;
 }
-
-// Responsive design
-@media (max-width: 768px) {
-  .settings-container {
-    padding: 12px;
-  }
-  
-  ion-card {
-    margin-bottom: 12px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  // Clickable accordion headers
-  .clickable-header {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    border-radius: 12px 12px 0 0;
-    
-    &:hover {
-      background-color: var(--ion-color-light);
-    }
-    
-    &:active {
-      background-color: var(--ion-color-medium);
-    }
-    
-    ion-card-title {
-      display: flex;
-      align-items: center;
-      user-select: none; // Prevent text selection on click
-      
-      ion-icon {
-        margin-right: 8px;
-        transition: transform 0.3s ease;
-        font-size: 1.2em;
-        
-        // Rotate chevron when expanded
-        &[name="chevron-down"] {
-          transform: rotate(0deg);
-        }
-        
-        &[name="chevron-forward"] {
-          transform: rotate(0deg);
-        }
-      }
-    }
-  }
-  
-  // Smooth content transitions
-  ion-card-content {
-    transition: all 0.3s ease;
-    overflow: hidden;
-    margin-top: 12px;
-    h4 {
-    margin-top: 15px;
-    margin-bottom: 6px;
-  }
-  }
   
   // Add visual separation between expanded cards
   ion-card {
@@ -195,7 +107,7 @@ ion-input {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
-}
+
 
 // Using ::ng-deep to penetrate Ionic's component encapsulation
 
@@ -401,8 +313,6 @@ ion-card-content { position: relative; z-index: 2; overflow: visible; }
   .color-preview-button:hover { transform: none !important; }
 }
 
-/* Restore comfortable end padding for end-slotted controls */
-ion-item { --inner-padding-end: 16px; }
 
 /* Natural alignment for inputs/selects (prevents odd hitboxes) */
 ion-select, ion-input { text-align: initial; }

@@ -19,7 +19,7 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { addIcons } from 'ionicons';
-import { language, colorPalette, school, server, informationCircle, image } from 'ionicons/icons';
+import { language, colorPalette, school, server, informationCircle, image, close } from 'ionicons/icons';
 
 // Register icons at module import time so they are available before first render
 try {
@@ -30,6 +30,7 @@ try {
     'server': server,
     'information-circle': informationCircle,
     'image': image,
+    'close': close,
   });
 } catch {}
 
@@ -197,6 +198,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
         'server': server,
         'information-circle': informationCircle,
         'image': image,
+        'close': close,
       });
     } catch (e) {
       console.warn('Ionicons addIcons failed (possibly already registered):', e);

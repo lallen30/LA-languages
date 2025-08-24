@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -47,10 +47,12 @@
 <ion-modal #ttsModal [isOpen]="modals.tts" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('tts')" (didDismiss)="closeModalKey('tts')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>Language & TTS</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('tts')">Close</ion-button>
+          <ion-button (click)="closeModalKey('tts')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -73,10 +75,12 @@
 <ion-modal #appearanceModal [isOpen]="modals.appearance" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('appearance')" (didDismiss)="closeModalKey('appearance')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>Appearance</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('appearance')">Close</ion-button>
+          <ion-button (click)="closeModalKey('appearance')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -95,10 +99,12 @@
 <ion-modal #studyModal [isOpen]="modals.study" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('study')" (didDismiss)="closeModalKey('study')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>Study Settings</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('study')">Close</ion-button>
+          <ion-button (click)="closeModalKey('study')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -115,10 +121,12 @@
 <ion-modal #imagesModal [isOpen]="modals.images" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('images')" (didDismiss)="closeModalKey('images')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>Images</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('images')">Close</ion-button>
+          <ion-button (click)="closeModalKey('images')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -139,10 +147,12 @@
 <ion-modal #dataModal [isOpen]="modals.data" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('data')" (didDismiss)="closeModalKey('data')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>Data Management</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('data')">Close</ion-button>
+          <ion-button (click)="closeModalKey('data')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -161,10 +171,12 @@
 <ion-modal #aboutModal [isOpen]="modals.about" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('about')" (didDismiss)="closeModalKey('about')">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="md">
         <ion-title>About</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('about')">Close</ion-button>
+          <ion-button (click)="closeModalKey('about')" fill="clear" aria-label="Close">
+            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

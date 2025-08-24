@@ -1,5 +1,59 @@
+@media (max-width: 768px) {
+  ion-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    background: #f8f8f8 !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    /* Add safe area padding for iOS status bar */
+    padding-top: env(safe-area-inset-top) !important;
+    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
+  }
+
+  ion-toolbar {
+    background: #ffffff !important;
+    color: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px 16px !important;
+    /* Ensure toolbar content is visible */
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  ion-title {
+    display: block !important;
+    text-align: left !important;
+    font-size: 22px !important;
+    color: #000 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    /* Ensure title is visible */
+    position: relative !important;
+    z-index: 1002 !important;
+  }
+}
+
 .stats-container {
+  margin-top: -60px !important;
   padding: 16px;
+}
+
+ion-card-title{
+  font-size: 18px;
+}
+
+:global(ion-content) {
+  position: fixed !important;
+  top: 0 !important;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
 }
 
 .loading-container {
@@ -7,7 +61,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 200px;
   
   ion-spinner {
     margin-bottom: 16px;
@@ -35,7 +88,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: var(--ion-color-primary);
+  background: var(--ion-color-light);
   border-radius: 12px;
   
   .stat-icon {

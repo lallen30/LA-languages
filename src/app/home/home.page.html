@@ -1,33 +1,12 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="welcome-content">
-    <ion-icon name="library-outline" class="welcome-icon"></ion-icon>
-    <h2>Ready to Study?</h2>
-    <p>Select a deck to start your flashcard session</p>
-    
-    <ion-button expand="block" fill="solid" color="primary" (click)="goToFlashcards()" class="start-btn">
-      <ion-icon name="library" slot="start"></ion-icon>
-      Start Flashcards
-    </ion-button>
-    
-    <ion-button expand="block" fill="solid" color="secondary" (click)="goToDecksCopy()" class="start-btn">
-      <ion-icon name="copy" slot="start"></ion-icon>
-      Decks Copy
-    </ion-button>
-    
-    <ion-button expand="block" fill="solid" color="tertiary" (click)="goToDecksBackup()" class="start-btn">
-      <ion-icon name="folder" slot="start"></ion-icon>
-      Decks Backup
-    </ion-button>
-    
-    <ion-button expand="block" fill="solid" color="success" (click)="goToExample()" class="start-btn">
-      <ion-icon name="play" slot="start"></ion-icon>
-      View Example Page
-    </ion-button>
+    <!-- <h2>Master your Language</h2> -->
+    <img src="assets/images/alien.png" alt="Alien" class="alien-image" />
   </div>
 </ion-content>
