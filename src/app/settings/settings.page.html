@@ -1,190 +1,47 @@
-<ion-header [translucent]="true">
-  <ion-toolbar mode="md">
+<ion-header>
+  <ion-toolbar>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="settings-container">
+<ion-content>
+  <ion-list inset="true">
 
-    <!-- The list -->
-    <ion-list inset>
-      <ion-item button detail="false" (click)="openModalKey('tts')">
-        <ion-icon name="language" slot="start"></ion-icon>
-        <ion-label>Language & Text-to-Speech</ion-label>
-      </ion-item>
+    <!-- TTS -->
+    <ion-item button detail="true" (click)="openModalKey('tts')">
+      <ion-icon name="language" slot="start"></ion-icon>
+      <ion-label>Text-to-Speech</ion-label>
+    </ion-item>
 
-      <ion-item button detail="false" (click)="openModalKey('appearance')">
-        <ion-icon name="color-palette" slot="start"></ion-icon>
-        <ion-label>Appearance</ion-label>
-        <ion-note slot="end">{{ settings.darkMode ? 'Dark' : 'Light' }}</ion-note>
-      </ion-item>
+    <!-- Appearance -->
+    <ion-item button detail="true" (click)="openModalKey('appearance')">
+      <ion-icon name="color-palette" slot="start"></ion-icon>
+      <ion-label>Appearance</ion-label>
+    </ion-item>
 
-      <ion-item button detail="false" (click)="openModalKey('study')">
-        <ion-icon name="school" slot="start"></ion-icon>
-        <ion-label>Study Settings</ion-label>
-      </ion-item>
+    <!-- Study -->
+    <ion-item button detail="true" (click)="openModalKey('study')">
+      <ion-icon name="school" slot="start"></ion-icon>
+      <ion-label>Study</ion-label>
+    </ion-item>
 
-      <ion-item button detail="false" (click)="openModalKey('images')">
-        <ion-icon name="image" slot="start"></ion-icon>
-        <ion-label>Images</ion-label>
-      </ion-item>
+    <!-- Images -->
+    <ion-item button detail="true" (click)="openModalKey('images')">
+      <ion-icon name="image" slot="start"></ion-icon>
+      <ion-label>Images</ion-label>
+    </ion-item>
 
-      <ion-item button detail="false" (click)="openModalKey('data')">
-        <ion-icon name="server" slot="start"></ion-icon>
-        <ion-label>Data Management</ion-label>
-      </ion-item>
+    <!-- Data -->
+    <ion-item button detail="true" (click)="openModalKey('data')">
+      <ion-icon name="server" slot="start"></ion-icon>
+      <ion-label>Data</ion-label>
+    </ion-item>
 
-      <ion-item button detail="false" (click)="openModalKey('about')">
-        <ion-icon name="information-circle" slot="start"></ion-icon>
-        <ion-label>About</ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
+    <!-- About -->
+    <ion-item button detail="true" (click)="openModalKey('about')">
+      <ion-icon name="information-circle" slot="start"></ion-icon>
+      <ion-label>About</ion-label>
+    </ion-item>
+
+  </ion-list>
 </ion-content>
-
-<!-- TTS Modal -->
-<ion-modal #ttsModal [isOpen]="modals.tts" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('tts')" (didDismiss)="closeModalKey('tts')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>Language & TTS</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('tts')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-tts-modal
-        [isIOS]="isIOS"
-        [settings]="settings"
-        [availableLanguages]="availableLanguages"
-        (ttsLanguageChange)="onTtsLanguageChange()"
-        (ttsRateChange)="onTtsRateChange()"
-        (ttsPitchChange)="onTtsPitchChange()"
-        (autoSpeakChange)="onAutoSpeakChange()"
-        (testTtsClick)="testTts()"
-      ></app-tts-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<!-- Appearance Modal -->
-<ion-modal #appearanceModal [isOpen]="modals.appearance" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('appearance')" (didDismiss)="closeModalKey('appearance')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>Appearance</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('appearance')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-appearance-modal
-        [settings]="settings"
-        (darkModeChange)="onDarkModeChange()"
-        (resetColorsClick)="resetColors()"
-        (previewColorsClick)="previewColors()"
-      ></app-appearance-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<!-- Study Settings Modal -->
-<ion-modal #studyModal [isOpen]="modals.study" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('study')" (didDismiss)="closeModalKey('study')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>Study Settings</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('study')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-study-modal
-        [settings]="settings"
-        (maxCardsChange)="onMaxCardsChange()"
-      ></app-study-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<!-- Images Modal -->
-<ion-modal #imagesModal [isOpen]="modals.images" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('images')" (didDismiss)="closeModalKey('images')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>Images</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('images')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-images-modal
-        [isIOS]="isIOS"
-        [settings]="settings"
-        [imageQualities]="imageQualities"
-        [cacheSize]="getCacheSize()"
-        (imageQualityChange)="onImageQualityChange()"
-        (clearImageCacheClick)="clearImageCache()"
-      ></app-images-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<!-- Data Management Modal -->
-<ion-modal #dataModal [isOpen]="modals.data" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('data')" (didDismiss)="closeModalKey('data')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>Data Management</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('data')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-data-modal
-        (exportDataClick)="exportData()"
-        (importDataClick)="importData()"
-        (resetAllSettingsClick)="resetAllSettings()"
-        (resetAllDataClick)="resetAllData()"
-      ></app-data-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<!-- About Modal -->
-<ion-modal #aboutModal [isOpen]="modals.about" [presentingElement]="presentingEl" (didPresent)="onModalDidPresent('about')" (didDismiss)="closeModalKey('about')">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar mode="md">
-        <ion-title>About</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeModalKey('about')" fill="clear" aria-label="Close">
-            <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <app-about-modal
-        (helpClick)="openHelp()"
-        (buyCoffeeClick)="openBuyMeCoffee()"
-      ></app-about-modal>
-    </ion-content>
-  </ng-template>
-</ion-modal>

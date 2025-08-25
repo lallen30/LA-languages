@@ -1,14 +1,26 @@
-<ion-list>
-  <ion-item>
-    <ion-icon name="layers" slot="start"></ion-icon>
-    <ion-label>Max cards per session</ion-label>
-    <ion-input
-      type="number"
-      [(ngModel)]="settings.maxCardsPerSession"
-      (ionChange)="maxCardsChange.emit()"
-      min="5"
-      max="500"
-      placeholder="20">
-    </ion-input>
-  </ion-item>
-</ion-list>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Study Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" aria-label="Close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-icon name="layers" slot="start"></ion-icon>
+      <ion-label>Max cards per session</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="settings.maxCardsPerSession"
+        (ionChange)="maxCardsChange.emit()"
+        min="5"
+        max="500"
+        placeholder="20">
+      </ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

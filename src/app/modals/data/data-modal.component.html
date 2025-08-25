@@ -1,18 +1,30 @@
-<div class="data-buttons">
-  <ion-button expand="block" fill="outline" (click)="exportDataClick.emit()">
-    <ion-icon name="download" slot="start"></ion-icon>
-    Export Data
-  </ion-button>
-  <ion-button expand="block" fill="outline" (click)="importDataClick.emit()">
-    <ion-icon name="cloud-upload" slot="start"></ion-icon>
-    Import Data
-  </ion-button>
-  <ion-button expand="block" fill="outline" color="warning" (click)="resetAllSettingsClick.emit()">
-    <ion-icon name="refresh" slot="start"></ion-icon>
-    Reset Settings
-  </ion-button>
-  <ion-button expand="block" fill="outline" color="danger" (click)="resetAllDataClick.emit()">
-    <ion-icon name="trash" slot="start"></ion-icon>
-    Delete All Data
-  </ion-button>
-</div>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Data</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" aria-label="Close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="data-buttons">
+    <ion-button expand="block" fill="outline" (click)="exportDataClick.emit()">
+      <ion-icon name="download" slot="start"></ion-icon>
+      Export Data
+    </ion-button>
+    <ion-button expand="block" fill="outline" (click)="importDataClick.emit()">
+      <ion-icon name="cloud-upload" slot="start"></ion-icon>
+      Import Data
+    </ion-button>
+    <ion-button expand="block" fill="outline" color="warning" (click)="resetAllSettingsClick.emit()">
+      <ion-icon name="refresh" slot="start"></ion-icon>
+      Reset Settings
+    </ion-button>
+    <ion-button expand="block" fill="outline" color="danger" (click)="resetAllDataClick.emit()">
+      <ion-icon name="trash" slot="start"></ion-icon>
+      Delete All Data
+    </ion-button>
+  </div>
+</ion-content>

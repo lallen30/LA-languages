@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-images-modal',
@@ -18,4 +18,10 @@ export class ImagesModalComponent {
 
   @Output() imageQualityChange = new EventEmitter<void>();
   @Output() clearImageCacheClick = new EventEmitter<void>();
+
+  constructor(private modalCtrl: ModalController) {}
+
+  close() {
+    this.modalCtrl.dismiss();
+  }
 }

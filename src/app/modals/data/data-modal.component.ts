@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-data-modal',
@@ -14,4 +14,10 @@ export class DataModalComponent {
   @Output() importDataClick = new EventEmitter<void>();
   @Output() resetAllSettingsClick = new EventEmitter<void>();
   @Output() resetAllDataClick = new EventEmitter<void>();
+
+  constructor(private modalCtrl: ModalController) {}
+
+  close() {
+    this.modalCtrl.dismiss();
+  }
 }

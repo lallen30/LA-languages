@@ -1,583 +1,125 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+/* ============================================================================
+   global.scss  — safe baseline + scoped fixes
+   ============================================================================ */
 
-/* Core CSS required for Ionic components to work properly */
+/* --- Ionic core + utilities (required) ------------------------------------ */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-
-
-
-
-/* Optional CSS utils that can be commented out */
+/* Optional Ionic utility imports */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/* Minimal iOS Fixes - Don't break Ionic's layout */
-.ios {
-  /* Basic iOS safe area support */
-  ion-content {
-    --padding-top: env(safe-area-inset-top);
-    --padding-bottom: env(safe-area-inset-bottom);
-  }
-
-/* TEMP: Force modals to be visible and on top for diagnostics */
-ion-modal {
-  z-index: 100000 !important;
-}
-ion-modal::part(backdrop) {
-  display: block !important;
-  opacity: 0.35 !important;
-}
-ion-modal::part(content) {
-  opacity: 1 !important;
-}
-  
-  /* Ensure proper background colors */
-  ion-content {
-    --background: var(--ion-background-color, #ffffff);
-  }
-  
-  ion-header ion-toolbar {
-    --background: var(--ion-toolbar-background, #ffffff);
-    --color: var(--ion-toolbar-color, #000000);
-  }
+/* --- App-wide base (safe; no structural overrides of Ionic components) ---- */
+html, body, ion-app, ion-content {
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
 }
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-/* @import '@ionic/angular/css/palettes/dark.system.css'; */
-
-/*
- * Dark Colors
- * -------------------------------------------
- */
-
-// Color picker modal centering - using Ionic CSS variables
-ion-modal.color-picker-modal-centered {
-  --width: 600px;
-  --max-width: 95vw;
-  --height: auto;
-  --max-height: 90vh;
-  --border-radius: 16px;
-  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  
-  // Use Ionic's positioning variables
-  --inset-inline-start: 50%;
-  --inset-block-start: 50%;
-  --transform: translate(-50%, -50%);
-  
-  // Ensure flexbox centering
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+/* Smoother text rendering */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-// Global CSS to ensure primary color is applied to all relevant elements
-ion-icon[name="moon"] {
-  color: var(--ion-color-primary) !important;
-  
-  // Target the SVG inside the icon
-  svg {
-    fill: var(--ion-color-primary) !important;
-    color: var(--ion-color-primary) !important;
-  }
-  
-  // Target any paths inside the SVG
-  svg path {
-    fill: var(--ion-color-primary) !important;
-    stroke: var(--ion-color-primary) !important;
-  }
+/* Remove any accidental list bullets from custom content */
+ul, ol { margin: 0; padding-left: 1.25rem; }
+
+/* ============================================================================
+   IMPORTANT: We intentionally DO NOT change layout of Ionic components here.
+   The following risky patterns have been removed (do not re-add globally):
+   - ion-item { display: block; }             // breaks internal flex row
+   - ion-label { width: 100%; }               // causes end-slot to collapse
+   - ion-item { --inner-padding-end: 0; }     // robs space from the end slot
+   If you need tighter rows on a specific page, scope it (see below).
+   ============================================================================ */
+
+/* --- Page-scoped styling for the Settings page list ----------------------- */
+/* Only affects the main Settings list, NOT modals */
+.settings-container ion-item {
+  /* You can keep your tighter look here without affecting modals */
+  /* Example: uncomment if desired */
+  /* --inner-padding-end: 0; */
 }
 
-ion-icon[slot="start"] {
-  color: var(--ion-color-primary) !important;
-  
-  // Target the SVG inside the icon
-  svg {
-    fill: var(--ion-color-primary) !important;
-    color: var(--ion-color-primary) !important;
-  }
-  
-  // Target any paths inside the SVG
-  svg path {
-    fill: var(--ion-color-primary) !important;
-    stroke: var(--ion-color-primary) !important;
-  }
+/* --- Scoped fix for the TTS modal layout ---------------------------------- */
+/* Prevent end-slot controls from collapsing only inside the TTS modal */
+ion-modal app-tts-modal ion-item::part(inner) {
+  display: flex !important;        /* ensure proper flex row */
+  align-items: center;
+  justify-content: space-between;  /* guarantees space for end slot */
+  gap: 12px;
 }
 
-ion-toggle {
-  --color-checked: var(--ion-color-primary) !important;
-  --handle-background-checked: var(--ion-color-primary) !important;
-  --background-checked: rgba(var(--ion-color-primary-rgb), 0.5) !important;
+/* Label grows but can’t steal the whole row */
+ion-modal app-tts-modal ion-item > ion-label {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-// Ensure buttons use primary color
-ion-button[color="primary"] {
-  --color: var(--ion-color-primary) !important;
-  --background: var(--ion-color-primary) !important;
+/* End-slot controls: reserve footprint so they never shrink to 0 */
+ion-modal app-tts-modal ion-select[slot="end"] {
+  flex: 0 0 auto;
+  min-width: 160px;                /* adjust to taste */
+}
+ion-modal app-tts-modal ion-toggle[slot="end"] {
+  flex: 0 0 auto;
+  min-width: 72px;                 /* typical toggle width */
 }
 
-// Settings page specific overrides
-app-settings {
-  ion-icon[name="moon"] {
-    color: var(--ion-color-primary) !important;
-  }
-  
-  ion-toggle {
-    --color-checked: var(--ion-color-primary) !important;
-    --handle-background-checked: var(--ion-color-primary) !important;
-  }
+/* Ranges (when you add them back): span the row reliably */
+ion-modal app-tts-modal ion-range {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 44px;                    /* visible touch target */
 }
 
-body.dark {
-  // Primary color is now dynamically set by the settings page
-  // --ion-color-primary: #428cff;
-  // --ion-color-primary-rgb: 66,140,255;
-  // --ion-color-primary-contrast: #ffffff;
-  // --ion-color-primary-contrast-rgb: 255,255,255;
-  // --ion-color-primary-shade: #3a7be0;
-  // --ion-color-primary-tint: #5598ff;
-
-  --ion-color-secondary: #50c8ff;
-  --ion-color-secondary-rgb: 80,200,255;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255,255,255;
-  --ion-color-secondary-shade: #46b0e0;
-  --ion-color-secondary-tint: #62ceff;
-
-  --ion-color-tertiary: #6a64ff;
-  --ion-color-tertiary-rgb: 106,100,255;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255,255,255;
-  --ion-color-tertiary-shade: #5d58e0;
-  --ion-color-tertiary-tint: #7974ff;
-
-  --ion-color-success: #2fdf75;
-  --ion-color-success-rgb: 47,223,117;
-  --ion-color-success-contrast: #000000;
-  --ion-color-success-contrast-rgb: 0,0,0;
-  --ion-color-success-shade: #29c467;
-  --ion-color-success-tint: #44e283;
-
-  --ion-color-warning: #ffd534;
-  --ion-color-warning-rgb: 255,213,52;
-  --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0,0,0;
-  --ion-color-warning-shade: #e0bb2e;
-  --ion-color-warning-tint: #ffd948;
-
-  --ion-color-danger: #ff4961;
-  --ion-color-danger-rgb: 255,73,97;
-  --ion-color-danger-contrast: #ffffff;
-  --ion-color-danger-contrast-rgb: 255,255,255;
-  --ion-color-danger-shade: #e04055;
-  --ion-color-danger-tint: #ff5b71;
-
-  --ion-color-dark: #f4f5f8;
-  --ion-color-dark-rgb: 244,245,248;
-  --ion-color-dark-contrast: #000000;
-  --ion-color-dark-contrast-rgb: 0,0,0;
-  --ion-color-dark-shade: #d7d8da;
-  --ion-color-dark-tint: #f5f6f9;
-
-  --ion-color-medium: #989aa2;
-  --ion-color-medium-rgb: 152,154,162;
-  --ion-color-medium-contrast: #000000;
-  --ion-color-medium-contrast-rgb: 0,0,0;
-  --ion-color-medium-shade: #86888f;
-  --ion-color-medium-tint: #a2a4ab;
-
-  --ion-color-light: #222428;
-  --ion-color-light-rgb: 34,36,40;
-  --ion-color-light-contrast: #ffffff;
-  --ion-color-light-contrast-rgb: 255,255,255;
-  --ion-color-light-shade: #1e2023;
-  --ion-color-light-tint: #383a3e;
+/* Optional: ensure select/toggle look good regardless of theme variables */
+ion-modal app-tts-modal ion-select::part(text),
+ion-modal app-tts-modal ion-select::part(placeholder) {
+  color: var(--ion-text-color, #111);
+  opacity: 1;
+}
+ion-modal app-tts-modal ion-select::part(icon) {
+  color: var(--ion-text-color, #111);
+}
+ion-modal app-tts-modal ion-toggle::part(track) {
+  background: color-mix(in srgb, var(--ion-text-color, #111) 20%, transparent);
+}
+ion-modal app-tts-modal ion-toggle.toggle-checked::part(track) {
+  background: color-mix(in srgb, var(--ion-color-primary, #428cff) 55%, transparent);
+}
+ion-modal app-tts-modal ion-toggle::part(handle) {
+  background: #fff;
 }
 
-/*
- * iOS Dark Theme
- * -------------------------------------------
- */
-
-.ios body.dark {
-  /* Background colors now managed dynamically by Settings page */
-  
-  --ion-text-color: #ffffff;
-  --ion-text-color-rgb: 255,255,255;
-
-  --ion-color-step-50: #0d0d0d;
-  --ion-color-step-100: #1a1a1a;
-  --ion-color-step-150: #262626;
-  --ion-color-step-200: #333333;
-  --ion-color-step-250: #404040;
-  --ion-color-step-300: #4d4d4d;
-  --ion-color-step-350: #595959;
-  --ion-color-step-400: #666666;
-  --ion-color-step-450: #737373;
-  --ion-color-step-500: #808080;
-  --ion-color-step-550: #8c8c8c;
-  --ion-color-step-600: #999999;
-  --ion-color-step-650: #a6a6a6;
-  --ion-color-step-700: #b3b3b3;
-  --ion-color-step-750: #bfbfbf;
-  --ion-color-step-800: #cccccc;
-  --ion-color-step-850: #d9d9d9;
-  --ion-color-step-900: #e6e6e6;
-  --ion-color-step-950: #f2f2f2;
-
-  /* Item and card backgrounds now managed dynamically by Settings page */
+/* --- Small quality-of-life tweaks (safe) ---------------------------------- */
+ion-button[fill="outline"] {
+  --border-width: 2px;
 }
 
-.ios body.dark ion-modal {
-  --ion-background-color: var(--ion-color-step-100);
-  --ion-toolbar-background: var(--ion-color-step-150);
-  --ion-toolbar-border-color: var(--ion-color-step-250);
+/* --- Fullscreen modal utility -------------------------------------------- */
+/* Applied from Settings via cssClass: 'modal-fullscreen' */
+ion-modal.modal-fullscreen {
+  /* Make the modal occupy the full viewport */
+  --height: 100%;
+  --max-height: 100%;
+  --width: 100%;
+  --border-radius: 0;
 }
 
-
-/*
- * Material Design Dark Theme
- * -------------------------------------------
- */
-
-.md body.dark {
-  /* Background colors now managed dynamically by Settings page */
-
-  --ion-text-color: #ffffff;
-  --ion-text-color-rgb: 255,255,255;
-
-  --ion-border-color: #222222;
-
-  --ion-color-step-50: #1e1e1e;
-  --ion-color-step-100: #2a2a2a;
-  --ion-color-step-150: #363636;
-  --ion-color-step-200: #414141;
-  --ion-color-step-250: #4d4d4d;
-  --ion-color-step-300: #595959;
-  --ion-color-step-350: #656565;
-  --ion-color-step-400: #717171;
-  --ion-color-step-450: #7d7d7d;
-  --ion-color-step-500: #898989;
-  --ion-color-step-550: #949494;
-  --ion-color-step-600: #a0a0a0;
-  --ion-color-step-650: #acacac;
-  --ion-color-step-700: #b8b8b8;
-  --ion-color-step-750: #c4c4c4;
-  --ion-color-step-800: #d0d0d0;
-  --ion-color-step-850: #dbdbdb;
-  --ion-color-step-900: #e7e7e7;
-  --ion-color-step-950: #f3f3f3;
-
-  /* Item, toolbar, tab bar, and card backgrounds now managed dynamically by Settings page */
+/* Ensure the shadow DOM content stretches fully */
+ion-modal.modal-fullscreen::part(content) {
+  height: 100%;
 }
 
-/*
- * Global Card Background Colors
- * -------------------------------------------
- */
-
-// Apply card background color to all cards throughout the app
-ion-card {
-  --background: var(--ion-card-background) !important;
-  background: var(--ion-card-background) !important;
-  background-color: var(--ion-card-background) !important;
-}
-
-/*
- * Custom Color Variables Application
- * -------------------------------------------
- */
-
-// Apply card text color to card content
-ion-card-content {
-  color: var(--app-card-text-color) !important;
-}
-
-// Apply footer colors to tab bar and footer elements
-ion-tab-bar {
-  --background: var(--app-footer-background, var(--ion-toolbar-background, var(--ion-background-color))) !important;
-  --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
-}
-
-// Apply footer text color to tab buttons
-ion-tab-button {
-  --color: var(--app-footer-text-color, var(--ion-text-color)) !important;
-  --color-selected: var(--ion-color-primary) !important;
-  
-  // Ensure inactive tab button text and icons use footer text color
-  ion-label {
-    color: var(--app-footer-text-color, var(--ion-text-color)) !important;
-  }
-  
-  ion-icon {
-    color: var(--app-footer-text-color, var(--ion-text-color)) !important;
-  }
-  
-  // Selected tab uses primary color
-  &.tab-selected {
-    ion-label, ion-icon {
-      color: var(--ion-color-primary) !important;
-    }
-  }
-}
-
-// Apply card text color to card titles and content
-ion-card-title, ion-card-subtitle {
-  color: var(--app-card-text-color) !important;
-}
-
-// Apply button colors from settings - use primary color as fallback if button colors aren't set
-ion-button,
-ion-button.button,
-ion-button.button-solid {
-  --background: var(--ion-color-button, var(--ion-color-primary)) !important;
-  --color: var(--ion-color-button-contrast, #ffffff) !important;
-  --background-activated: var(--ion-color-button-shade, var(--ion-color-primary-shade)) !important;
-  --background-focused: var(--ion-color-button-tint, var(--ion-color-primary-tint)) !important;
-  --background-hover: var(--ion-color-button-tint, var(--ion-color-primary-tint)) !important;
-  
-  // Also apply to the native button element inside
-  .button-native {
-    background: var(--ion-color-button, var(--ion-color-primary)) !important;
-    color: var(--ion-color-button-contrast, #ffffff) !important;
-  }
-  
-  // Make icons inside buttons match the button text color
-  ion-icon {
-    color: var(--ion-color-button-contrast, #ffffff) !important;
-  }
-}
-
-// Apply footer background to any footer elements
-.footer, ion-footer {
-  --background: var(--app-footer-background) !important;
-  background: var(--app-footer-background) !important;
-  color: var(--app-footer-text-color) !important;
-}
-
-// Apply item colors to all ion-item elements
-ion-item {
-  --background: var(--app-item-background) !important;
-  --color: var(--app-item-text-color) !important;
-  background: var(--app-item-background) !important;
-  color: var(--app-item-text-color) !important;
-}
-
-// Apply item text color to item labels and content
-ion-label {
-  color: var(--app-item-text-color) !important;
-}
-
-// Tab bar visibility fix - removed conflicting color rules as they're handled above
-
-// Review Action Bar - Dynamic colors using CSS variables
-.review-tab-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  display: flex;
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
-  
-  .review-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 8px;
-    min-height: 70px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    
-    ion-icon {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-    
-    .tab-label {
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0;
-    }
-    
-    // Dynamic color variants using CSS variables
-    &.hard-tab {
-      background: var(--review-hard-bg, #eb445a);
-      
-      ion-icon, .tab-label {
-        color: var(--review-hard-text, #ffffff);
-      }
-    }
-    
-    &.good-tab {
-      background: var(--review-good-bg, #ffc409);
-      
-      ion-icon, .tab-label {
-        color: var(--review-good-text, #000000);
-      }
-    }
-    
-    &.easy-tab {
-      background: var(--review-easy-bg, #2dd36f);
-      
-      ion-icon, .tab-label {
-        color: var(--review-easy-text, #ffffff);
-      }
-    }
-    
-    &.copy-tab {
-      background: var(--review-copy-bg, #92949c);
-      
-      ion-icon, .tab-label {
-        color: var(--review-copy-text, #ffffff);
-      }
-    }
-    
-    // Hover/active states
-    &:hover, &:active {
-      opacity: 0.8;
-    }
-    
-    &:focus {
-      outline: none;
-    }
-  }
-}
-
-// Apply secondary color to textarea text
-ion-textarea {
-  --color: var(--ion-color-medium) !important;
-  color: var(--ion-color-medium) !important;
-}
-
-// Apply secondary color to select text
-ion-select {
-  --color: var(--ion-color-medium) !important;
-  color: var(--ion-color-medium) !important;
-}
-
-// Apply secondary text color to native HTML input elements (used in alerts, modals, etc.)
-// Be more specific to avoid affecting tab bar and other UI elements
-ion-alert input[type="text"], 
-ion-alert input[type="email"], 
-ion-alert input[type="password"], 
-ion-alert input[type="number"], 
-ion-alert input[type="search"],
-ion-modal input[type="text"], 
-ion-modal input[type="email"], 
-ion-modal input[type="password"], 
-ion-modal input[type="number"], 
-ion-modal input[type="search"],
-ion-modal textarea,
-ion-alert textarea {
-  color: var(--ion-text-color) !important;
-}
-
-// Specifically target Ionic alert inputs
-.alert-input {
-  color: var(--ion-text-color) !important;
-  
-  // Style placeholder text with contrasting color
-  &::placeholder {
-    color: var(--ion-color-medium, #000000) !important;
-    opacity: 0.6;
-  }
-}
-
-// Style placeholder text for all targeted input elements
-ion-alert input[type="text"]::placeholder, 
-ion-alert input[type="email"]::placeholder, 
-ion-alert input[type="password"]::placeholder, 
-ion-alert input[type="number"]::placeholder, 
-ion-alert input[type="search"]::placeholder,
-ion-modal input[type="text"]::placeholder, 
-ion-modal input[type="email"]::placeholder, 
-ion-modal input[type="password"]::placeholder, 
-ion-modal input[type="number"]::placeholder, 
-ion-modal input[type="search"]::placeholder,
-ion-modal textarea::placeholder,
-ion-alert textarea::placeholder {
-  color: var(--ion-color-medium, #000000) !important;
-  opacity: 0.6;
-}
-
-// iOS Header Button Fixes - Universal approach for mobile devices
-@media (max-width: 768px) {
-  ion-header {
-    position: relative;
-    visibility: visible;
-    opacity: 1;
-    z-index: 1000;
-    padding-top: env(safe-area-inset-top);
-    padding-top: constant(safe-area-inset-top);
-    
-    ion-toolbar {
-      position: relative;
-      visibility: visible;
-      opacity: 1;
-      z-index: 1001;
-      
-      ion-title {
-        position: relative;
-        visibility: visible;
-        opacity: 1;
-        z-index: 1002;
-      }
-      
-      ion-buttons {
-        position: relative;
-        visibility: visible;
-        opacity: 1;
-        z-index: 1003;
-        
-        ion-button {
-          position: relative;
-          visibility: visible;
-          opacity: 1;
-          
-          ion-icon {
-            position: relative;
-            visibility: visible;
-            opacity: 1;
-            display: block;
-          }
-        }
-      }
-    }
-  }
-  
-  // Ensure content has proper padding to account for header
-  ion-content {
-    padding-top: 0;
-  }
+/* Optional: make inner ion-content fill too, in case components rely on it */
+ion-modal.modal-fullscreen ion-content {
+  height: 100%;
 }

@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-about-modal',
@@ -10,6 +10,12 @@ import { IonicModule } from '@ionic/angular';
   styleUrls: ['./about-modal.component.scss']
 })
 export class AboutModalComponent {
-  @Output() helpClick = new EventEmitter<void>();
-  @Output() buyCoffeeClick = new EventEmitter<void>();
+  @Input() openHelp?: () => void;
+  @Input() openBuyMeCoffee?: () => void;
+
+  constructor(private modalCtrl: ModalController) {}
+
+  close() {
+    this.modalCtrl.dismiss();
+  }
 }

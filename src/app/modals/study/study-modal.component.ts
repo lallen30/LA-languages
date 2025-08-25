@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-study-modal',
@@ -13,4 +13,10 @@ import { IonicModule } from '@ionic/angular';
 export class StudyModalComponent {
   @Input() settings: any;
   @Output() maxCardsChange = new EventEmitter<void>();
+
+  constructor(private modalCtrl: ModalController) {}
+
+  close() {
+    this.modalCtrl.dismiss();
+  }
 }

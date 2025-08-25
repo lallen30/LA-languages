@@ -1,0 +1,40 @@
+:host {
+  ion-list { padding: 0; }
+  ion-item { --inner-padding-end: 16px; align-items: center; }
+
+  /* Lay out label + control ourselves (no end slot needed) */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto; /* label then control */
+    align-items: center;
+    column-gap: 12px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .row ion-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Controls at the end: guaranteed footprint */
+  .row .end { min-width: 0; }
+  .row ion-select.end { min-width: 160px; }  /* adjust to taste */
+  .row ion-toggle.end { min-width: 72px;  }
+
+  /* When you re-add ranges */
+  .row .fill { width: 100%; height: 44px; }
+
+  /* Make select/toggle readable regardless of theme variables */
+  ion-select::part(text),
+  ion-select::part(placeholder) { color: var(--ion-text-color, #111); opacity: 1; }
+  ion-select::part(icon) { color: var(--ion-text-color, #111); }
+  ion-toggle::part(track) {
+    background: color-mix(in srgb, var(--ion-text-color, #111) 20%, transparent);
+  }
+  ion-toggle.toggle-checked::part(track) {
+    background: color-mix(in srgb, var(--ion-color-primary, #428cff) 55%, transparent);
+  }
+  ion-toggle::part(handle) { background: #fff; }
+}

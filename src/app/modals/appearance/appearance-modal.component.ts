@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-appearance-modal',
@@ -15,4 +15,10 @@ export class AppearanceModalComponent {
   @Output() darkModeChange = new EventEmitter<void>();
   @Output() resetColorsClick = new EventEmitter<void>();
   @Output() previewColorsClick = new EventEmitter<void>();
+
+  constructor(private modalCtrl: ModalController) {}
+
+  close() {
+    this.modalCtrl.dismiss();
+  }
 }

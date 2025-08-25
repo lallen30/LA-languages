@@ -1,4 +1,15 @@
-<ion-list>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Appearance</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" aria-label="Close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
   <ion-item>
     <ion-icon name="moon" slot="start"></ion-icon>
     <ion-label>Dark Mode</ion-label>
@@ -20,4 +31,5 @@
       Apply Color Changes
     </ion-button>
   </div>
-</ion-list>
+  </ion-list>
+</ion-content>

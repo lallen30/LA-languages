@@ -1,38 +1,69 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController, ToastController, ModalController, PopoverController, IonContent } from '@ionic/angular';
-import { IonModal } from '@ionic/angular/standalone';
+import {
+  IonicModule,
+  AlertController,
+  ToastController,
+  ModalController,
+  PopoverController,
+  IonContent,
+  Platform
+} from '@ionic/angular';
+import { Router } from '@angular/router';
+
 import { TtsModalComponent } from '../modals/tts/tts-modal.component';
 import { AppearanceModalComponent } from '../modals/appearance/appearance-modal.component';
 import { StudyModalComponent } from '../modals/study/study-modal.component';
 import { ImagesModalComponent } from '../modals/images/images-modal.component';
 import { DataModalComponent } from '../modals/data/data-modal.component';
 import { AboutModalComponent } from '../modals/about/about-modal.component';
-import { Router } from '@angular/router';
-import { ColorPickerPopoverComponent } from '../components/color-picker-popover.component';
+import { TestHelloModalComponent } from '../modals/test-hello.modal';
+
 import { ColorPickerOverlayService } from '../services/color-picker-overlay.service';
 import { TtsService } from '../services/tts.service';
 import { ImageService } from '../services/image.service';
 import { StorageService } from '../services/storage.service';
+
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
-import { addIcons } from 'ionicons';
-import { language, colorPalette, school, server, informationCircle, image, close } from 'ionicons/icons';
 
-// Register icons at module import time so they are available before first render
+import { addIcons } from 'ionicons';
+import {
+  language,
+  colorPalette,
+  school,
+  server,
+  informationCircle,
+  image,
+  close
+} from 'ionicons/icons';
+
+// Ensure ion-modal is defined when creating it programmatically
+import { defineCustomElement as defineIonModal } from '@ionic/core/components/ion-modal';
+
+// Register icons early
 try {
   addIcons({
-    'language': language,
+    language,
     'color-palette': colorPalette,
-    'school': school,
-    'server': server,
+    school,
+    server,
     'information-circle': informationCircle,
-    'image': image,
-    'close': close,
+    image,
+    close
   });
 } catch {}
+
+type ModalKey = 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about';
 
 @Component({
   selector: 'app-settings',
@@ -40,44 +71,26 @@ try {
   styleUrls: ['./settings.page.scss'],
   standalone: true,
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
-    IonModal,
+    IonicModule,
     TtsModalComponent,
     AppearanceModalComponent,
     StudyModalComponent,
     ImagesModalComponent,
     DataModalComponent,
     AboutModalComponent,
+    TestHelloModalComponent
   ]
 })
-
 export class SettingsPage implements OnInit, AfterViewInit {
-  @ViewChild(IonContent, { read: ElementRef, static: true }) contentEl!: ElementRef<HTMLElement>;
-  // In Angular, template refs on web components resolve to ElementRef
-  @ViewChild('ttsModal', { read: ElementRef, static: false }) ttsModalRef!: ElementRef<any>;
-  @ViewChild('appearanceModal', { read: ElementRef, static: false }) appearanceModalRef!: ElementRef<any>;
-  @ViewChild('studyModal', { read: ElementRef, static: false }) studyModalRef!: ElementRef<any>;
-  @ViewChild('imagesModal', { read: ElementRef, static: false }) imagesModalRef!: ElementRef<any>;
-  @ViewChild('dataModal', { read: ElementRef, static: false }) dataModalRef!: ElementRef<any>;
-  @ViewChild('aboutModal', { read: ElementRef, static: false }) aboutModalRef!: ElementRef<any>;
+  @ViewChild(IonContent, { read: ElementRef, static: true })
+  contentEl!: ElementRef<HTMLElement>;
+
+  
   presentingEl!: HTMLElement;
-  modals: {
-    tts: boolean;
-    appearance: boolean;
-    study: boolean;
-    images: boolean;
-    data: boolean;
-    about: boolean;
-  } = {
-    tts: false,
-    appearance: false,
-    study: false,
-    images: false,
-    data: false,
-    about: false,
-  };
+
+  // ---- STATE ----
   settings = {
     darkMode: false,
     ttsLanguage: 'es-ES',
@@ -89,7 +102,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
     maxCardsPerSession: 20
   };
 
-  // Color schemes for light and dark modes
   lightColorScheme = {
     primary: '#3880ff',
     secondary: '#3dc2ff',
@@ -108,7 +120,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
     buttonBackground: '#3880ff',
     buttonText: '#ffffff',
     outlinedButtonColor: '#eb445a',
-    // Flashcard Action Bar Colors
     hardButtonBackground: '#eb445a',
     hardButtonText: '#ffffff',
     goodButtonBackground: '#ffc409',
@@ -137,7 +148,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
     buttonBackground: '#428cff',
     buttonText: '#ffffff',
     outlinedButtonColor: '#d33447',
-    // Flashcard Action Bar Colors (Dark Mode)
     hardButtonBackground: '#d33447',
     hardButtonText: '#ffffff',
     goodButtonBackground: '#e6b000',
@@ -148,7 +158,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
     incorrectButtonText: '#ffffff'
   };
 
-  // Current active color scheme (switches based on dark mode)
   currentColorScheme = { ...this.lightColorScheme };
 
   availableLanguages = [
@@ -166,7 +175,16 @@ export class SettingsPage implements OnInit, AfterViewInit {
     { value: 'high', label: 'High (best quality)' }
   ];
 
-  
+  // Map modal keys to components (TS can see this field now)
+  private readonly modalComponentMap: Record<ModalKey, any> = {
+    // Use the real TTS modal component now that overlays are verified
+    tts: TtsModalComponent,
+    appearance: AppearanceModalComponent,
+    study: StudyModalComponent,
+    images: ImagesModalComponent,
+    data: DataModalComponent,
+    about: AboutModalComponent
+  };
 
   constructor(
     private storageService: StorageService,
@@ -178,6 +196,8 @@ export class SettingsPage implements OnInit, AfterViewInit {
     private popoverController: PopoverController,
     private colorPickerOverlayService: ColorPickerOverlayService,
     private router: Router,
+    private platform: Platform,
+    private el: ElementRef<HTMLElement>,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -186,109 +206,289 @@ export class SettingsPage implements OnInit, AfterViewInit {
     return Capacitor.getPlatform() === 'ios';
   }
 
-  
-
   ngOnInit() {
-    // Register specific Ionicons used on this page to avoid runtime icon load warnings
     try {
       addIcons({
-        'language': language,
+        language,
         'color-palette': colorPalette,
-        'school': school,
-        'server': server,
+        school,
+        server,
         'information-circle': informationCircle,
-        'image': image,
-        'close': close,
+        image,
+        close
       });
+    } catch {}
+    // On some builds, ion-modal may not be registered until first use in templates.
+    // We register it explicitly to allow programmatic creation/presentation for diagnostics.
+    try {
+      if (!customElements.get('ion-modal')) {
+        defineIonModal();
+        console.log('[Settings] ion-modal defined via defineCustomElement');
+      }
     } catch (e) {
-      console.warn('Ionicons addIcons failed (possibly already registered):', e);
+      console.warn('[Settings] Failed to define ion-modal via defineCustomElement', e);
     }
     this.loadSettings();
   }
 
   ngAfterViewInit() {
-    // Set presenting element after view init so the element exists
-    this.presentingEl = this.contentEl?.nativeElement ?? document.body;
-    // Diagnostics for modal refs
-    console.log('Modal refs after view init:', {
-      tts: this.ttsModalRef,
-      appearance: this.appearanceModalRef,
-      study: this.studyModalRef,
-      images: this.imagesModalRef,
-      data: this.dataModalRef,
-      about: this.aboutModalRef,
-    });
-    // Verify custom element registration and upgrade
-    const ce = (window as any).customElements?.get?.('ion-modal');
-    console.log('customElements.get(\'ion-modal\') =>', ce);
-    const firstModal: any = document.querySelector('ion-modal');
-    console.log('First ion-modal element present:', !!firstModal, 'has present():', typeof firstModal?.present);
+    // Prefer the router outlet for the iOS card presentation
+    const closestOutlet =
+    this.el.nativeElement.closest('ion-router-outlet') as HTMLElement | null;
+
+  // Fallbacks if not found
+  const firstOutlet = document.querySelector('ion-router-outlet') as HTMLElement | null;
+
+  this.presentingEl =
+    closestOutlet ??
+    firstOutlet ??
+    this.contentEl?.nativeElement ??
+    document.body;
   }
 
-  onModalDidPresent(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
+  onModalDidPresent(key: ModalKey) {
     console.log('didPresent', key);
   }
 
-
-  // New helpers for [isOpen] pattern
-  openModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
-    if (!(key in this.modals)) {
-      console.error('openModalKey: unknown key', key);
-      return;
+  // ---------- MODALS: programmatic, iOS-safe ----------
+  private buildProps(key: ModalKey): any {
+    if (key === 'tts') {
+      return {
+        isIOS: this.isIOS,
+        settings: this.settings,
+        availableLanguages: this.availableLanguages,
+        ttsLanguageChange: () => this.onTtsLanguageChange(),
+        ttsRateChange: () => this.onTtsRateChange(),
+        ttsPitchChange: () => this.onTtsPitchChange(),
+        autoSpeakChange: () => this.onAutoSpeakChange()
+      };
     }
-    this.modals[key] = true;
-    console.log('openModalKey ->', key, this.modals);
-    // Ensure change detection runs so the modal sees the new isOpen value
-    this.cdr.detectChanges();
+    if (key === 'images') {
+      return {
+        isIOS: this.isIOS,
+        settings: this.settings,
+        imageQualities: this.imageQualities,
+        cacheSize: this.getCacheSize(),
+        clearCache: () => this.clearImageCache()
+      };
+    }
+    if (key === 'data') {
+      return {
+        resetAllData: () => this.resetAllData(),
+        exportData: () => this.exportData(),
+        importData: () => this.importData()
+      };
+    }
+    if (key === 'appearance') {
+      return {
+        isIOS: this.isIOS,
+        settings: this.settings,
+        currentColorScheme: this.currentColorScheme,
+        presetColors: this.getPresetColors(),
+        onColorChange: (k: string, e: any) => this.onColorChange(k, e),
+        onHexInput: (k: string, e: any) => this.onHexInput(k, e),
+        resetColors: () => this.resetColors(),
+        previewColors: () => this.previewColors()
+      };
+    }
+    if (key === 'study') {
+      return {
+        settings: this.settings,
+        onStudyRemindersChange: () => this.onStudyRemindersChange(),
+        onMaxCardsChange: () => this.onMaxCardsChange()
+      };
+    }
+    if (key === 'about') {
+      return {
+        openHelp: this.openHelp.bind(this),
+        openBuyMeCoffee: this.openBuyMeCoffee.bind(this)
+      };
+    }
+    // Fallback (keeps TS happy even if the union expands later)
+    return {};
   }
 
-  closeModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
-    if (!(key in this.modals)) {
-      console.error('closeModalKey: unknown key', key);
-      return;
-    }
-    this.modals[key] = false;
-    console.log('closeModalKey ->', key, this.modals);
-    this.cdr.detectChanges();
-  }
-
-  async openModal(modalRef: any) {
+  async openModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
     try {
-      // Prefer passed ref; fallback to known ViewChilds if a string key is provided
-      let ref: any = modalRef;
-      if (typeof modalRef === 'string') {
-        ref = (this as any)[modalRef];
+      console.log('[Settings] openModalKey start', key);
+      const component = this.modalComponentMap[key];
+      const componentProps = this.buildProps(key);
+
+      // Force fullscreen presentation for all modals
+      const forceFullscreen = true;
+      if (forceFullscreen) {
+        console.warn('[Settings] Forcing fullscreen modal presentation (no presentingElement)');
       }
-      const modalEl: any = ref?.el ?? ref?.nativeElement ?? ref;
-      if (!modalEl || typeof modalEl.present !== 'function') {
-        console.error('Open modal failed: invalid modalRef/modalEl', { ref, modalRef, modalElType: typeof modalEl, keys: Object.keys(modalEl || {}) });
-        return;
-      }
-      await modalEl.present();
+      await this.tryPresentModal({ component, componentProps, usePresenting: this.isIOS && !forceFullscreen });
+      console.log('[Settings] openModalKey done', key);
     } catch (e) {
-      console.error('Open modal failed with error:', e);
+      console.error('openModalKey failed', e);
       this.showToast('Unable to open modal', 'danger');
     }
   }
 
-  async closeModal(modalRef: any) {
+  private async openRawTestModal() {
     try {
-      let ref: any = modalRef;
-      if (typeof modalRef === 'string') {
-        ref = (this as any)[modalRef];
-      }
-      const modalEl: any = ref?.el ?? ref?.nativeElement ?? ref;
-      if (!modalEl || typeof modalEl.dismiss !== 'function') {
-        console.error('Close modal failed: invalid modalRef/modalEl', { ref, modalRef, modalElType: typeof modalEl, keys: Object.keys(modalEl || {}) });
-        return;
-      }
-      await modalEl.dismiss();
+      const hasIonModal = !!customElements.get('ion-modal');
+      console.log('[Settings] customElements.has(ion-modal)=', hasIonModal);
+      const raw = document.createElement('ion-modal') as HTMLIonModalElement & any;
+      raw.style.zIndex = '9999';
+      raw.backdropDismiss = true;
+      raw.innerHTML = `
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Raw Modal</ion-title>
+            <ion-buttons slot="end"><ion-button id="raw-close">Close</ion-button></ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          If you can see this, Ionic overlays work. The issue is Angular component resolution.
+        </ion-content>
+      `;
+      document.body.appendChild(raw);
+      const closeBtn = raw.querySelector('#raw-close') as HTMLElement | null;
+      closeBtn?.addEventListener('click', () => raw.dismiss());
+      console.log('[Settings] presenting RAW ion-modal');
+      await raw.present();
+      console.log('[Settings] RAW ion-modal presented');
     } catch (e) {
-      console.error('Close modal failed with error:', e);
-      this.showToast('Unable to close modal', 'danger');
+      console.error('[Settings] RAW modal failed', e);
+      await this.openAlertSmokeTest('RAW modal failed', JSON.stringify(e ?? {}, null, 2));
     }
   }
 
+  private async openAlertSmokeTest(hdr: string, msg: string) {
+    try {
+      const alert = await this.alertController.create({
+        header: hdr,
+        message: msg,
+        buttons: ['OK']
+      });
+      await alert.present();
+      await alert.onDidDismiss();
+    } catch (e) {
+      console.error('[Settings] Alert overlay failed', e);
+    }
+  }
+  
+  private async tryPresentModal(opts: {
+    component: any;
+    componentProps: any;
+    usePresenting: boolean;
+  }) {
+    // Build options
+    const baseOpts: any = {
+      component: opts.component,
+      componentProps: opts.componentProps,
+      showBackdrop: true,
+      backdropDismiss: true,
+      cssClass: 'modal-fullscreen'
+    };
+    if (opts.usePresenting && this.presentingEl) {
+      baseOpts.presentingElement = this.presentingEl;
+    }
+  
+    console.log('[Settings] creating modal with opts', { hasPresenting: !!baseOpts.presentingElement });
+    const modal = await this.modalController.create(baseOpts);
+
+    // Do NOT manually append the modal; Ionic handles DOM placement.
+    // Appending to document.body can cause "<ion-modal> must be used inside ion-content" warnings on iOS.
+
+    // Guard componentOnReady with a timeout to avoid hangs
+    try {
+      const cor = (modal as any).componentOnReady?.();
+      if (cor && typeof cor.then === 'function') {
+        await Promise.race([
+          cor,
+          new Promise((res) => setTimeout(res, 500))
+        ]);
+        console.log('[Settings] componentOnReady completed or timed out');
+      }
+    } catch (e) {
+      console.warn('[Settings] componentOnReady threw; continuing to present', e);
+    }
+  
+    // iOS sheet tweaks set directly on element to avoid typing/version issues
+    const m = modal as any;
+    m.swipeToClose = true;
+    m.initialBreakpoint = 1;
+    m.breakpoints = [0, 1];
+  
+    // TEMP: Present directly to verify present() runs on device
+    console.log('[Settings] invoking modal.present() (direct)');
+    try {
+      await modal.present();
+      console.log('[Settings] modal.present() resolved (direct)');
+    } catch (e) {
+      console.error('[Settings] modal.present() threw (direct)', e);
+      throw e;
+    }
+    const ok = true;
+  
+    if (!ok && opts.usePresenting) {
+      // Fallback: retry without presentingElement (fullscreen)
+      console.warn('[Settings] Modal did not present with presentingElement; retrying fullscreen…');
+      await modal.dismiss().catch(() => {});
+      const fallback = await this.modalController.create({
+        component: opts.component,
+        componentProps: opts.componentProps,
+        showBackdrop: true,
+        backdropDismiss: true,
+        cssClass: 'modal-fullscreen'
+      });
+      await (fallback as any).componentOnReady?.();
+      const f = fallback as any;
+      f.swipeToClose = true;
+      f.initialBreakpoint = 1;
+      f.breakpoints = [0, 1];
+      if (!fallback.parentElement) document.body.appendChild(fallback);
+      try {
+        console.log('[Settings] invoking fallback.present() (direct)');
+        await fallback.present();
+        console.log('[Settings] fallback.present() resolved (direct)');
+      } catch (e) {
+        console.error('[Settings] fallback.present() threw (direct)', e);
+      }
+    }
+  }
+  
+// Replace your presentWithWatchdog with this:
+private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number): Promise<boolean> {
+  return new Promise<boolean>(async (resolve) => {
+    let settled = false;
+
+    const done = (ok: boolean) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      modal.removeEventListener('ionModalDidPresent', onPresented as any);
+      resolve(ok);
+    };
+
+    const onPresented = () => done(true);
+    modal.addEventListener('ionModalDidPresent', onPresented as any, { once: true });
+
+    const timer = setTimeout(() => done(false), timeoutMs);
+
+    try {
+      console.log('[Settings] calling modal.present()');
+      await modal.present();
+      console.log('[Settings] modal.present() returned, waiting for ionModalDidPresent');
+      // present() resolves when animation starts; we rely on ionModalDidPresent to confirm
+    } catch (e) {
+      console.error('modal.present() threw', e);
+      done(false);
+    }
+  });
+}
+
+
+  async closeTopModal() {
+    const top = await this.modalController.getTop();
+    if (top) await top.dismiss();
+  }
+
+  // ---------- SETTINGS + HELPERS ----------
   async loadSettings() {
     try {
       this.settings.darkMode = await this.storageService.getSetting('darkMode', false);
@@ -300,14 +500,10 @@ export class SettingsPage implements OnInit, AfterViewInit {
       this.settings.studyReminders = await this.storageService.getSetting('studyReminders', true);
       this.settings.maxCardsPerSession = await this.storageService.getSetting('maxCardsPerSession', 20);
 
-      // Load custom color schemes
       await this.loadColorSchemes();
-      
-      // Apply dark mode and colors
       this.applyDarkMode();
       this.switchColorScheme();
-      
-      // Update TTS settings
+
       this.ttsService.setLanguage(this.settings.ttsLanguage);
       this.ttsService.setRate(this.settings.ttsRate);
       this.ttsService.setPitch(this.settings.ttsPitch);
@@ -318,20 +514,11 @@ export class SettingsPage implements OnInit, AfterViewInit {
 
   async saveSetting(key: string, value: any) {
     try {
-      console.log(`=== SAVING SETTING: ${key} ===`);
-      console.log('Key:', key, 'Value:', value, 'Type:', typeof value);
       await this.storageService.saveSetting(key, value);
-      console.log('Setting saved successfully to storage');
-      
-      // Verify it was saved by reading it back
-      const savedValue = await this.storageService.getSetting(key);
-      console.log('Verification - value read back from storage:', savedValue);
-      console.log(`=== END SAVING SETTING: ${key} ===`);
-      
-      // Apply changes immediately
       switch (key) {
         case 'darkMode':
           this.applyDarkMode();
+          this.switchColorScheme();
           break;
         case 'ttsLanguage':
           this.ttsService.setLanguage(value);
@@ -343,7 +530,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
           this.ttsService.setPitch(value);
           break;
       }
-      
       await this.showToast('Setting saved');
     } catch (error) {
       console.error('Error saving setting:', error);
@@ -351,50 +537,20 @@ export class SettingsPage implements OnInit, AfterViewInit {
     }
   }
 
-  onDarkModeChange() {
-    this.saveSetting('darkMode', this.settings.darkMode);
-    this.applyDarkMode();
-    this.switchColorScheme();
-  }
-
-  onTtsLanguageChange() {
-    console.log('=== TTS LANGUAGE CHANGE ===');
-    console.log('New ttsLanguage value:', this.settings.ttsLanguage);
-    console.log('About to save ttsLanguage setting...');
-    this.saveSetting('ttsLanguage', this.settings.ttsLanguage);
-    console.log('=== END TTS LANGUAGE CHANGE ===');
-  }
-
-  onTtsRateChange() {
-    this.saveSetting('ttsRate', this.settings.ttsRate);
-  }
-
-  onTtsPitchChange() {
-    this.saveSetting('ttsPitch', this.settings.ttsPitch);
-  }
-
-  onImageQualityChange() {
-    this.saveSetting('imageQuality', this.settings.imageQuality);
-  }
-
-  onAutoSpeakChange() {
-    this.saveSetting('autoSpeak', this.settings.autoSpeak);
-  }
-
-  onStudyRemindersChange() {
-    this.saveSetting('studyReminders', this.settings.studyReminders);
-  }
-
-  onMaxCardsChange() {
-    this.saveSetting('maxCardsPerSession', this.settings.maxCardsPerSession);
-  }
+  onDarkModeChange() { this.saveSetting('darkMode', this.settings.darkMode); }
+  onTtsLanguageChange() { this.saveSetting('ttsLanguage', this.settings.ttsLanguage); }
+  onTtsRateChange() { this.saveSetting('ttsRate', this.settings.ttsRate); }
+  onTtsPitchChange() { this.saveSetting('ttsPitch', this.settings.ttsPitch); }
+  onImageQualityChange() { this.saveSetting('imageQuality', this.settings.imageQuality); }
+  onAutoSpeakChange() { this.saveSetting('autoSpeak', this.settings.autoSpeak); }
+  onStudyRemindersChange() { this.saveSetting('studyReminders', this.settings.studyReminders); }
+  onMaxCardsChange() { this.saveSetting('maxCardsPerSession', this.settings.maxCardsPerSession); }
 
   async testTts() {
     try {
-      const testText = this.settings.ttsLanguage.startsWith('es') 
+      const testText = this.settings.ttsLanguage.startsWith('es')
         ? 'Hola, esto es una prueba de texto a voz'
         : 'Hello, this is a text-to-speech test';
-      
       await this.ttsService.speak(testText);
     } catch (error) {
       console.error('TTS test failed:', error);
@@ -407,10 +563,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
       header: 'Clear Image Cache',
       message: 'This will clear all cached images. They will be re-downloaded when needed.',
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
+        { text: 'Cancel', role: 'cancel' },
         {
           text: 'Clear',
           handler: async () => {
@@ -420,7 +573,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
         }
       ]
     });
-
     await alert.present();
   }
 
@@ -429,10 +581,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
       header: 'Reset Settings',
       message: 'This will reset all settings to their default values. Are you sure?',
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
+        { text: 'Cancel', role: 'cancel' },
         {
           text: 'Reset',
           role: 'destructive',
@@ -442,7 +591,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
         }
       ]
     });
-
     await alert.present();
   }
 
@@ -451,23 +599,18 @@ export class SettingsPage implements OnInit, AfterViewInit {
       header: 'Reset All Data',
       message: 'This will delete ALL your decks, cards, and progress. This cannot be undone!',
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
+        { text: 'Cancel', role: 'cancel' },
         {
           text: 'Delete Everything',
           role: 'destructive',
           handler: async () => {
             await this.storageService.clearAllData();
             await this.showToast('All data cleared');
-            // Reload the app or navigate to a fresh state
             window.location.reload();
           }
         }
       ]
     });
-
     await alert.present();
   }
 
@@ -478,32 +621,20 @@ export class SettingsPage implements OnInit, AfterViewInit {
       const fileName = `flashcards-backup-${new Date().toISOString().split('T')[0]}.json`;
 
       const platform = Capacitor.getPlatform();
-
       if (platform === 'ios' || platform === 'android') {
-        // Write to Documents then share
         await Filesystem.writeFile({
           path: fileName,
           data: dataStr,
           directory: Directory.Documents,
-          encoding: Encoding.UTF8,
+          encoding: Encoding.UTF8
         });
         const { uri } = await Filesystem.getUri({ path: fileName, directory: Directory.Documents });
-        // iOS prefers url; Android supports files
         if (platform === 'ios') {
-          await Share.share({
-            title: 'Export Data',
-            text: 'Flashcards backup',
-            url: uri,
-          });
+          await Share.share({ title: 'Export Data', text: 'Flashcards backup', url: uri });
         } else {
-          await Share.share({
-            title: 'Export Data',
-            text: 'Flashcards backup',
-            files: [uri],
-          });
+          await Share.share({ title: 'Export Data', text: 'Flashcards backup', files: [uri] });
         }
       } else {
-        // Web download
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -512,36 +643,31 @@ export class SettingsPage implements OnInit, AfterViewInit {
         a.click();
         URL.revokeObjectURL(url);
       }
-  
       await this.showToast('Data exported successfully');
     } catch (error) {
       console.error('Export failed:', error);
       await this.showToast('Export failed', 'danger');
     }
   }
-  
 
   async importData() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
-    
+
     input.onchange = async (event: any) => {
       const file = event.target.files[0];
       if (!file) return;
-      
+
       try {
         const text = await file.text();
         const data = JSON.parse(text);
-        
+
         const alert = await this.alertController.create({
           header: 'Import Data',
           message: 'This will replace all current data. Continue?',
           buttons: [
-            {
-              text: 'Cancel',
-              role: 'cancel'
-            },
+            { text: 'Cancel', role: 'cancel' },
             {
               text: 'Import',
               handler: async () => {
@@ -552,19 +678,18 @@ export class SettingsPage implements OnInit, AfterViewInit {
             }
           ]
         });
-        
+
         await alert.present();
       } catch (error) {
         console.error('Import failed:', error);
         await this.showToast('Import failed - invalid file', 'danger');
       }
     };
-    
+
     input.click();
   }
 
   private async performReset() {
-    // Reset to default values
     this.settings = {
       darkMode: false,
       ttsLanguage: 'es-ES',
@@ -576,12 +701,10 @@ export class SettingsPage implements OnInit, AfterViewInit {
       maxCardsPerSession: 20
     };
 
-    // Save all defaults
     for (const [key, value] of Object.entries(this.settings)) {
       await this.storageService.saveSetting(key, value);
     }
 
-    // Apply changes
     this.applyDarkMode();
     this.ttsService.setLanguage(this.settings.ttsLanguage);
     this.ttsService.setRate(this.settings.ttsRate);
@@ -609,40 +732,30 @@ export class SettingsPage implements OnInit, AfterViewInit {
     return `${size} images cached`;
   }
 
-  // Color customization methods
+  // ---------- Color helpers ----------
   async loadColorSchemes() {
     try {
-      // Load custom light mode colors
-      const savedLightColors = await this.storageService.getSetting('lightColorScheme', null);
-      if (savedLightColors) {
-        this.lightColorScheme = { ...this.lightColorScheme, ...savedLightColors };
-      }
+      const savedLight = await this.storageService.getSetting('lightColorScheme', null);
+      if (savedLight) this.lightColorScheme = { ...this.lightColorScheme, ...savedLight };
 
-      // Load custom dark mode colors
-      const savedDarkColors = await this.storageService.getSetting('darkColorScheme', null);
-      if (savedDarkColors) {
-        this.darkColorScheme = { ...this.darkColorScheme, ...savedDarkColors };
-      }
+      const savedDark = await this.storageService.getSetting('darkColorScheme', null);
+      if (savedDark) this.darkColorScheme = { ...this.darkColorScheme, ...savedDark };
     } catch (error) {
       console.error('Error loading color schemes:', error);
     }
   }
 
   switchColorScheme() {
-    // Switch between light and dark color schemes
-    this.currentColorScheme = this.settings.darkMode 
+    this.currentColorScheme = this.settings.darkMode
       ? { ...this.darkColorScheme }
       : { ...this.lightColorScheme };
-    
-    console.log('DEBUG: Switched to', this.settings.darkMode ? 'dark' : 'light', 'color scheme');
     this.applyColors();
   }
 
   onColorChange(colorKey: string, event: any) {
     const newColor = event.target.value;
     (this.currentColorScheme as any)[colorKey] = newColor;
-    
-    // Update the appropriate mode's color scheme
+
     if (this.settings.darkMode) {
       (this.darkColorScheme as any)[colorKey] = newColor;
       this.saveSetting('darkColorScheme', this.darkColorScheme);
@@ -650,30 +763,23 @@ export class SettingsPage implements OnInit, AfterViewInit {
       (this.lightColorScheme as any)[colorKey] = newColor;
       this.saveSetting('lightColorScheme', this.lightColorScheme);
     }
-    
+
     this.applyColors();
   }
 
   onHexInput(colorKey: string, event: any) {
     let hexValue = event.target.value;
-    
-    // Auto-add # if missing
     if (hexValue && !hexValue.startsWith('#')) {
       hexValue = '#' + hexValue;
       event.target.value = hexValue;
     }
-    
-    // Validate hex color format (3 or 6 characters after #)
     if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/i.test(hexValue)) {
-      // Convert 3-digit hex to 6-digit
       if (hexValue.length === 4) {
         hexValue = '#' + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
         event.target.value = hexValue;
       }
-      
       (this.currentColorScheme as any)[colorKey] = hexValue;
-      
-      // Update the appropriate mode's color scheme
+
       if (this.settings.darkMode) {
         (this.darkColorScheme as any)[colorKey] = hexValue;
         this.saveSetting('darkColorScheme', this.darkColorScheme);
@@ -681,103 +787,81 @@ export class SettingsPage implements OnInit, AfterViewInit {
         (this.lightColorScheme as any)[colorKey] = hexValue;
         this.saveSetting('lightColorScheme', this.lightColorScheme);
       }
-      
+
       this.applyColors();
     }
   }
 
   applyColors() {
-    // Apply colors to CSS custom properties
     const root = document.documentElement;
-    
-    // Primary colors with RGB variants for transparency
+
     const primaryRgb = this.hexToRgb(this.currentColorScheme.primary);
     const secondaryRgb = this.hexToRgb(this.currentColorScheme.secondary);
     const tertiaryRgb = this.hexToRgb(this.currentColorScheme.tertiary);
-    
-    // Primary color variants
+
     root.style.setProperty('--ion-color-primary', this.currentColorScheme.primary);
     root.style.setProperty('--ion-color-primary-rgb', primaryRgb);
     root.style.setProperty('--ion-color-primary-contrast', '#ffffff');
     root.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
     root.style.setProperty('--ion-color-primary-shade', this.darkenColor(this.currentColorScheme.primary, 0.12));
     root.style.setProperty('--ion-color-primary-tint', this.lightenColor(this.currentColorScheme.primary, 0.1));
-    
-    // Debug: Log the primary color being applied
-    console.log('DEBUG: Setting --ion-color-primary to:', this.currentColorScheme.primary);
-    console.log('DEBUG: Current CSS variable value:', getComputedStyle(root).getPropertyValue('--ion-color-primary'));
-    
-    // Force immediate update of all primary-colored elements
-    this.forceElementUpdate();
-    
-    // Secondary color variants
+
     root.style.setProperty('--ion-color-secondary', this.currentColorScheme.secondary);
     root.style.setProperty('--ion-color-secondary-rgb', secondaryRgb);
     root.style.setProperty('--ion-color-secondary-contrast', '#ffffff');
     root.style.setProperty('--ion-color-secondary-contrast-rgb', '255,255,255');
     root.style.setProperty('--ion-color-secondary-shade', this.darkenColor(this.currentColorScheme.secondary, 0.12));
     root.style.setProperty('--ion-color-secondary-tint', this.lightenColor(this.currentColorScheme.secondary, 0.1));
-    
-    // Tertiary color variants
+
     root.style.setProperty('--ion-color-tertiary', this.currentColorScheme.tertiary);
     root.style.setProperty('--ion-color-tertiary-rgb', tertiaryRgb);
     root.style.setProperty('--ion-color-tertiary-contrast', '#ffffff');
     root.style.setProperty('--ion-color-tertiary-contrast-rgb', '255,255,255');
     root.style.setProperty('--ion-color-tertiary-shade', this.darkenColor(this.currentColorScheme.tertiary, 0.12));
     root.style.setProperty('--ion-color-tertiary-tint', this.lightenColor(this.currentColorScheme.tertiary, 0.1));
-    
-    // Background colors
+
     root.style.setProperty('--ion-background-color', this.currentColorScheme.background);
     root.style.setProperty('--ion-background-color-rgb', this.hexToRgb(this.currentColorScheme.background));
     root.style.setProperty('--ion-card-background', this.currentColorScheme.cardBackground);
     root.style.setProperty('--ion-item-background', this.currentColorScheme.cardBackground);
     root.style.setProperty('--ion-toolbar-background', this.currentColorScheme.headerBackground);
     root.style.setProperty('--ion-tab-bar-background', this.currentColorScheme.footerBackground);
-    
-    // Custom footer background variable
+
     root.style.setProperty('--app-footer-background', this.currentColorScheme.footerBackground);
-    
-    // Text colors - map to proper Ionic text color variables
+
     root.style.setProperty('--ion-text-color', this.currentColorScheme.textPrimary);
     root.style.setProperty('--ion-text-color-rgb', this.hexToRgb(this.currentColorScheme.textPrimary));
-    
-    // Secondary text color - use a custom property that doesn't conflict with step variables
+
     root.style.setProperty('--ion-color-medium', this.currentColorScheme.textSecondary);
     root.style.setProperty('--ion-color-medium-rgb', this.hexToRgb(this.currentColorScheme.textSecondary));
     root.style.setProperty('--ion-color-medium-contrast', '#ffffff');
     root.style.setProperty('--ion-color-medium-contrast-rgb', '255,255,255');
     root.style.setProperty('--ion-color-medium-shade', this.darkenColor(this.currentColorScheme.textSecondary, 0.12));
     root.style.setProperty('--ion-color-medium-tint', this.lightenColor(this.currentColorScheme.textSecondary, 0.1));
-    
-    // Header text colors
+
     root.style.setProperty('--ion-toolbar-color', this.currentColorScheme.headerText);
     root.style.setProperty('--ion-tab-bar-color', this.currentColorScheme.footerText);
-    
-    // Custom text color variables
+
     root.style.setProperty('--app-card-text-color', this.currentColorScheme.cardText);
     root.style.setProperty('--app-footer-text-color', this.currentColorScheme.footerText);
     root.style.setProperty('--app-item-text-color', this.currentColorScheme.itemText);
-    
-    // Custom item background variable
+
     root.style.setProperty('--app-item-background', this.currentColorScheme.itemBackground);
-    
-    // Button colors - create custom button color variables
+
     root.style.setProperty('--ion-color-button', this.currentColorScheme.buttonBackground);
     root.style.setProperty('--ion-color-button-rgb', this.hexToRgb(this.currentColorScheme.buttonBackground));
     root.style.setProperty('--ion-color-button-contrast', this.currentColorScheme.buttonText);
     root.style.setProperty('--ion-color-button-contrast-rgb', this.hexToRgb(this.currentColorScheme.buttonText));
     root.style.setProperty('--ion-color-button-shade', this.darkenColor(this.currentColorScheme.buttonBackground, 0.12));
     root.style.setProperty('--ion-color-button-tint', this.lightenColor(this.currentColorScheme.buttonBackground, 0.1));
-    
-    // Outlined button color - for outline buttons like "Reset to Default"
+
     root.style.setProperty('--ion-color-danger', this.currentColorScheme.outlinedButtonColor);
     root.style.setProperty('--ion-color-danger-rgb', this.hexToRgb(this.currentColorScheme.outlinedButtonColor));
     root.style.setProperty('--ion-color-danger-contrast', '#ffffff');
     root.style.setProperty('--ion-color-danger-contrast-rgb', '255,255,255');
     root.style.setProperty('--ion-color-danger-shade', this.darkenColor(this.currentColorScheme.outlinedButtonColor, 0.12));
     root.style.setProperty('--ion-color-danger-tint', this.lightenColor(this.currentColorScheme.outlinedButtonColor, 0.1));
-    
-    // Flashcard Action Bar Colors - create custom CSS variables
+
     root.style.setProperty('--review-hard-bg', this.currentColorScheme.hardButtonBackground);
     root.style.setProperty('--review-hard-text', this.currentColorScheme.hardButtonText);
     root.style.setProperty('--review-good-bg', this.currentColorScheme.goodButtonBackground);
@@ -786,16 +870,11 @@ export class SettingsPage implements OnInit, AfterViewInit {
     root.style.setProperty('--review-easy-text', this.currentColorScheme.easyButtonText);
     root.style.setProperty('--review-incorrect-bg', this.currentColorScheme.incorrectButtonBackground);
     root.style.setProperty('--review-incorrect-text', this.currentColorScheme.incorrectButtonText);
-    
-    console.log('DEBUG: Applied comprehensive custom colors to CSS variables');
   }
 
-  // Force immediate update of all elements that use CSS variables
+  // Force immediate update of elements using CSS vars
   forceElementUpdate() {
-    // Trigger a reflow to ensure CSS variable changes are applied immediately
     document.documentElement.offsetHeight;
-    
-    // Force update of all moon icons specifically
     const moonIcons = document.querySelectorAll('ion-icon[name="moon"]');
     moonIcons.forEach(icon => {
       const svgs = icon.querySelectorAll('svg, svg path');
@@ -804,54 +883,42 @@ export class SettingsPage implements OnInit, AfterViewInit {
         (svg as HTMLElement).style.color = this.currentColorScheme.primary;
       });
     });
-    
-    // Also ensure Angular change detection runs
     setTimeout(() => {
-      // Force Angular to check for changes
-      if ((this as any).cdr) {
-        (this as any).cdr.detectChanges();
-      }
+      if ((this as any).cdr) (this as any).cdr.detectChanges();
     }, 0);
   }
 
-  // Helper method to convert hex to RGB
   hexToRgb(hex: string): string {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (result) {
-      const r = parseInt(result[1], 16);
-      const g = parseInt(result[2], 16);
-      const b = parseInt(result[3], 16);
-      return `${r},${g},${b}`;
-    }
-    return '0,0,0';
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!m) return '0,0,0';
+    const r = parseInt(m[1], 16);
+    const g = parseInt(m[2], 16);
+    const b = parseInt(m[3], 16);
+    return `${r},${g},${b}`;
   }
 
-  // Helper method to darken a color
   darkenColor(hex: string, amount: number): string {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (result) {
-      const r = Math.max(0, Math.floor(parseInt(result[1], 16) * (1 - amount)));
-      const g = Math.max(0, Math.floor(parseInt(result[2], 16) * (1 - amount)));
-      const b = Math.max(0, Math.floor(parseInt(result[3], 16) * (1 - amount)));
-      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-    }
-    return hex;
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!m) return hex;
+    const r = Math.max(0, Math.floor(parseInt(m[1], 16) * (1 - amount)));
+    const g = Math.max(0, Math.floor(parseInt(m[2], 16) * (1 - amount)));
+    const b = Math.max(0, Math.floor(parseInt(m[3], 16) * (1 - amount)));
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
   }
 
-  // Helper method to lighten a color
   lightenColor(hex: string, amount: number): string {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (result) {
-      const r = Math.min(255, Math.floor(parseInt(result[1], 16) + (255 - parseInt(result[1], 16)) * amount));
-      const g = Math.min(255, Math.floor(parseInt(result[2], 16) + (255 - parseInt(result[2], 16)) * amount));
-      const b = Math.min(255, Math.floor(parseInt(result[3], 16) + (255 - parseInt(result[3], 16)) * amount));
-      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-    }
-    return hex;
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!m) return hex;
+    const r0 = parseInt(m[1], 16);
+    const g0 = parseInt(m[2], 16);
+    const b0 = parseInt(m[3], 16);
+    const r = Math.min(255, Math.floor(r0 + (255 - r0) * amount));
+    const g = Math.min(255, Math.floor(g0 + (255 - g0) * amount));
+    const b = Math.min(255, Math.floor(b0 + (255 - b0) * amount));
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
   }
 
   resetColors() {
-    // Reset to default colors
     if (this.settings.darkMode) {
       this.darkColorScheme = {
         primary: '#428cff',
@@ -871,7 +938,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
         buttonBackground: '#428cff',
         buttonText: '#ffffff',
         outlinedButtonColor: '#d33447',
-        // Flashcard Action Bar Colors (Dark Mode)
         hardButtonBackground: '#d33447',
         hardButtonText: '#ffffff',
         goodButtonBackground: '#e6b000',
@@ -901,7 +967,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
         buttonBackground: '#3880ff',
         buttonText: '#ffffff',
         outlinedButtonColor: '#eb445a',
-        // Flashcard Action Bar Colors
         hardButtonBackground: '#eb445a',
         hardButtonText: '#ffffff',
         goodButtonBackground: '#ffc409',
@@ -913,7 +978,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
       };
       this.saveSetting('lightColorScheme', this.lightColorScheme);
     }
-    
     this.switchColorScheme();
     this.showToast('Colors reset to default!', 'success');
   }
@@ -923,27 +987,17 @@ export class SettingsPage implements OnInit, AfterViewInit {
     this.showToast('Color preview applied!', 'success');
   }
 
-  
+  openHelp() { this.router.navigate(['/tabs/help']); }
+  openBuyMeCoffee() { window.open('https://buymeacoffee.com/lallen30', '_blank'); }
 
-  openHelp() {
-    this.router.navigate(['/tabs/help']);
-  }
-
-  openBuyMeCoffee() {
-    window.open('https://buymeacoffee.com/lallen30', '_blank');
-  }
-
-  async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {
+  async openCustomColorPicker(colorKey: string, colorName: string, evt?: Event) {
     const currentColor = (this.currentColorScheme as any)[colorKey];
-    
     try {
       const result = await this.colorPickerOverlayService.open(colorName, currentColor);
-      
       if (result && result.saved && result.color) {
         const newColor = result.color;
         (this.currentColorScheme as any)[colorKey] = newColor;
-        
-        // Update the appropriate mode's color scheme
+
         if (this.settings.darkMode) {
           (this.darkColorScheme as any)[colorKey] = newColor;
           this.saveSetting('darkColorScheme', this.darkColorScheme);
@@ -951,17 +1005,14 @@ export class SettingsPage implements OnInit, AfterViewInit {
           (this.lightColorScheme as any)[colorKey] = newColor;
           this.saveSetting('lightColorScheme', this.lightColorScheme);
         }
-        
-        // Apply colors immediately
+
         this.applyColors();
         this.showToast(`${colorName} updated to ${newColor}`, 'success');
       } else if (Capacitor.getPlatform() === 'ios') {
-        // Fallback on iOS if overlay was cancelled or returned no result
         this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
       }
     } catch (error) {
       console.error('Error opening color picker:', error);
-      // On iOS, fall back to native color input if overlay fails
       if (Capacitor.getPlatform() === 'ios') {
         this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
         return;
@@ -971,7 +1022,6 @@ export class SettingsPage implements OnInit, AfterViewInit {
   }
 
   openNativeColorPickerWithSave(colorKey: string, colorName: string, currentColor: string) {
-    // Create temporary hidden color input
     const colorInput = document.createElement('input');
     colorInput.type = 'color';
     colorInput.value = currentColor;
@@ -981,16 +1031,11 @@ export class SettingsPage implements OnInit, AfterViewInit {
 
     colorInput.addEventListener('change', async () => {
       const selectedColor = colorInput.value;
-      
-      // Show confirmation alert with save button
       const confirmAlert = await this.alertController.create({
         header: colorName,
         message: `Selected color: ${selectedColor}`,
         buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
+          { text: 'Cancel', role: 'cancel' },
           {
             text: 'Save',
             handler: () => {
@@ -1001,17 +1046,15 @@ export class SettingsPage implements OnInit, AfterViewInit {
           }
         ]
       });
-      
+
       await confirmAlert.present();
       document.body.removeChild(colorInput);
     });
 
-    // Trigger the color picker
     colorInput.click();
   }
 
   triggerNativeColorPicker(colorKey: string, colorName: string) {
-    // Create a temporary color input
     const tempInput = document.createElement('input');
     tempInput.type = 'color';
     tempInput.value = (this.currentColorScheme as any)[colorKey];
@@ -1032,21 +1075,13 @@ export class SettingsPage implements OnInit, AfterViewInit {
   }
 
   getPresetColors(): string[] {
-    // Curated preset colors for quick selection
     return [
-      // Blues
       '#3880ff', '#428cff', '#0066cc', '#1e90ff', '#4169e1',
-      // Greens  
       '#2dd36f', '#10dc60', '#00c851', '#4caf50', '#8bc34a',
-      // Purples
       '#6a64ff', '#5260ff', '#9c27b0', '#673ab7', '#3f51b5',
-      // Reds
       '#eb445a', '#f04141', '#e91e63', '#f44336', '#ff5722',
-      // Oranges
       '#ffc409', '#ffce00', '#ff9800', '#ff6f00', '#ff5722',
-      // Teals
       '#2dd36f', '#00d4aa', '#009688', '#26a69a', '#4db6ac',
-      // Grays (for text/backgrounds)
       '#92949c', '#666666', '#333333', '#1a1a1a', '#f8f9fa'
     ];
   }
