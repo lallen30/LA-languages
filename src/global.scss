@@ -48,37 +48,8 @@ ul, ol { margin: 0; padding-left: 1.25rem; }
   /* --inner-padding-end: 0; */
 }
 
-/* --- Scoped fix for the TTS modal layout ---------------------------------- */
-/* Prevent end-slot controls from collapsing only inside the TTS modal */
-ion-modal app-tts-modal ion-item::part(inner) {
-  display: flex !important;        /* ensure proper flex row */
-  align-items: center;
-  justify-content: space-between;  /* guarantees space for end slot */
-  gap: 12px;
-}
-
-/* Label grows but can’t steal the whole row */
-ion-modal app-tts-modal ion-item > ion-label {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-/* End-slot controls: reserve footprint so they never shrink to 0 */
-ion-modal app-tts-modal ion-select[slot="end"] {
-  flex: 0 0 auto;
-  min-width: 160px;                /* adjust to taste */
-}
-ion-modal app-tts-modal ion-toggle[slot="end"] {
-  flex: 0 0 auto;
-  min-width: 72px;                 /* typical toggle width */
-}
-
-/* Ranges (when you add them back): span the row reliably */
-ion-modal app-tts-modal ion-range {
-  flex: 1 1 0;
-  min-width: 0;
-  height: 44px;                    /* visible touch target */
-}
+/* --- Scoped visual tweaks for the TTS modal (no layout overrides) --------- */
+/* Keep only safe color tweaks; rely on native Ionic item layout */
 
 /* Optional: ensure select/toggle look good regardless of theme variables */
 ion-modal app-tts-modal ion-select::part(text),

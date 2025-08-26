@@ -7,59 +7,35 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  </ion-header>
+</ion-header>
 
 <ion-content>
+  <!-- IonAlert: Language picker -->
+  <ion-alert
+    [isOpen]="isLangAlertOpen"
+    header="Choose Language"
+    [inputs]="languageInputs"
+    [buttons]="langButtons"
+    (didDismiss)="onLangAlertDidDismiss($event)">
+  </ion-alert>
+
   <ion-list>
-    <!-- Language -->
-    <ion-item lines="full">
+    <!-- Language: custom picker to avoid iOS ion-select rendering issues -->
+    <ion-item button detail (click)="presentLanguagePicker()">
       <ion-icon name="language" slot="start"></ion-icon>
-      <div class="row">
-        <ion-label>Language</ion-label>
-        <ion-select class="end"
-                    placeholder="Select"
-                    [interface]="isIOS ? 'popover' : 'alert'"
-                    [(ngModel)]="settings.ttsLanguage"
-                    (ionChange)="ttsLanguageChange.emit()">
-          <ion-select-option *ngFor="let lang of availableLanguages" [value]="lang.code">
-            {{ lang.name }}
-          </ion-select-option>
-        </ion-select>
-      </div>
+      <ion-label>
+        <h3>Language</h3>
+        <p>{{ displayLanguage(settings?.ttsLanguage) || 'Choose…' }}</p>
+      </ion-label>
     </ion-item>
 
-    <!-- Auto-speak -->
     <ion-item lines="full">
       <ion-icon name="volume-high" slot="start"></ion-icon>
-      <div class="row">
-        <ion-label>Auto-speak on card flip</ion-label>
-        <ion-toggle class="end"
-                    [(ngModel)]="settings.autoSpeak"
-                    (ionChange)="autoSpeakChange.emit()">
-        </ion-toggle>
-      </div>
+      <ion-label>Auto-speak on card flip</ion-label>
+      <ion-toggle slot="end"
+                  [(ngModel)]="settings.autoSpeak"
+                  (ionChange)="autoSpeakChange.emit()">
+      </ion-toggle>
     </ion-item>
-
-    <!-- (When ready, add these back the same way)
-    <ion-item lines="none">
-      <ion-icon name="speedometer" slot="start"></ion-icon>
-      <div class="row">
-        <ion-label>Speech Rate</ion-label>
-        <ion-range class="fill" min="0.5" max="2.0" step="0.1" snaps
-                   [(ngModel)]="settings.ttsRate"
-                   (ionChange)="ttsRateChange.emit()"></ion-range>
-      </div>
-    </ion-item>
-
-    <ion-item lines="none">
-      <ion-icon name="musical-notes" slot="start"></ion-icon>
-      <div class="row">
-        <ion-label>Pitch</ion-label>
-        <ion-range class="fill" min="0.5" max="2.0" step="0.1" snaps
-                   [(ngModel)]="settings.ttsPitch"
-                   (ionChange)="ttsPitchChange.emit()"></ion-range>
-      </div>
-    </ion-item>
-    -->
   </ion-list>
 </ion-content>
