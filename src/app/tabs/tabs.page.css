@@ -2,9 +2,11 @@
   display: none !important;
 }
 
+/* REMOVED: transform transition was breaking iOS click detection
 ion-tab-bar {
   transition: transform 0.3s ease-in-out;
 }
 ion-tab-bar.hidden {
   transform: translateY(100%);
-}/*# sourceMappingURL=tabs.page.css.map */
+}
+*//*# sourceMappingURL=tabs.page.css.map */

@@ -318,6 +318,7 @@ ion-toolbar {
 @media (max-width: 768px) {
   ion-content {
     --padding-top: 0 !important;
+    --padding-bottom: calc(56px + env(safe-area-inset-bottom)) !important;
     --margin-top: 0 !important;
     padding-top: 0 !important;
     margin-top: 0 !important;

@@ -1,0 +1,134 @@
+// Custom toggle switch that works on iOS
+.custom-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-toggle {
+  position: relative;
+  display: inline-block;
+  width: 51px;
+  height: 31px;
+  margin: 0;
+  cursor: pointer;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .toggle-slider {
+      background-color: #34c759; // iOS green
+    }
+    
+    &:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e5e5ea; // iOS gray
+    border-radius: 31px;
+    transition: 0.3s;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      height: 27px;
+      width: 27px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+ion-toggle {
+  --handle-width: 26px;
+  --handle-height: 26px;
+  --handle-spacing: 2px;
+  pointer-events: auto !important;
+  z-index: 10;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 8px;
+  --min-height: 56px;
+  cursor: pointer;
+  
+  &::part(native) {
+    cursor: pointer;
+    min-height: 56px;
+  }
+}
+
+// iOS-specific fix for clickable items
+@media (max-width: 768px) {
+  ion-item[button] {
+    position: relative;
+    
+    &::part(native) {
+      position: relative;
+      z-index: 1;
+    }
+    
+    ion-label {
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+    }
+    
+    .color-preview-container {
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+    }
+  }
+}
+
+.color-section {
+  margin-top: 24px;
+  
+  h4 {
+    padding: 16px 16px 8px 16px;
+    margin: 0;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--ion-color-medium);
+  }
+}
+
+.color-preview-container {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid var(--ion-color-medium);
+}
+
+.color-actions {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

@@ -17,7 +17,27 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 /* --- App-wide base (safe; no structural overrides of Ionic components) ---- */
-html, body, ion-app, ion-content {
+html, body {
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+ion-app {
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+ion-content {
   background: var(--ion-background-color);
   color: var(--ion-text-color);
 }
@@ -42,11 +62,7 @@ ul, ol { margin: 0; padding-left: 1.25rem; }
 
 /* --- Page-scoped styling for the Settings page list ----------------------- */
 /* Only affects the main Settings list, NOT modals */
-.settings-container ion-item {
-  /* You can keep your tighter look here without affecting modals */
-  /* Example: uncomment if desired */
-  /* --inner-padding-end: 0; */
-}
+/* Removed empty ruleset - add specific styles here if needed */
 
 /* --- Scoped visual tweaks for the TTS modal (no layout overrides) --------- */
 /* Keep only safe color tweaks; rely on native Ionic item layout */
@@ -93,4 +109,31 @@ ion-modal.modal-fullscreen::part(content) {
 /* Optional: make inner ion-content fill too, in case components rely on it */
 ion-modal.modal-fullscreen ion-content {
   height: 100%;
+}
+
+/* ============================================================================
+   iOS CRITICAL FIX: Global clickability issue - NUCLEAR OPTION
+   ============================================================================ */
+@media (max-width: 768px) {
+  /* Force hardware acceleration off to prevent compositing layer issues */
+  * {
+    transform: none !important;
+    will-change: auto !important;
+    backface-visibility: visible !important;
+  }
+  
+  /* Ensure all clickable elements have proper touch targets */
+  ion-button, ion-item, ion-tab-button, button, a {
+    min-height: 44px !important;
+  }
+  
+  /* Ensure content doesn't go under fixed tab bar */
+  ion-content {
+    --padding-bottom: 70px;
+  }
+  
+  /* Ensure ion-item clicks work */
+  ion-item::part(native) {
+    min-height: 56px !important;
+  }
 }

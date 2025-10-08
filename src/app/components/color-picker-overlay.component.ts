@@ -8,8 +8,8 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule],
   template: `
-    <div class="overlay-backdrop" (click)="cancel()">
-      <div class="color-picker-container" (click)="$event.stopPropagation()">
+    <div class="overlay-backdrop">
+      <div class="color-picker-container">
         <div class="color-picker-header">
           <h3>{{ colorName }}</h3>
           <ion-button fill="clear" size="small" (click)="cancel()">
@@ -96,15 +96,15 @@ import { IonicModule } from '@ionic/angular';
               </div>
             </div>
           </div>
-
-          <!-- Action buttons -->
-          <div class="action-buttons">
-            <ion-button fill="clear" color="medium" (click)="cancel()">
-              CANCEL
-            </ion-button>
-            <ion-button fill="solid" (click)="save()">
-              SELECT
-            </ion-button>
+        </div>
+        
+        <!-- Action buttons - OUTSIDE scrollable content -->
+        <div class="button-row">
+          <div class="action-button cancel-btn" (click)="cancel()">
+            CANCEL
+          </div>
+          <div class="action-button select-btn" (click)="save()">
+            SELECT
           </div>
         </div>
       </div>
@@ -122,6 +122,7 @@ import { IonicModule } from '@ionic/angular';
       align-items: center;
       justify-content: center;
       z-index: 20000;
+      pointer-events: none;
     }
     
     .color-picker-container {
@@ -131,7 +132,10 @@ import { IonicModule } from '@ionic/angular';
       width: 600px;
       max-width: 95vw;
       max-height: 90vh;
-      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      pointer-events: auto;
     }
     
     .color-picker-header {
@@ -140,6 +144,8 @@ import { IonicModule } from '@ionic/angular';
       align-items: center;
       padding: 16px 16px 8px 16px;
       border-bottom: 1px solid var(--ion-color-light);
+      background: var(--ion-color-step-50, #ffffff);
+      flex-shrink: 0;
     }
     
     .color-picker-header h3 {
@@ -151,6 +157,13 @@ import { IonicModule } from '@ionic/angular';
     
     .color-picker-content {
       padding: 16px;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--ion-color-step-50, #ffffff);
+      min-height: 0;
+      max-height: calc(90vh - 200px);
+      -webkit-overflow-scrolling: touch;
     }
     
     .color-canvas-container {
@@ -279,12 +292,48 @@ import { IonicModule } from '@ionic/angular';
       border-color: var(--ion-color-primary);
     }
     
-    .action-buttons {
+    .button-row {
       display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      padding-top: 16px;
+      gap: 12px;
+      padding: 16px;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
       border-top: 1px solid var(--ion-color-light);
+      flex-shrink: 0;
+      background: var(--ion-color-step-50, #ffffff);
+      z-index: 10001;
+      position: relative;
+    }
+    
+    .action-button {
+      flex: 1;
+      height: 50px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      position: relative;
+      z-index: 1001;
+    }
+    
+    .cancel-btn {
+      background: #f4f5f8;
+      color: var(--ion-color-medium);
+    }
+    
+    .select-btn {
+      background: var(--ion-color-primary);
+      color: white;
+    }
+    
+    .action-button:active {
+      border-color: var(--ion-color-primary);
     }
   `]
 })
@@ -583,12 +632,14 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
   }
 
   save() {
+    console.log('SAVE clicked, color:', this.selectedColor);
     if (this.onColorSelected) {
       this.onColorSelected(this.selectedColor);
     }
   }
 
   cancel() {
+    console.log('CANCEL clicked');
     if (this.onCancel) {
       this.onCancel();
     }

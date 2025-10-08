@@ -2,15 +2,7 @@ ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Universal content centering fix for mobile */
-@media (max-width: 768px) {
-  ion-content {
-    position: fixed !important;
-    height: auto !important;
-    z-index: 100 !important;
-  }
+  --padding-bottom: calc(56px + env(safe-area-inset-bottom));
 }
 
 .welcome-content {
