@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { IonAlert, IonButton } from '@ionic/angular/standalone';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-tts-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, IonAlert, IonButton],
+  imports: [CommonModule, FormsModule, IonicModule],
   templateUrl: './tts-modal.component.html',
   styleUrls: ['./tts-modal.component.scss']
 })
@@ -27,7 +27,10 @@ export class TtsModalComponent {
   languageInputs: Array<never> = [];
   langButtons: Array<{ text: string; role?: string; handler?: () => boolean | void }> = []; // built per open
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private storageService: StorageService
+  ) {}
 
   close() {
     this.modalCtrl.dismiss();
@@ -72,5 +75,21 @@ export class TtsModalComponent {
   onLangAlertDidDismiss(ev: CustomEvent<any>) {
     // Ensure state is closed if dismissed via backdrop/cancel
     this.isLangAlertOpen = false;
+  }
+
+  async onAutoSpeakToggle(newValue: boolean) {
+    console.log('TTS Modal: Auto-speak toggled to:', newValue);
+    this.settings.autoSpeak = newValue;
+    
+    // Save directly to storage (like appearance modal does)
+    try {
+      await this.storageService.saveSetting('autoSpeak', newValue);
+      console.log('TTS Modal: Auto-speak saved to storage successfully');
+    } catch (error) {
+      console.error('TTS Modal: Failed to save autoSpeak setting:', error);
+    }
+    
+    // Still emit for any listeners (optional)
+    this.autoSpeakChange.emit();
   }
 }

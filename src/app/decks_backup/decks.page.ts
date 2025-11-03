@@ -124,8 +124,22 @@ export class DecksPage implements OnInit {
     this.checkForReturnedData();
   }
 
-  ionViewWillEnter() {
-    console.log('📱 DecksPage ionViewWillEnter - checking for returned data');
+  async ionViewWillEnter() {
+    console.log('📱 DecksPage ionViewWillEnter - reloading deck counts');
+    
+    // Reload the selected language from settings
+    await this.loadSelectedLanguage();
+    
+    // Reload card counts for all decks to ensure UI is up to date
+    for (const deck of this.filteredDecks) {
+      const cards = await this.storageService.getCardsByDeck(deck.id);
+      deck.cardCount = cards.length;
+      console.log(`📚 Refreshed deck "${deck.name}" - ${cards.length} cards`);
+    }
+    
+    // Trigger change detection by creating new array reference
+    this.filteredDecks = [...this.filteredDecks];
+    
     this.checkForReturnedData();
   }
 
@@ -159,25 +173,76 @@ export class DecksPage implements OnInit {
     }
   }
 
+  async loadSelectedLanguage() {
+    // Load the ttsLanguage setting from storage
+    const ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
+    console.log('📚 Loaded ttsLanguage from settings:', ttsLanguage);
+    
+    // Only update if language changed
+    if (this.selectedLanguage !== ttsLanguage) {
+      this.selectedLanguage = ttsLanguage;
+      console.log('📚 Language changed to:', this.selectedLanguage);
+      
+      // Reload decks from storage and filter by language
+      await this.loadAndFilterDecks();
+    }
+  }
+
+  async loadAndFilterDecks() {
+    try {
+      // Load all decks from storage
+      const storedDecks = await this.storageService.getAllDecks();
+      console.log('📚 Loaded all decks from storage:', storedDecks);
+      
+      this.decks = storedDecks || [];
+      
+      // Filter decks by selected language
+      this.filteredDecks = this.decks.filter(deck => {
+        // Map language codes to language names
+        const languageMap: { [key: string]: string } = {
+          'es-ES': 'Spanish',
+          'fr-FR': 'French',
+          'de-DE': 'German',
+          'pt-PT': 'Portuguese',
+          'it-IT': 'Italian',
+          'en-US': 'English'
+        };
+        
+        const languageName = languageMap[this.selectedLanguage];
+        console.log(`📚 Checking deck "${deck.name}" with language "${deck.language}" against selected "${languageName}"`);
+        
+        return deck.language === languageName;
+      });
+      
+      console.log('📚 Filtered decks for language', this.selectedLanguage, ':', this.filteredDecks);
+      
+      // Update card counts for filtered decks
+      for (const deck of this.filteredDecks) {
+        const cards = await this.storageService.getCardsByDeck(deck.id);
+        deck.cardCount = cards.length;
+      }
+    } catch (error) {
+      console.error('📚 Error loading and filtering decks:', error);
+      this.decks = [];
+      this.filteredDecks = [];
+    }
+  }
+
   async initializeDecksPage() {
     console.log('DecksPage initialized');
     
     try {
+      // Load the selected language first
+      await this.loadSelectedLanguage();
+      
       // Load real decks from storage
       const storedDecks = await this.storageService.getAllDecks();
       console.log('📚 Loaded decks from storage:', storedDecks);
       
       if (storedDecks && storedDecks.length > 0) {
-        // Use real decks from storage
+        // Use real decks from storage and filter by language
         this.decks = storedDecks;
-        this.filteredDecks = [...storedDecks];
-        
-        // Update card counts for each deck
-        for (const deck of this.filteredDecks) {
-          const cards = await this.storageService.getCardsByDeck(deck.id);
-          deck.cardCount = cards.length;
-          console.log(`📚 Deck "${deck.name}" has ${cards.length} cards`);
-        }
+        await this.loadAndFilterDecks();
       } else {
         // Fallback to mock data if no decks exist
         console.log('📚 No decks found, creating default deck');
@@ -202,7 +267,8 @@ export class DecksPage implements OnInit {
         defaultDeck.cardCount = cards.length;
         
         this.decks = [defaultDeck];
-        this.filteredDecks = [defaultDeck];
+        // Filter the default deck by language
+        await this.loadAndFilterDecks();
       }
       
       console.log('📚 Final filtered decks:', this.filteredDecks);
@@ -217,6 +283,18 @@ export class DecksPage implements OnInit {
   // Utility methods
   trackByDeckId(index: number, deck: any): string {
     return deck.id;
+  }
+
+  async getShowWordFirstSetting(): Promise<boolean> {
+    const setting = await this.storageService.getSetting('pictureWordDisplay', 'images-first');
+    if (setting === 'word-first') {
+      return true;
+    } else if (setting === 'images-first') {
+      return false;
+    } else {
+      // random
+      return Math.random() > 0.5;
+    }
   }
 
   getDeckColor(deckId: string): string {
@@ -237,10 +315,26 @@ export class DecksPage implements OnInit {
   // Header button actions
   async refreshDecks() {
     this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
+    console.log('🔄 Refreshing decks and card counts...');
+    
+    try {
+      // Reload card counts for all decks
+      for (const deck of this.filteredDecks) {
+        const cards = await this.storageService.getCardsByDeck(deck.id);
+        deck.cardCount = cards.length;
+        console.log(`🔄 Deck "${deck.name}" - ${cards.length} cards`);
+      }
+      
+      // Trigger change detection
+      this.filteredDecks = [...this.filteredDecks];
+      
       this.showToast('Decks refreshed successfully!');
-    }, 1500);
+    } catch (error) {
+      console.error('Error refreshing decks:', error);
+      this.showToast('Error refreshing decks');
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async showToast(message: string) {
@@ -276,7 +370,29 @@ export class DecksPage implements OnInit {
   async importFromDevice() {
     console.log('importFromDevice called');
     this.showImportModal = false;
-    await this.importDeck();
+    
+    // Show warning alert
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: 'Importing will replace all existing decks for the current language. Do you want to continue?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Import cancelled by user');
+          }
+        },
+        {
+          text: 'Continue',
+          handler: async () => {
+            await this.importDeck();
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
   async executeUrlImport() {
@@ -284,7 +400,29 @@ export class DecksPage implements OnInit {
     if (this.importUrl && this.importUrl.trim()) {
       const urlToImport = this.importUrl.trim();
       this.closeUrlInputModal();
-      await this.downloadAndImportDeck(urlToImport);
+      
+      // Show warning alert
+      const alert = await this.alertController.create({
+        header: 'Warning',
+        message: 'Importing will replace all existing decks for the current language. Do you want to continue?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Import cancelled by user');
+            }
+          },
+          {
+            text: 'Continue',
+            handler: async () => {
+              await this.downloadAndImportDeck(urlToImport);
+            }
+          }
+        ]
+      });
+      
+      await alert.present();
     } else {
       console.log('No URL provided for import');
     }
@@ -549,11 +687,24 @@ export class DecksPage implements OnInit {
     }
 
     const id = Date.now().toString();
+    
+    // Map language code to language name
+    const languageMap: { [key: string]: string } = {
+      'es-ES': 'Spanish',
+      'fr-FR': 'French',
+      'de-DE': 'German',
+      'pt-PT': 'Portuguese',
+      'it-IT': 'Italian',
+      'en-US': 'English'
+    };
+    
+    const languageName = languageMap[this.selectedLanguage] || 'Spanish';
+    
     const newDeck: any = {
       id,
       name,
       description: this.newDeckDescription || '',
-      language: this.selectedLanguage,
+      language: languageName,
       cardCount: 0,
       masteredCards: 0,
       createdAt: new Date(),
@@ -567,7 +718,10 @@ export class DecksPage implements OnInit {
     }
 
     this.decks = [...this.decks, newDeck];
-    this.filteredDecks = [...this.filteredDecks, newDeck];
+    // Only add to filteredDecks if it matches the current language
+    if (newDeck.language === languageName) {
+      this.filteredDecks = [...this.filteredDecks, newDeck];
+    }
     this.showCreateDeckModal = false;
     this.showToast('Deck created successfully!');
   }
@@ -711,13 +865,14 @@ export class DecksPage implements OnInit {
   }
 
   openAddCardActionSheet(deck: any) {
+    this.lockSelectedDeck = true; // Lock selection during card creation
     this.selectedDeck = deck;
     this.isAddCardActionSheetOpen = true;
   }
 
   setAddCardActionSheetOpen(isOpen: boolean) {
     this.isAddCardActionSheetOpen = isOpen;
-    if (!isOpen) {
+    if (!isOpen && !this.lockSelectedDeck) {
       this.selectedDeck = null;
     }
   }
@@ -741,16 +896,23 @@ export class DecksPage implements OnInit {
     
     if (!this.selectedDeck) {
       console.log('No deck selected for adding card');
+      this.lockSelectedDeck = false; // Unlock if failed
       return;
     }
 
     console.log('Creating card of type:', type);
-    if (type === 'fill-blank') {
-      await this.createFillBlankCard(this.selectedDeck);
-    } else if (type === 'picture') {
-      await this.createPictureWordCard(this.selectedDeck);
-    } else if (type === 'translate') {
-      await this.createTranslateCard(this.selectedDeck);
+    try {
+      if (type === 'fill-blank') {
+        await this.createFillBlankCard(this.selectedDeck);
+      } else if (type === 'picture') {
+        await this.createPictureWordCard(this.selectedDeck);
+      } else if (type === 'translate') {
+        await this.createTranslateCard(this.selectedDeck);
+      }
+    } finally {
+      // Always unlock after operation completes
+      this.lockSelectedDeck = false;
+      this.selectedDeck = null;
     }
   }
 
@@ -769,7 +931,7 @@ export class DecksPage implements OnInit {
       if (missingWord) {
         const translation = prompt('English translation:');
         if (translation) {
-          this.saveFillBlankCard(sentence, missingWord, translation);
+          await this.saveFillBlankCard(sentence, missingWord, translation);
         }
       }
     }
@@ -802,7 +964,12 @@ export class DecksPage implements OnInit {
   }
 
   async saveFillBlankCard(sentence: string, missingWord: string, translation: string) {
-    if (!this.selectedDeck) return;
+    if (!this.selectedDeck) {
+      console.error('❌ No selectedDeck when trying to save fill-blank card');
+      return;
+    }
+    
+    console.log('📝 Creating fill-blank card for deck:', this.selectedDeck.name, 'ID:', this.selectedDeck.id);
     
     const sentenceFront = sentence.replace(missingWord, '___');
     const sentenceBack = sentence.replace(missingWord, `**${missingWord}**`);
@@ -825,12 +992,39 @@ export class DecksPage implements OnInit {
       skipCount: 0
     };
 
-    await this.storageService.saveCard(newCard);
+    console.log('💾 Attempting to save fill-blank card:', newCard);
+    console.log('💾 Card will be saved to deckId:', newCard.deckId);
     
-    // Update deck card count
-    this.selectedDeck.cardCount = (this.selectedDeck.cardCount || 0) + 1;
-    this.showToast('Fill-in-the-blank card created successfully!');
-    console.log('Fill-blank card saved:', newCard);
+    try {
+      await this.storageService.saveCard(newCard);
+      console.log('💾 Fill-blank card saved successfully to storage');
+      
+      // Verify the card was saved by retrieving actual count from storage
+      const savedCards = await this.storageService.getCardsByDeck(this.selectedDeck.id);
+      console.log('💾 Verification - Cards in deck after save:', savedCards.length);
+      console.log('💾 All cards in deck:', savedCards.map(c => ({ id: c.id, type: c.type })));
+      
+      // Update deck card count in UI by finding and updating the deck in filteredDecks
+      console.log('📚 Looking for deck in filteredDecks. Current filteredDecks:', this.filteredDecks.map(d => ({ id: d.id, name: d.name, count: d.cardCount })));
+      const deckToUpdate = this.filteredDecks.find(d => d.id === this.selectedDeck.id);
+      if (deckToUpdate) {
+        const oldCount = deckToUpdate.cardCount;
+        deckToUpdate.cardCount = savedCards.length;
+        console.log(`📚 Updated deck "${deckToUpdate.name}" card count from ${oldCount} to ${savedCards.length}`);
+        
+        // Force change detection by creating new array reference
+        this.filteredDecks = [...this.filteredDecks];
+        console.log('📚 Triggered change detection with new array reference');
+      } else {
+        console.error('❌ Could not find deck in filteredDecks with ID:', this.selectedDeck.id);
+      }
+      
+      this.showToast('Fill-in-the-blank card created successfully!');
+      console.log('✅ Fill-blank card saved:', newCard);
+    } catch (saveError) {
+      console.error('💾 Failed to save fill-blank card:', saveError);
+      this.showToast('Error saving card. Please try again.');
+    }
   }
 
 
@@ -869,6 +1063,8 @@ export class DecksPage implements OnInit {
         return;
       }
 
+      const showWordFirst = await this.getShowWordFirstSetting();
+      
       const newCard = {
         id: `card_${Date.now()}`,
         deckId: deckId,
@@ -876,7 +1072,7 @@ export class DecksPage implements OnInit {
         spanishWord: word,
         englishTranslation: translation,
         imageUrls: imageUrls.slice(0, 4),
-        showWordFirst: Math.random() > 0.5,
+        showWordFirst: showWordFirst,
         easeFactor: 2.5,
         interval: 1,
         repetitions: 0,
@@ -915,6 +1111,8 @@ export class DecksPage implements OnInit {
   }
 
   async savePictureWordCard(deck: any, data: any, imageUrls: string[] = []) {
+    const showWordFirst = await this.getShowWordFirstSetting();
+    
     const newCard = {
       id: `card_${Date.now()}`,
       deckId: deck.id,
@@ -922,7 +1120,7 @@ export class DecksPage implements OnInit {
       spanishWord: data.word,
       englishTranslation: data.translation,
       imageUrls: imageUrls,
-      showWordFirst: Math.random() > 0.5,
+      showWordFirst: showWordFirst,
       easeFactor: 2.5,
       interval: 1,
       repetitions: 0,
@@ -932,11 +1130,28 @@ export class DecksPage implements OnInit {
       skipCount: 0
     };
 
-    await this.storageService.saveCard(newCard);
-    
-    // Update deck card count
-    deck.cardCount = (deck.cardCount || 0) + 1;
-    this.showToast('Picture word card created successfully!');
+    console.log('💾 Attempting to save picture-word card:', newCard);
+    try {
+      await this.storageService.saveCard(newCard);
+      console.log('💾 Picture-word card saved successfully to storage');
+      
+      // Verify the card was saved by retrieving actual count from storage
+      const savedCards = await this.storageService.getCardsByDeck(deck.id);
+      console.log('💾 Verification - Cards in deck after save:', savedCards.length);
+      
+      // Update deck card count in UI by finding and updating the deck in filteredDecks
+      const deckToUpdate = this.filteredDecks.find(d => d.id === deck.id);
+      if (deckToUpdate) {
+        deckToUpdate.cardCount = savedCards.length;
+        console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
+      }
+      
+      this.showToast('Picture word card created successfully!');
+      console.log('✅ Picture-word card saved:', newCard);
+    } catch (saveError) {
+      console.error('💾 Failed to save picture-word card:', saveError);
+      this.showToast('Error saving card. Please try again.');
+    }
   }
 
   async saveTranslateCard(deck: any, data: any) {
@@ -957,11 +1172,28 @@ export class DecksPage implements OnInit {
       skipCount: 0
     };
 
-    await this.storageService.saveCard(newCard);
-    
-    // Update deck card count
-    deck.cardCount = (deck.cardCount || 0) + 1;
-    this.showToast('Translation card created successfully!');
+    console.log('💾 Attempting to save translate card:', newCard);
+    try {
+      await this.storageService.saveCard(newCard);
+      console.log('💾 Translate card saved successfully to storage');
+      
+      // Verify the card was saved by retrieving actual count from storage
+      const savedCards = await this.storageService.getCardsByDeck(deck.id);
+      console.log('💾 Verification - Cards in deck after save:', savedCards.length);
+      
+      // Update deck card count in UI by finding and updating the deck in filteredDecks
+      const deckToUpdate = this.filteredDecks.find(d => d.id === deck.id);
+      if (deckToUpdate) {
+        deckToUpdate.cardCount = savedCards.length;
+        console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
+      }
+      
+      this.showToast('Translation card created successfully!');
+      console.log('✅ Translate card saved:', newCard);
+    } catch (saveError) {
+      console.error('💾 Failed to save translate card:', saveError);
+      this.showToast('Error saving card. Please try again.');
+    }
   }
 
   async createDeck() {

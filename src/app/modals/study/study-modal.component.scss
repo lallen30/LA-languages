@@ -1,0 +1,37 @@
+app-study-modal {
+  ion-item {
+    --inner-padding-end: 16px;
+    --min-height: 60px;
+  }
+
+  .item-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 12px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .item-content-wrapper ion-label {
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .item-content-wrapper input.native-input {
+    min-width: 80px;
+    max-width: 100px;
+    text-align: right;
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 1px solid var(--ion-color-medium, #ccc);
+    border-radius: 8px;
+    background: var(--ion-background-color, #fff);
+    color: var(--ion-text-color, #000);
+    
+    &:focus {
+      outline: none;
+      border-color: var(--ion-color-primary, #3880ff);
+      box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.2);
+    }
+  }
+}

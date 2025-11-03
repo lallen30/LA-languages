@@ -22,7 +22,6 @@ import { Router } from '@angular/router';
 import { TtsModalComponent } from '../modals/tts/tts-modal.component';
 import { AppearanceModalComponent } from '../modals/appearance/appearance-modal.component';
 import { StudyModalComponent } from '../modals/study/study-modal.component';
-import { ImagesModalComponent } from '../modals/images/images-modal.component';
 import { DataModalComponent } from '../modals/data/data-modal.component';
 import { AboutModalComponent } from '../modals/about/about-modal.component';
 import { TestHelloModalComponent } from '../modals/test-hello.modal';
@@ -63,7 +62,7 @@ try {
   });
 } catch {}
 
-type ModalKey = 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about';
+type ModalKey = 'tts' | 'appearance' | 'study' | 'data' | 'about';
 
 @Component({
   selector: 'app-settings',
@@ -77,7 +76,6 @@ type ModalKey = 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about';
     TtsModalComponent,
     AppearanceModalComponent,
     StudyModalComponent,
-    ImagesModalComponent,
     DataModalComponent,
     AboutModalComponent,
     TestHelloModalComponent
@@ -96,10 +94,10 @@ export class SettingsPage implements OnInit, AfterViewInit {
     ttsLanguage: 'es-ES',
     ttsRate: 1.0,
     ttsPitch: 1.0,
-    imageQuality: 'medium',
     autoSpeak: false,
     studyReminders: true,
-    maxCardsPerSession: 20
+    maxCardsPerSession: 20,
+    pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'
   };
 
   lightColorScheme = {
@@ -169,19 +167,12 @@ export class SettingsPage implements OnInit, AfterViewInit {
     { code: 'en-US', name: 'English' }
   ];
 
-  imageQualities = [
-    { value: 'low', label: 'Low (faster loading)' },
-    { value: 'medium', label: 'Medium (balanced)' },
-    { value: 'high', label: 'High (best quality)' }
-  ];
-
   // Map modal keys to components (TS can see this field now)
   private readonly modalComponentMap: Record<ModalKey, any> = {
     // Use the real TTS modal component now that overlays are verified
     tts: TtsModalComponent,
     appearance: AppearanceModalComponent,
     study: StudyModalComponent,
-    images: ImagesModalComponent,
     data: DataModalComponent,
     about: AboutModalComponent
   };
@@ -263,20 +254,12 @@ export class SettingsPage implements OnInit, AfterViewInit {
         autoSpeakChange: () => this.onAutoSpeakChange()
       };
     }
-    if (key === 'images') {
-      return {
-        isIOS: this.isIOS,
-        settings: this.settings,
-        imageQualities: this.imageQualities,
-        cacheSize: this.getCacheSize(),
-        clearCache: () => this.clearImageCache()
-      };
-    }
     if (key === 'data') {
       return {
         resetAllData: () => this.resetAllData(),
         exportData: () => this.exportData(),
-        importData: () => this.importData()
+        importData: () => this.importData(),
+        resetAllSettings: () => this.resetAllSettings()
       };
     }
     if (key === 'appearance') {
@@ -308,7 +291,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
     return {};
   }
 
-  async openModalKey(key: 'tts' | 'appearance' | 'study' | 'images' | 'data' | 'about') {
+  async openModalKey(key: 'tts' | 'appearance' | 'study' | 'data' | 'about') {
     try {
       console.log('[Settings] openModalKey start', key);
       const component = this.modalComponentMap[key];
@@ -325,6 +308,11 @@ export class SettingsPage implements OnInit, AfterViewInit {
       console.error('openModalKey failed', e);
       this.showToast('Unable to open modal', 'danger');
     }
+  }
+
+  openStudySettings() {
+    // Navigate to dedicated study settings page (regular pages work better with iOS keyboard)
+    this.router.navigate(['/tabs/study-settings']);
   }
 
   private async openRawTestModal() {
@@ -495,10 +483,10 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       this.settings.ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
       this.settings.ttsRate = await this.storageService.getSetting('ttsRate', 1.0);
       this.settings.ttsPitch = await this.storageService.getSetting('ttsPitch', 1.0);
-      this.settings.imageQuality = await this.storageService.getSetting('imageQuality', 'medium');
       this.settings.autoSpeak = await this.storageService.getSetting('autoSpeak', false);
       this.settings.studyReminders = await this.storageService.getSetting('studyReminders', true);
       this.settings.maxCardsPerSession = await this.storageService.getSetting('maxCardsPerSession', 20);
+      this.settings.pictureWordDisplay = await this.storageService.getSetting('pictureWordDisplay', 'images-first');
 
       await this.loadColorSchemes();
       this.applyDarkMode();
@@ -513,8 +501,10 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   }
 
   async saveSetting(key: string, value: any) {
+    console.log(`Settings: Saving ${key} = ${value}`);
     try {
       await this.storageService.saveSetting(key, value);
+      console.log(`Settings: Successfully saved ${key}`);
       switch (key) {
         case 'darkMode':
           this.applyDarkMode();
@@ -541,8 +531,10 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   onTtsLanguageChange() { this.saveSetting('ttsLanguage', this.settings.ttsLanguage); }
   onTtsRateChange() { this.saveSetting('ttsRate', this.settings.ttsRate); }
   onTtsPitchChange() { this.saveSetting('ttsPitch', this.settings.ttsPitch); }
-  onImageQualityChange() { this.saveSetting('imageQuality', this.settings.imageQuality); }
-  onAutoSpeakChange() { this.saveSetting('autoSpeak', this.settings.autoSpeak); }
+  onAutoSpeakChange() { 
+    console.log('Settings: onAutoSpeakChange called, value:', this.settings.autoSpeak);
+    this.saveSetting('autoSpeak', this.settings.autoSpeak); 
+  }
   onStudyRemindersChange() { this.saveSetting('studyReminders', this.settings.studyReminders); }
   onMaxCardsChange() { this.saveSetting('maxCardsPerSession', this.settings.maxCardsPerSession); }
 
@@ -556,24 +548,6 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       console.error('TTS test failed:', error);
       await this.showToast('TTS test failed', 'danger');
     }
-  }
-
-  async clearImageCache() {
-    const alert = await this.alertController.create({
-      header: 'Clear Image Cache',
-      message: 'This will clear all cached images. They will be re-downloaded when needed.',
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        {
-          text: 'Clear',
-          handler: async () => {
-            this.imageService.clearCache();
-            await this.showToast('Image cache cleared');
-          }
-        }
-      ]
-    });
-    await alert.present();
   }
 
   async resetAllSettings() {
@@ -695,10 +669,10 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       ttsLanguage: 'es-ES',
       ttsRate: 1.0,
       ttsPitch: 1.0,
-      imageQuality: 'medium',
       autoSpeak: false,
       studyReminders: true,
-      maxCardsPerSession: 20
+      maxCardsPerSession: 20,
+      pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'
     };
 
     for (const [key, value] of Object.entries(this.settings)) {
@@ -727,10 +701,6 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
     await toast.present();
   }
 
-  getCacheSize(): string {
-    const size = this.imageService.getCacheSize();
-    return `${size} images cached`;
-  }
 
   // ---------- Color helpers ----------
   async loadColorSchemes() {

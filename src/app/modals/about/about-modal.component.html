@@ -10,13 +10,12 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item button (click)="openHelp && openHelp()">
+    <ion-item button detail (click)="handleOpenHelp()">
       <ion-icon name="help-circle" slot="start"></ion-icon>
       <ion-label>
         <h3>Help & Guide</h3>
         <p>Learn how to use the spaced repetition system</p>
       </ion-label>
-      <ion-icon name="chevron-forward" slot="end"></ion-icon>
     </ion-item>
     <ion-item>
       <ion-icon name="information-circle" slot="start"></ion-icon>

@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Study Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item lines="none">
+      <ion-label position="stacked">Max cards per session (5-500)</ion-label>
+      <input
+        type="number"
+        inputmode="numeric"
+        class="native-input"
+        [(ngModel)]="maxCards"
+        min="5"
+        max="500"
+        placeholder="20">
+    </ion-item>
+    
+    <ion-item lines="none">
+      <ion-label position="stacked">Picture Word Cards Display</ion-label>
+    </ion-item>
+    
+    <ion-item button (click)="selectDisplay('images-first')" lines="full" [class.selected]="pictureWordDisplay === 'images-first'">
+      <ion-label>
+        <h3>Images First</h3>
+        <p>Show images, tap to see word</p>
+      </ion-label>
+      <ion-icon *ngIf="pictureWordDisplay === 'images-first'" name="checkmark-circle" color="primary" slot="end"></ion-icon>
+    </ion-item>
+    
+    <ion-item button (click)="selectDisplay('word-first')" lines="full" [class.selected]="pictureWordDisplay === 'word-first'">
+      <ion-label>
+        <h3>Word First</h3>
+        <p>Show word, tap to see images</p>
+      </ion-label>
+      <ion-icon *ngIf="pictureWordDisplay === 'word-first'" name="checkmark-circle" color="primary" slot="end"></ion-icon>
+    </ion-item>
+    
+    <ion-item button (click)="selectDisplay('random')" lines="full" [class.selected]="pictureWordDisplay === 'random'">
+      <ion-label>
+        <h3>Random</h3>
+        <p>Randomly choose for each card</p>
+      </ion-label>
+      <ion-icon *ngIf="pictureWordDisplay === 'random'" name="checkmark-circle" color="primary" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+  
+  <ion-button expand="block" (click)="save()" class="ion-margin-top">
+    Save
+  </ion-button>
+</ion-content>

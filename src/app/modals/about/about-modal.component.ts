@@ -15,7 +15,14 @@ export class AboutModalComponent {
 
   constructor(private modalCtrl: ModalController) {}
 
+  async handleOpenHelp() {
+    await this.close();
+    if (this.openHelp) {
+      this.openHelp();
+    }
+  }
+
   close() {
-    this.modalCtrl.dismiss();
+    return this.modalCtrl.dismiss();
   }
 }

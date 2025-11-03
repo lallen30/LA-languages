@@ -52,6 +52,11 @@ export const routes: Routes = [
           import('../image-selection/image-selection.page').then((m) => m.ImageSelectionPage),
       },
       {
+        path: 'study-settings',
+        loadComponent: () =>
+          import('../study-settings/study-settings.page').then((m) => m.StudySettingsPage),
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full',

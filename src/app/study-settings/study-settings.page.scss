@@ -1,0 +1,30 @@
+ion-item {
+  --background: transparent;
+  --padding-start: 0;
+}
+
+.native-input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px;
+  margin-top: 8px;
+  border: 1px solid var(--ion-color-medium, #ccc);
+  border-radius: 8px;
+  background: var(--ion-background-color, #fff);
+  color: var(--ion-text-color, #000);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--ion-color-primary, #3880ff);
+    box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.2);
+  }
+}
+
+ion-item.selected {
+  --background: var(--ion-color-primary-tint, rgba(56, 128, 255, 0.1));
+  
+  h3 {
+    color: var(--ion-color-primary, #3880ff);
+    font-weight: 600;
+  }
+}

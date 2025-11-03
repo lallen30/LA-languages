@@ -10,17 +10,37 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item>
+    <ion-item lines="full">
       <ion-icon name="layers" slot="start"></ion-icon>
-      <ion-label>Max cards per session</ion-label>
-      <ion-input
-        type="number"
-        [(ngModel)]="settings.maxCardsPerSession"
-        (ionChange)="maxCardsChange.emit()"
-        min="5"
-        max="500"
-        placeholder="20">
-      </ion-input>
+      <div class="item-content-wrapper">
+        <ion-label>Max cards per session</ion-label>
+        <input
+          type="number"
+          inputmode="numeric"
+          class="native-input"
+          [(ngModel)]="settings.maxCardsPerSession"
+          (change)="maxCardsChange.emit()"
+          min="5"
+          max="500"
+          placeholder="20">
+      </div>
+    </ion-item>
+    
+    <ion-item lines="full">
+      <ion-icon name="image" slot="start"></ion-icon>
+      <ion-label>
+        <h2>Picture Word Cards</h2>
+        <p>Choose what to show first</p>
+      </ion-label>
+      <ion-select
+        [(ngModel)]="settings.pictureWordDisplay"
+        (ionChange)="pictureWordDisplayChange.emit()"
+        interface="popover"
+        placeholder="Select display mode">
+        <ion-select-option value="images-first">Images First</ion-select-option>
+        <ion-select-option value="word-first">Word First</ion-select-option>
+        <ion-select-option value="random">Random</ion-select-option>
+      </ion-select>
     </ion-item>
   </ion-list>
 </ion-content>

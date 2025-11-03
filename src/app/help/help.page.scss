@@ -41,6 +41,10 @@ ion-card {
   }
 }
 
+.study-session-guide {
+  margin-top: 16px;
+}
+
 // Response guide styling
 .response-guide {
   .response-item {
@@ -85,6 +89,10 @@ ion-card {
   }
 }
 
+.tips-title {
+  padding-bottom: 8px;
+}
+
 // Tips list styling
 .tips-list {
   .tip-item {
@@ -94,6 +102,7 @@ ion-card {
     margin-bottom: 16px;
     padding: 12px;
     background: var(--ion-color-light);
+    color: var(--ion-color-dark);
     border-radius: 8px;
     
     ion-icon {
@@ -134,12 +143,12 @@ ion-note {
   
   &[color="primary"] {
     background: var(--ion-color-primary-tint);
-    color: var(--ion-color-primary-shade);
+    color: var(--ion-color-light);
   }
   
   &[color="success"] {
     background: var(--ion-color-success-tint);
-    color: var(--ion-color-success-shade);
+    color: var(--ion-color-dark);
   }
 }
 

@@ -120,7 +120,7 @@
             <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
               {{ currentCard.englishTranslation }}
             </p>
-            <!-- <p class="hint">Tap to see word</p> -->
+            <p class="hint">Tap to see word</p>
           </div>
         </div>
         
@@ -156,36 +156,18 @@
     <!-- Translate Card -->
     <div *ngIf="currentCard.type === 'translate'" class="card-container" (click)="flipCard()">
       <div class="flashcard" [class.flipped]="isFlipped">
-        <!-- Show target language first or English first based on showTargetLanguageFirst -->
-        <div class="card-front" *ngIf="currentCard.showTargetLanguageFirst">
+        <!-- Front: Always show, content depends on showTargetLanguageFirst -->
+        <div class="card-front">
           <div class="card-content">
-            <h2>{{ currentCard.targetLanguageWord }}</h2>
-            <p class="hint">Translate to English</p>
-            <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
-              {{ currentCard.englishTranslation }}
-            </p>
+            <h2>{{ currentCard.showTargetLanguageFirst ? currentCard.targetLanguageWord : currentCard.englishTranslation }}</h2>
+            <p class="hint">{{ currentCard.showTargetLanguageFirst ? 'Translate to English' : 'Translate to target language' }}</p>
           </div>
         </div>
         
-        <div class="card-front" *ngIf="!currentCard.showTargetLanguageFirst">
+        <!-- Back: Always show, content depends on showTargetLanguageFirst -->
+        <div class="card-back">
           <div class="card-content">
-            <h2>{{ currentCard.englishTranslation }}</h2>
-            <p class="hint">Translate to target language</p>
-            <p *ngIf="showTranslation && currentCard.targetLanguageWord" class="translation">
-              {{ currentCard.targetLanguageWord }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.englishTranslation }}</h2>
-          </div>
-        </div>
-        
-        <div class="card-back" *ngIf="!currentCard.showTargetLanguageFirst">
-          <div class="card-content">
-            <h2>{{ currentCard.targetLanguageWord }}</h2>
+            <h2>{{ currentCard.showTargetLanguageFirst ? currentCard.englishTranslation : currentCard.targetLanguageWord }}</h2>
           </div>
         </div>
       </div>

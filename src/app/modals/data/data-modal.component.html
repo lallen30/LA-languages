@@ -10,19 +10,19 @@
 </ion-header>
 <ion-content>
   <div class="data-buttons">
-    <ion-button expand="block" fill="outline" (click)="exportDataClick.emit()">
+    <ion-button expand="block" fill="outline" (click)="handleExportData()">
       <ion-icon name="download" slot="start"></ion-icon>
       Export Data
     </ion-button>
-    <ion-button expand="block" fill="outline" (click)="importDataClick.emit()">
+    <ion-button expand="block" fill="outline" (click)="handleImportData()">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
       Import Data
     </ion-button>
-    <ion-button expand="block" fill="outline" color="warning" (click)="resetAllSettingsClick.emit()">
+    <ion-button expand="block" fill="outline" color="warning" (click)="handleResetSettings()">
       <ion-icon name="refresh" slot="start"></ion-icon>
       Reset Settings
     </ion-button>
-    <ion-button expand="block" fill="outline" color="danger" (click)="resetAllDataClick.emit()">
+    <ion-button expand="block" fill="outline" color="danger" (click)="handleResetData()">
       <ion-icon name="trash" slot="start"></ion-icon>
       Delete All Data
     </ion-button>

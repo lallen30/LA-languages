@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -8,11 +8,13 @@ import { IonicModule, ModalController } from '@ionic/angular';
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule],
   templateUrl: './study-modal.component.html',
-  styleUrls: ['./study-modal.component.scss']
+  styleUrls: ['./study-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class StudyModalComponent {
   @Input() settings: any;
   @Output() maxCardsChange = new EventEmitter<void>();
+  @Output() pictureWordDisplayChange = new EventEmitter<void>();
 
   constructor(private modalCtrl: ModalController) {}
 

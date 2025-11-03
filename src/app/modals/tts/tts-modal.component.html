@@ -32,10 +32,16 @@
     <ion-item lines="full">
       <ion-icon name="volume-high" slot="start"></ion-icon>
       <ion-label>Auto-speak on card flip</ion-label>
-      <ion-toggle slot="end"
-                  [(ngModel)]="settings.autoSpeak"
-                  (ionChange)="autoSpeakChange.emit()">
-      </ion-toggle>
+      <div class="custom-toggle-wrapper" slot="end">
+        <label class="custom-toggle">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="settings.autoSpeak"
+            (ngModelChange)="onAutoSpeakToggle($event)"
+          />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
     </ion-item>
   </ion-list>
 </ion-content>

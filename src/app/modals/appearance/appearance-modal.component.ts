@@ -96,7 +96,6 @@ export class AppearanceModalComponent implements OnInit {
         ttsLanguage: 'es-ES',
         ttsRate: 1.0,
         ttsPitch: 1.0,
-        imageQuality: 'medium',
         autoSpeak: false,
         studyReminders: true,
         maxCardsPerSession: 20
@@ -259,12 +258,10 @@ export class AppearanceModalComponent implements OnInit {
     this.showToast('Colors reset to default!', 'success');
   }
 
-  async previewColors() {
-    this.applyColors();
-    await this.showToast('Color preview applied!', 'success');
-  }
-
   applyColors() {
+    // Ensure dark mode class is applied to body
+    document.body.classList.toggle('dark', this.settings.darkMode);
+    
     const root = document.documentElement;
     
     // Primary colors with RGB variants
