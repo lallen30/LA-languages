@@ -164,6 +164,30 @@ export class StorageService {
     }
   }
 
+  async importMultipleDecks(data: any): Promise<void> {
+    await this.ensureStorage();
+    
+    // Get existing data
+    const existingCards = await this._storage?.get('cards') || [];
+    const existingDecks = await this._storage?.get('decks') || [];
+    
+    // Merge new cards with existing (avoid duplicates by ID)
+    if (data.cards) {
+      const existingCardIds = new Set(existingCards.map((c: any) => c.id));
+      const newCards = data.cards.filter((c: any) => !existingCardIds.has(c.id));
+      const mergedCards = [...existingCards, ...newCards];
+      await this._storage?.set('cards', mergedCards);
+    }
+    
+    // Merge new decks with existing (avoid duplicates by ID)
+    if (data.decks) {
+      const existingDeckIds = new Set(existingDecks.map((d: any) => d.id));
+      const newDecks = data.decks.filter((d: any) => !existingDeckIds.has(d.id));
+      const mergedDecks = [...existingDecks, ...newDecks];
+      await this._storage?.set('decks', mergedDecks);
+    }
+  }
+
   private async ensureStorage(): Promise<void> {
     if (!this._storage) {
       await this.init();

@@ -259,6 +259,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
         resetAllData: () => this.resetAllData(),
         exportData: () => this.exportData(),
         importData: () => this.importData(),
+        importMultipleDecks: () => this.importMultipleDecks(),
         resetAllSettings: () => this.resetAllSettings()
       };
     }
@@ -647,6 +648,51 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
               handler: async () => {
                 await this.storageService.importData(data);
                 await this.showToast('Data imported successfully');
+                window.location.reload();
+              }
+            }
+          ]
+        });
+
+        await alert.present();
+      } catch (error) {
+        console.error('Import failed:', error);
+        await this.showToast('Import failed - invalid file', 'danger');
+      }
+    };
+
+    input.click();
+  }
+
+  async importMultipleDecks() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = async (event: any) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+
+        // Validate the data structure
+        if (!data.cards || !data.decks) {
+          await this.showToast('Invalid file format - must contain cards and decks', 'danger');
+          return;
+        }
+
+        const alert = await this.alertController.create({
+          header: 'Import Multiple Decks',
+          message: `This will add ${data.decks.length} deck(s) and ${data.cards.length} card(s) to your existing data. Continue?`,
+          buttons: [
+            { text: 'Cancel', role: 'cancel' },
+            {
+              text: 'Import',
+              handler: async () => {
+                await this.storageService.importMultipleDecks(data);
+                await this.showToast('Decks imported successfully');
                 window.location.reload();
               }
             }

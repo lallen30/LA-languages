@@ -12,6 +12,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 export class DataModalComponent {
   @Input() exportData?: () => void;
   @Input() importData?: () => void;
+  @Input() importMultipleDecks?: () => void;
   @Input() resetAllSettings?: () => void;
   @Input() resetAllData?: () => void;
 
@@ -26,6 +27,12 @@ export class DataModalComponent {
   async handleImportData() {
     if (this.importData) {
       await this.importData();
+    }
+  }
+
+  async handleImportMultipleDecks() {
+    if (this.importMultipleDecks) {
+      await this.importMultipleDecks();
     }
   }
 
