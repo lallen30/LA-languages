@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Settings</ion-title>
+    <ion-title>{{ 'settings.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,31 +10,31 @@
     <!-- TTS -->
     <ion-item button detail="true" (click)="openModalKey('tts')">
       <ion-icon name="language" slot="start"></ion-icon>
-      <ion-label>Text-to-Speech</ion-label>
+      <ion-label>{{ 'settings.languageSettings' | translate }}</ion-label>
     </ion-item>
 
     <!-- Appearance -->
     <ion-item button detail="true" (click)="openModalKey('appearance')">
       <ion-icon name="color-palette" slot="start"></ion-icon>
-      <ion-label>Appearance</ion-label>
+      <ion-label>{{ 'settings.appearance' | translate }}</ion-label>
     </ion-item>
 
     <!-- Study -->
     <ion-item button detail="true" (click)="openStudySettings()">
       <ion-icon name="school" slot="start"></ion-icon>
-      <ion-label>Study</ion-label>
+      <ion-label>{{ 'settings.study' | translate }}</ion-label>
     </ion-item>
 
     <!-- Data -->
     <ion-item button detail="true" (click)="openModalKey('data')">
       <ion-icon name="server" slot="start"></ion-icon>
-      <ion-label>Data</ion-label>
+      <ion-label>{{ 'settings.data' | translate }}</ion-label>
     </ion-item>
 
     <!-- About -->
     <ion-item button detail="true" (click)="openModalKey('about')">
       <ion-icon name="information-circle" slot="start"></ion-icon>
-      <ion-label>About</ion-label>
+      <ion-label>{{ 'settings.about' | translate }}</ion-label>
     </ion-item>
 
   </ion-list>

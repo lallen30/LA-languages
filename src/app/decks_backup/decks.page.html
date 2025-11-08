@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar mode="md">
-    <ion-title>Decks</ion-title>
+    <ion-title>{{ 'decks.title' | translate }}</ion-title>
     <ion-button slot="end" fill="clear" (click)="refreshDecks()">
       <ion-icon name="refresh" slot="icon-only"></ion-icon>
     </ion-button>
@@ -25,7 +25,7 @@
           <ion-label>
             <h2 class="deck-title">{{ deck.name }}</h2>
             <p class="deck-subtitle">{{ deck.description }}</p>
-            <p class="deck-stats">{{ deck.cardCount || 0 }} cards • {{ deck.masteredCards || 0 }} mastered</p>
+            <p class="deck-stats">{{ deck.cardCount || 0 }} {{ 'decks.cards' | translate }} • {{ deck.masteredCards || 0 }} {{ 'stats.mastered' | translate }}</p>
           </ion-label>
         </ion-item>
         
@@ -53,26 +53,26 @@
     <!-- Empty State -->
     <div *ngIf="!isLoading && filteredDecks.length === 0" class="empty-state">
       <ion-icon name="library-outline" class="empty-icon"></ion-icon>
-      <h2>No Decks Yet</h2>
-      <p>Create your first deck to start learning!</p>
+      <h2>{{ 'decks.noDecks' | translate }}</h2>
+      <p>{{ 'decks.createFirst' | translate }}</p>
       
       <ion-button expand="block" (click)="openCreateDeckActionSheet()" class="create-deck-btn">
         <ion-icon name="add" slot="start"></ion-icon>
-        Create Your First Deck
+        {{ 'decks.createDeck' | translate }}
       </ion-button>
     </div>
 
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-container no-padding">
       <ion-spinner></ion-spinner>
-      <p>Loading decks...</p>
+      <p>{{ 'decks.loading' | translate }}</p>
     </div>
   </div>
 
   <!-- Deck Action Sheet -->
   <ion-action-sheet
     [isOpen]="isDeckActionSheetOpen"
-    header="Deck Actions"
+    [header]="'decks.title' | translate"
     [buttons]="deckActionSheetButtons"
     (didDismiss)="setDeckActionSheetOpen(false)">
   </ion-action-sheet>
@@ -80,7 +80,7 @@
   <!-- Add Card Action Sheet -->
   <ion-action-sheet
     [isOpen]="isAddCardActionSheetOpen"
-    header="Add Card Type"
+    [header]="'decks.addCard' | translate"
     [buttons]="addCardActionSheetButtons"
     (didDismiss)="setAddCardActionSheetOpen(false)">
   </ion-action-sheet>
@@ -88,7 +88,7 @@
   <!-- Create Deck Action Sheet -->
   <ion-action-sheet
     [isOpen]="isCreateDeckActionSheetOpen"
-    header="Create New Deck"
+    [header]="'decks.createNewDeck' | translate"
     [buttons]="createDeckActionSheetButtons"
     (didDismiss)="setCreateDeckActionSheetOpen(false)">
   </ion-action-sheet>
@@ -98,19 +98,19 @@
   <div class="custom-modal-overlay" *ngIf="showCreateDeckModal" (click)="closeCreateDeckModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Create New Deck</h2>
+        <h2>{{ 'decks.createNewDeck' | translate }}</h2>
         <button class="close-btn" (click)="closeCreateDeckModal()">×</button>
       </div>
       <div class="modal-content">
-        <label for="new-deck-name">Name</label>
-        <input id="new-deck-name" type="text" [(ngModel)]="newDeckName" class="modal-input" placeholder="Deck name" />
+        <label for="new-deck-name">{{ 'decks.deckName' | translate }}</label>
+        <input id="new-deck-name" type="text" [(ngModel)]="newDeckName" class="modal-input" [placeholder]="'decks.deckName' | translate" />
 
-        <label for="new-deck-desc">Description</label>
-        <textarea id="new-deck-desc" [(ngModel)]="newDeckDescription" class="modal-textarea" placeholder="Description (optional)"></textarea>
+        <label for="new-deck-desc">{{ 'decks.description' | translate }}</label>
+        <textarea id="new-deck-desc" [(ngModel)]="newDeckDescription" class="modal-textarea" [placeholder]="'decks.description' | translate"></textarea>
 
         <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeCreateDeckModal()">Cancel</button>
-          <button class="modal-btn primary" (click)="saveNewDeck()" [disabled]="!(newDeckName && newDeckName.trim())">Create</button>
+          <button class="cancel-btn" (click)="closeCreateDeckModal()">{{ 'common.cancel' | translate }}</button>
+          <button class="modal-btn primary" (click)="saveNewDeck()" [disabled]="!(newDeckName && newDeckName.trim())">{{ 'common.save' | translate }}</button>
         </div>
       </div>
     </div>
@@ -119,19 +119,19 @@
   <div class="custom-modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Import Deck</h2>
+        <h2>{{ 'decks.importDecks' | translate }}</h2>
         <button class="close-btn" (click)="closeImportModal()">×</button>
       </div>
       <div class="modal-content">
-        <p>Choose import method:</p>
+        <p>{{ 'decks.importDecks' | translate }}</p>
         <div class="import-options">
           <button class="import-btn url-btn" (click)="showUrlInput()">
             <ion-icon name="download-outline"></ion-icon>
-            Import from URL
+            {{ 'decks.importFromUrl' | translate }}
           </button>
           <button class="import-btn device-btn" (click)="importFromDevice()">
             <ion-icon name="cloud-upload-outline"></ion-icon>
-            Import from Device
+            {{ 'decks.importFromFile' | translate }}
           </button>
         </div>
       </div>
@@ -142,19 +142,19 @@
   <div class="custom-modal-overlay" *ngIf="showUrlInputModal" (click)="closeUrlInputModal()">
     <div class="custom-modal url-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Import from URL</h2>
+        <h2>{{ 'decks.importFromUrl' | translate }}</h2>
         <button class="close-btn" (click)="closeUrlInputModal()">×</button>
       </div>
       <div class="modal-content">
-        <p>Enter the URL of the deck JSON file:</p>
+        <p>{{ 'decks.enterUrl' | translate }}</p>
         <input 
           type="url" 
           [(ngModel)]="importUrl" 
           placeholder="https://example.com/deck.json"
           class="url-input">
         <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeUrlInputModal()">Cancel</button>
-          <button class="import-btn" (click)="executeUrlImport()" [disabled]="!importUrl">Import</button>
+          <button class="cancel-btn" (click)="closeUrlInputModal()">{{ 'common.cancel' | translate }}</button>
+          <button class="import-btn" (click)="executeUrlImport()" [disabled]="!importUrl">{{ 'decks.importDecks' | translate }}</button>
         </div>
       </div>
     </div>
@@ -164,19 +164,19 @@
   <div class="custom-modal-overlay" *ngIf="showEditDeckModal" (click)="closeEditDeckModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Edit Deck</h2>
+        <h2>{{ 'decks.editDeck' | translate }}</h2>
         <button class="close-btn" (click)="closeEditDeckModal()">×</button>
       </div>
       <div class="modal-content">
-        <label for="deck-name">Name</label>
-        <input id="deck-name" type="text" [(ngModel)]="editDeckName" class="modal-input" placeholder="Deck name" />
+        <label for="deck-name">{{ 'decks.deckName' | translate }}</label>
+        <input id="deck-name" type="text" [(ngModel)]="editDeckName" class="modal-input" [placeholder]="'decks.deckName' | translate" />
 
-        <label for="deck-desc">Description</label>
-        <textarea id="deck-desc" [(ngModel)]="editDeckDescription" class="modal-textarea" placeholder="Description (optional)"></textarea>
+        <label for="deck-desc">{{ 'decks.description' | translate }}</label>
+        <textarea id="deck-desc" [(ngModel)]="editDeckDescription" class="modal-textarea" [placeholder]="'decks.description' | translate"></textarea>
 
         <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeEditDeckModal()">Cancel</button>
-          <button class="modal-btn primary" (click)="saveEditedDeck()" [disabled]="!(editDeckName && editDeckName.trim())">Save</button>
+          <button class="cancel-btn" (click)="closeEditDeckModal()">{{ 'common.cancel' | translate }}</button>
+          <button class="modal-btn primary" (click)="saveEditedDeck()" [disabled]="!(editDeckName && editDeckName.trim())">{{ 'common.save' | translate }}</button>
         </div>
       </div>
     </div>
@@ -186,16 +186,15 @@
   <div class="custom-modal-overlay" *ngIf="showDeleteDeckModal" (click)="closeDeleteDeckModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Delete Deck</h2>
+        <h2>{{ 'decks.deleteDeck' | translate }}</h2>
         <button class="close-btn" (click)="closeDeleteDeckModal()">×</button>
       </div>
       <div class="modal-content">
-        <p>Are you sure you want to delete
-          <strong>{{ deckToDelete?.name }}</strong>?
-          This action cannot be undone.</p>
+        <p>{{ 'decks.deleteConfirm' | translate }}
+          <strong>{{ deckToDelete?.name }}</strong>?</p>
         <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeDeleteDeckModal()">Cancel</button>
-          <button class="modal-btn danger" (click)="confirmDeleteDeck()">Delete</button>
+          <button class="cancel-btn" (click)="closeDeleteDeckModal()">{{ 'common.cancel' | translate }}</button>
+          <button class="modal-btn danger" (click)="confirmDeleteDeck()">{{ 'common.delete' | translate }}</button>
         </div>
       </div>
     </div>
@@ -205,17 +204,17 @@
   <div class="custom-modal-overlay" *ngIf="showStatsModal" (click)="closeStatsModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Deck Statistics</h2>
+        <h2>{{ 'decks.viewStats' | translate }}</h2>
         <button class="close-btn" (click)="closeStatsModal()">×</button>
       </div>
       <div class="modal-content stats-modal">
         <h3 class="deck-title">{{ statsDeckName }}</h3>
-        <div class="stats-row"><strong>Total Cards:</strong> {{ statsTotal }}</div>
-        <div class="stats-row"><strong>Mastered:</strong> {{ statsMastered }}</div>
-        <div class="stats-row"><strong>Remaining:</strong> {{ statsRemaining }}</div>
-        <div class="stats-row"><strong>Progress:</strong> {{ statsProgress }}%</div>
+        <div class="stats-row"><strong>{{ 'stats.totalCards' | translate }}:</strong> {{ statsTotal }}</div>
+        <div class="stats-row"><strong>{{ 'stats.mastered' | translate }}:</strong> {{ statsMastered }}</div>
+        <div class="stats-row"><strong>{{ 'stats.learning' | translate }}:</strong> {{ statsRemaining }}</div>
+        <div class="stats-row"><strong>{{ 'decks.deckProgress' | translate }}:</strong> {{ statsProgress }}%</div>
         <div class="modal-buttons">
-          <button class="modal-btn primary stats-btn" (click)="closeStatsModal()">OK</button>
+          <button class="modal-btn primary stats-btn" (click)="closeStatsModal()">{{ 'common.ok' | translate }}</button>
         </div>
       </div>
     </div>

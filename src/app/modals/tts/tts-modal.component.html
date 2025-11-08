@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Text-to-Speech</ion-title>
+    <ion-title>{{ 'settings.languageSettings' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" aria-label="Close">
         <ion-icon name="close"></ion-icon>
@@ -10,28 +10,46 @@
 </ion-header>
 
 <ion-content>
-  <!-- IonAlert: Language picker -->
+  <!-- IonAlert: Native Language picker -->
   <ion-alert
-    [isOpen]="isLangAlertOpen"
-    header="Choose Language"
+    [isOpen]="isNativeLangAlertOpen"
+    [header]="'settings.nativeLanguage' | translate"
     [inputs]="languageInputs"
-    [buttons]="langButtons"
-    (didDismiss)="onLangAlertDidDismiss($event)">
+    [buttons]="nativeLangButtons"
+    (didDismiss)="onNativeLangAlertDidDismiss($event)">
+  </ion-alert>
+
+  <!-- IonAlert: Target Language picker -->
+  <ion-alert
+    [isOpen]="isTargetLangAlertOpen"
+    [header]="'settings.targetLanguage' | translate"
+    [inputs]="languageInputs"
+    [buttons]="targetLangButtons"
+    (didDismiss)="onTargetLangAlertDidDismiss($event)">
   </ion-alert>
 
   <ion-list>
-    <!-- Language: custom picker to avoid iOS ion-select rendering issues -->
-    <ion-item button detail (click)="presentLanguagePicker()">
+    <!-- Native Language: Language for app interface -->
+    <ion-item button detail (click)="presentNativeLanguagePicker()">
       <ion-icon name="language" slot="start"></ion-icon>
       <ion-label>
-        <h3>Language</h3>
+        <h3>{{ 'settings.nativeLanguage' | translate }}</h3>
+        <p>{{ displayLanguage(settings?.nativeLanguage) || 'Choose…' }}</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Target Language: Language you are learning -->
+    <ion-item button detail (click)="presentTargetLanguagePicker()">
+      <ion-icon name="language" slot="start"></ion-icon>
+      <ion-label>
+        <h3>{{ 'settings.targetLanguage' | translate }}</h3>
         <p>{{ displayLanguage(settings?.ttsLanguage) || 'Choose…' }}</p>
       </ion-label>
     </ion-item>
 
     <ion-item lines="full">
       <ion-icon name="volume-high" slot="start"></ion-icon>
-      <ion-label>Auto-speak on card flip</ion-label>
+      <ion-label>{{ 'settings.autoSpeak' | translate }}</ion-label>
       <div class="custom-toggle-wrapper" slot="end">
         <label class="custom-toggle">
           <input 
@@ -45,3 +63,16 @@
     </ion-item>
   </ion-list>
 </ion-content>
+
+<ion-footer>
+  <div style="padding: 16px;">
+    <ion-button 
+      expand="block" 
+      (click)="close()" 
+      [style.--background]="buttonBackground"
+      [style.--color]="buttonText">
+      <ion-icon name="checkmark" slot="start"></ion-icon>
+      {{ 'settings.done' | translate }}
+    </ion-button>
+  </div>
+</ion-footer>

@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar mode="md">
-    <ion-title>Statistics</ion-title>
+    <ion-title>{{ 'stats.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +10,7 @@
     <!-- Loading -->
     <div *ngIf="isLoading" class="loading-container">
       <ion-spinner></ion-spinner>
-      <p>Loading statistics...</p>
+      <p>{{ 'decks.loadingStats' | translate }}</p>
     </div>
 
     <!-- Stats Content -->
@@ -18,7 +18,7 @@
       <!-- Overall Stats -->
       <ion-card class="overview-card">
         <ion-card-header>
-          <ion-card-title>Overview</ion-card-title>
+          <ion-card-title>{{ 'decks.overview' | translate }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="stats-grid">
@@ -26,7 +26,7 @@
               <ion-icon name="library" class="stat-icon" color="primary"></ion-icon>
               <div class="stat-content">
                 <span class="stat-number">{{ userStats.totalCards }}</span>
-                <span class="stat-label">Total Cards</span>
+                <span class="stat-label">{{ 'stats.totalCards' | translate }}</span>
               </div>
             </div>
 
@@ -34,7 +34,7 @@
               <ion-icon name="trophy" class="stat-icon" color="success"></ion-icon>
               <div class="stat-content">
                 <span class="stat-number">{{ userStats.masteredCards }}</span>
-                <span class="stat-label">Mastered</span>
+                <span class="stat-label">{{ 'stats.mastered' | translate }}</span>
               </div>
             </div>
 
@@ -42,7 +42,7 @@
               <ion-icon [name]="getStreakIcon()" class="stat-icon" [color]="getStreakColor()"></ion-icon>
               <div class="stat-content">
                 <span class="stat-number">{{ userStats.streak }}</span>
-                <span class="stat-label">Day Streak</span>
+                <span class="stat-label">{{ 'stats.studyStreak' | translate }}</span>
               </div>
             </div>
 
@@ -50,7 +50,7 @@
               <ion-icon name="analytics" class="stat-icon" [color]="getAccuracyColor()"></ion-icon>
               <div class="stat-content">
                 <span class="stat-number">{{ userStats.accuracy }}%</span>
-                <span class="stat-label">Accuracy</span>
+                <span class="stat-label">{{ 'decks.accuracy' | translate }}</span>
               </div>
             </div>
           </div>
@@ -58,22 +58,22 @@
           <!-- Metric Explanations -->
           <div class="metric-explanations">
             <ion-text color="medium">
-              <h4>What do these metrics mean?</h4>
+              <h4>{{ 'stats.metricsTitle' | translate }}</h4>
               <div class="explanation-item">
-                <strong>Mastered:</strong> Cards you've reviewed successfully 3+ times
+                <strong>{{ 'stats.mastered' | translate }}:</strong> {{ 'stats.masteredDesc' | translate }}
               </div>
               <div class="explanation-item">
-                <strong>Day Streak:</strong> Consecutive days you've studied (resets if you skip a day)
+                <strong>{{ 'stats.studyStreak' | translate }}:</strong> {{ 'stats.streakDesc' | translate }}
               </div>
               <div class="explanation-item">
-                <strong>Accuracy:</strong> Percentage of reviewed cards you got right
+                <strong>{{ 'decks.accuracy' | translate }}:</strong> {{ 'stats.accuracyDesc' | translate }}
               </div>
             </ion-text>
           </div>
 
           <div class="last-review">
             <ion-text color="medium">
-              Last review: {{ formatLastReview() }}
+              {{ 'decks.lastReview' | translate }}: {{ formatLastReview() }}
             </ion-text>
           </div>
         </ion-card-content>
@@ -82,7 +82,7 @@
       <!-- Deck Statistics -->
       <ion-card *ngIf="deckStats.length > 0" class="deck-stats-card">
         <ion-card-header>
-          <ion-card-title>Deck Progress</ion-card-title>
+          <ion-card-title>{{ 'decks.deckProgress' | translate }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="deck-list">
@@ -104,19 +104,19 @@
               
               <div class="deck-details">
                 <div class="detail-item">
-                  <span class="detail-label">Total:</span>
+                  <span class="detail-label">{{ 'stats.total' | translate }}:</span>
                   <span class="detail-value">{{ deck.totalCards }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">New:</span>
+                  <span class="detail-label">{{ 'stats.new' | translate }}:</span>
                   <span class="detail-value">{{ deck.newCards }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Review:</span>
+                  <span class="detail-label">{{ 'stats.review' | translate }}:</span>
                   <span class="detail-value">{{ deck.reviewCards }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">Mastered:</span>
+                  <span class="detail-label">{{ 'stats.mastered' | translate }}:</span>
                   <span class="detail-value">{{ deck.masteredCards }}</span>
                 </div>
               </div>
@@ -128,15 +128,15 @@
       <!-- No Data State -->
       <div *ngIf="deckStats.length === 0" class="empty-state">
         <ion-icon name="bar-chart-outline" class="empty-icon"></ion-icon>
-        <h2>No Statistics Yet</h2>
-        <p>Start studying some decks to see your progress!</p>
+        <h2>{{ 'stats.noStatsYet' | translate }}</h2>
+        <p>{{ 'stats.startStudying' | translate }}</p>
       </div>
 
       <!-- Reset Button -->
       <div class="reset-section">
         <ion-button fill="outline" color="danger" (click)="resetStats()">
           <ion-icon name="refresh" slot="start"></ion-icon>
-          Reset Statistics
+          {{ 'stats.resetStats' | translate }}
         </ion-button>
       </div>
     </div>

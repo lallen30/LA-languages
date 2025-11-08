@@ -5,13 +5,15 @@ import { IonicModule } from '@ionic/angular';
 import { Deck, DeckStats } from '../models/deck.model';
 import { Card } from '../models/card.model';
 import { StorageService } from '../services/storage.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.page.html',
   styleUrls: ['./stats.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, TranslatePipe]
 })
 export class StatsPage implements OnInit {
   userStats = {
@@ -26,7 +28,10 @@ export class StatsPage implements OnInit {
   deckStats: (Deck & DeckStats)[] = [];
   isLoading = false;
 
-  constructor(private storageService: StorageService) {}
+  constructor(
+    private storageService: StorageService,
+    private translationService: TranslationService
+  ) {}
 
   async ngOnInit() {
     // Don't load stats here to avoid double loading
@@ -182,21 +187,21 @@ export class StatsPage implements OnInit {
   }
 
   formatLastReview(): string {
-    if (!this.userStats.lastReviewDate) return 'Never';
+    if (!this.userStats.lastReviewDate) return this.translationService.t('decks.never');
     
     const lastReview = new Date(this.userStats.lastReviewDate);
     const today = new Date();
     const diffTime = Math.abs(today.getTime() - lastReview.getTime());
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    return `${diffDays} days ago`;
+    if (diffDays === 0) return this.translationService.t('decks.today');
+    if (diffDays === 1) return this.translationService.t('decks.yesterday');
+    return `${diffDays} ${this.translationService.t('stats.days')} ${this.translationService.t('decks.daysAgo').replace('days ', '').replace('jours ', '').replace('Tage ', '').replace('giorni ', '').replace('dias ', '')}`;
   }
 
   async resetStats() {
     // This would show a confirmation dialog in a real app
-    const confirmed = confirm('Are you sure you want to reset all statistics? This cannot be undone.');
+    const confirmed = confirm(this.translationService.t('stats.resetConfirm'));
     
     if (confirmed) {
       await this.storageService.saveStats({

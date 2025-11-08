@@ -2,11 +2,13 @@ import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '../pipes/translate.pipe';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'app-color-picker-overlay',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, IonicModule, TranslatePipe],
   template: `
     <div class="overlay-backdrop">
       <div class="color-picker-container">
@@ -76,14 +78,14 @@ import { IonicModule } from '@ionic/angular';
           <!-- Preset colors -->
           <div class="preset-colors-section">
             <div class="preset-header">
-              <span>Preset colors</span>
+              <span>{{ 'settings.presetColors' | translate }}</span>
               <ion-button 
                 fill="clear" 
                 size="small" 
                 (click)="addCurrentColorToPresets()"
                 class="add-color-btn">
                 <ion-icon name="add" slot="start"></ion-icon>
-                ADD COLOR
+                {{ 'settings.addColor' | translate }}
               </ion-button>
             </div>
             <div class="preset-colors-grid">
@@ -101,10 +103,10 @@ import { IonicModule } from '@ionic/angular';
         <!-- Action buttons - OUTSIDE scrollable content -->
         <div class="button-row">
           <div class="action-button cancel-btn" (click)="cancel()">
-            CANCEL
+            {{ 'common.cancel' | translate | uppercase }}
           </div>
           <div class="action-button select-btn" (click)="save()">
-            SELECT
+            {{ 'settings.select' | translate }}
           </div>
         </div>
       </div>

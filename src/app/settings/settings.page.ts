@@ -30,6 +30,8 @@ import { ColorPickerOverlayService } from '../services/color-picker-overlay.serv
 import { TtsService } from '../services/tts.service';
 import { ImageService } from '../services/image.service';
 import { StorageService } from '../services/storage.service';
+import { TranslationService } from '../services/translation.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -78,7 +80,8 @@ type ModalKey = 'tts' | 'appearance' | 'study' | 'data' | 'about';
     StudyModalComponent,
     DataModalComponent,
     AboutModalComponent,
-    TestHelloModalComponent
+    TestHelloModalComponent,
+    TranslatePipe
   ]
 })
 export class SettingsPage implements OnInit, AfterViewInit {
@@ -91,6 +94,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
   // ---- STATE ----
   settings = {
     darkMode: false,
+    nativeLanguage: 'en-US',
     ttsLanguage: 'es-ES',
     ttsRate: 1.0,
     ttsPitch: 1.0,
@@ -159,12 +163,12 @@ export class SettingsPage implements OnInit, AfterViewInit {
   currentColorScheme = { ...this.lightColorScheme };
 
   availableLanguages = [
+    { code: 'en-US', name: 'English' },
     { code: 'es-ES', name: 'Spanish' },
     { code: 'fr-FR', name: 'French' },
     { code: 'pt-PT', name: 'Portuguese' },
     { code: 'de-DE', name: 'German' },
-    { code: 'it-IT', name: 'Italian' },
-    { code: 'en-US', name: 'English' }
+    { code: 'it-IT', name: 'Italian' }
   ];
 
   // Map modal keys to components (TS can see this field now)
@@ -189,7 +193,8 @@ export class SettingsPage implements OnInit, AfterViewInit {
     private router: Router,
     private platform: Platform,
     private el: ElementRef<HTMLElement>,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translationService: TranslationService
   ) {}
 
   // Platform helpers
@@ -248,6 +253,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
         isIOS: this.isIOS,
         settings: this.settings,
         availableLanguages: this.availableLanguages,
+        nativeLanguageChange: () => this.onNativeLanguageChange(),
         ttsLanguageChange: () => this.onTtsLanguageChange(),
         ttsRateChange: () => this.onTtsRateChange(),
         ttsPitchChange: () => this.onTtsPitchChange(),
@@ -256,6 +262,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
     }
     if (key === 'data') {
       return {
+        settings: this.settings,
         resetAllData: () => this.resetAllData(),
         exportData: () => this.exportData(),
         importData: () => this.importData(),
@@ -284,6 +291,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
     }
     if (key === 'about') {
       return {
+        settings: this.settings,
         openHelp: this.openHelp.bind(this),
         openBuyMeCoffee: this.openBuyMeCoffee.bind(this)
       };
@@ -307,7 +315,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
       console.log('[Settings] openModalKey done', key);
     } catch (e) {
       console.error('openModalKey failed', e);
-      this.showToast('Unable to open modal', 'danger');
+      this.showToast(this.translationService.t('settings.unableToOpenModal'), 'danger');
     }
   }
 
@@ -481,6 +489,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   async loadSettings() {
     try {
       this.settings.darkMode = await this.storageService.getSetting('darkMode', false);
+      this.settings.nativeLanguage = await this.storageService.getSetting('nativeLanguage', 'en-US');
       this.settings.ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
       this.settings.ttsRate = await this.storageService.getSetting('ttsRate', 1.0);
       this.settings.ttsPitch = await this.storageService.getSetting('ttsPitch', 1.0);
@@ -492,6 +501,9 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       await this.loadColorSchemes();
       this.applyDarkMode();
       this.switchColorScheme();
+
+      // Set translation language
+      await this.translationService.setLanguage(this.settings.nativeLanguage as any);
 
       this.ttsService.setLanguage(this.settings.ttsLanguage);
       this.ttsService.setRate(this.settings.ttsRate);
@@ -511,6 +523,9 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
           this.applyDarkMode();
           this.switchColorScheme();
           break;
+        case 'nativeLanguage':
+          await this.translationService.setLanguage(value);
+          break;
         case 'ttsLanguage':
           this.ttsService.setLanguage(value);
           break;
@@ -521,14 +536,15 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
           this.ttsService.setPitch(value);
           break;
       }
-      await this.showToast('Setting saved');
+      await this.showToast(this.translationService.t('settings.settingSaved'));
     } catch (error) {
       console.error('Error saving setting:', error);
-      await this.showToast('Error saving setting', 'danger');
+      await this.showToast(this.translationService.t('settings.errorSavingSetting'), 'danger');
     }
   }
 
   onDarkModeChange() { this.saveSetting('darkMode', this.settings.darkMode); }
+  onNativeLanguageChange() { this.saveSetting('nativeLanguage', this.settings.nativeLanguage); }
   onTtsLanguageChange() { this.saveSetting('ttsLanguage', this.settings.ttsLanguage); }
   onTtsRateChange() { this.saveSetting('ttsRate', this.settings.ttsRate); }
   onTtsPitchChange() { this.saveSetting('ttsPitch', this.settings.ttsPitch); }
@@ -547,16 +563,16 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       await this.ttsService.speak(testText);
     } catch (error) {
       console.error('TTS test failed:', error);
-      await this.showToast('TTS test failed', 'danger');
+      await this.showToast(this.translationService.t('settings.ttsFailed'), 'danger');
     }
   }
 
   async resetAllSettings() {
     const alert = await this.alertController.create({
-      header: 'Reset Settings',
-      message: 'This will reset all settings to their default values. Are you sure?',
+      header: this.translationService.t('settings.resetSettingsTitle'),
+      message: this.translationService.t('settings.resetSettingsMsg'),
       buttons: [
-        { text: 'Cancel', role: 'cancel' },
+        { text: this.translationService.t('common.cancel'), role: 'cancel' },
         {
           text: 'Reset',
           role: 'destructive',
@@ -571,16 +587,16 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
 
   async resetAllData() {
     const alert = await this.alertController.create({
-      header: 'Reset All Data',
-      message: 'This will delete ALL your decks, cards, and progress. This cannot be undone!',
+      header: this.translationService.t('settings.resetDataTitle'),
+      message: this.translationService.t('settings.resetDataMsg'),
       buttons: [
-        { text: 'Cancel', role: 'cancel' },
+        { text: this.translationService.t('common.cancel'), role: 'cancel' },
         {
-          text: 'Delete Everything',
+          text: this.translationService.t('common.delete'),
           role: 'destructive',
           handler: async () => {
             await this.storageService.clearAllData();
-            await this.showToast('All data cleared');
+            await this.showToast(this.translationService.t('settings.allDataCleared'));
             window.location.reload();
           }
         }
@@ -618,10 +634,10 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         a.click();
         URL.revokeObjectURL(url);
       }
-      await this.showToast('Data exported successfully');
+      await this.showToast(this.translationService.t('settings.dataExported'));
     } catch (error) {
       console.error('Export failed:', error);
-      await this.showToast('Export failed', 'danger');
+      await this.showToast(this.translationService.t('settings.exportFailed'), 'danger');
     }
   }
 
@@ -639,15 +655,15 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         const data = JSON.parse(text);
 
         const alert = await this.alertController.create({
-          header: 'Import Data',
-          message: 'This will replace all current data. Continue?',
+          header: this.translationService.t('settings.importDataTitle'),
+          message: this.translationService.t('settings.importDataMsg'),
           buttons: [
-            { text: 'Cancel', role: 'cancel' },
+            { text: this.translationService.t('common.cancel'), role: 'cancel' },
             {
-              text: 'Import',
+              text: this.translationService.t('settings.importData'),
               handler: async () => {
                 await this.storageService.importData(data);
-                await this.showToast('Data imported successfully');
+                await this.showToast(this.translationService.t('settings.dataImported'));
                 window.location.reload();
               }
             }
@@ -657,7 +673,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         await alert.present();
       } catch (error) {
         console.error('Import failed:', error);
-        await this.showToast('Import failed - invalid file', 'danger');
+        await this.showToast(this.translationService.t('settings.importFailed'), 'danger');
       }
     };
 
@@ -679,20 +695,20 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
 
         // Validate the data structure
         if (!data.cards || !data.decks) {
-          await this.showToast('Invalid file format - must contain cards and decks', 'danger');
+          await this.showToast(this.translationService.t('settings.invalidFileFormat'), 'danger');
           return;
         }
 
         const alert = await this.alertController.create({
-          header: 'Import Multiple Decks',
-          message: `This will add ${data.decks.length} deck(s) and ${data.cards.length} card(s) to your existing data. Continue?`,
+          header: this.translationService.t('settings.importDecksTitle'),
+          message: `${this.translationService.t('settings.importDecksMsg')} ${data.decks.length} ${this.translationService.t('settings.deckAnd')} ${data.cards.length} ${this.translationService.t('settings.cardTo')}`,
           buttons: [
-            { text: 'Cancel', role: 'cancel' },
+            { text: this.translationService.t('common.cancel'), role: 'cancel' },
             {
-              text: 'Import',
+              text: this.translationService.t('settings.importData'),
               handler: async () => {
                 await this.storageService.importMultipleDecks(data);
-                await this.showToast('Decks imported successfully');
+                await this.showToast(this.translationService.t('settings.decksImported'));
                 window.location.reload();
               }
             }
@@ -702,7 +718,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         await alert.present();
       } catch (error) {
         console.error('Import failed:', error);
-        await this.showToast('Import failed - invalid file', 'danger');
+        await this.showToast(this.translationService.t('settings.importFailed'), 'danger');
       }
     };
 
@@ -712,6 +728,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   private async performReset() {
     this.settings = {
       darkMode: false,
+      nativeLanguage: 'en-US',
       ttsLanguage: 'es-ES',
       ttsRate: 1.0,
       ttsPitch: 1.0,
@@ -726,11 +743,12 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
     }
 
     this.applyDarkMode();
+    await this.translationService.setLanguage(this.settings.nativeLanguage as any);
     this.ttsService.setLanguage(this.settings.ttsLanguage);
     this.ttsService.setRate(this.settings.ttsRate);
     this.ttsService.setPitch(this.settings.ttsPitch);
 
-    await this.showToast('Settings reset to defaults');
+    await this.showToast(this.translationService.t('settings.settingsReset'));
   }
 
   private applyDarkMode() {
@@ -995,12 +1013,12 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       this.saveSetting('lightColorScheme', this.lightColorScheme);
     }
     this.switchColorScheme();
-    this.showToast('Colors reset to default!', 'success');
+    this.showToast(this.translationService.t('settings.colorsReset'), 'success');
   }
 
   async previewColors() {
     this.applyColors();
-    this.showToast('Color preview applied!', 'success');
+    this.showToast(this.translationService.t('settings.colorPreview'), 'success');
   }
 
   openHelp() { this.router.navigate(['/tabs/help']); }
@@ -1023,7 +1041,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         }
 
         this.applyColors();
-        this.showToast(`${colorName} updated to ${newColor}`, 'success');
+        this.showToast(`${colorName} ${this.translationService.t('settings.colorUpdated')} ${newColor}`, 'success');
       } else if (Capacitor.getPlatform() === 'ios') {
         this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
       }
@@ -1033,7 +1051,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
         this.openNativeColorPickerWithSave(colorKey, colorName, currentColor);
         return;
       }
-      this.showToast('Error opening color picker', 'danger');
+      this.showToast(this.translationService.t('settings.errorColorPicker'), 'danger');
     }
   }
 
@@ -1049,15 +1067,15 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       const selectedColor = colorInput.value;
       const confirmAlert = await this.alertController.create({
         header: colorName,
-        message: `Selected color: ${selectedColor}`,
+        message: `${this.translationService.t('settings.selectedColor')}: ${selectedColor}`,
         buttons: [
-          { text: 'Cancel', role: 'cancel' },
+          { text: this.translationService.t('common.cancel'), role: 'cancel' },
           {
-            text: 'Save',
+            text: this.translationService.t('common.save'),
             handler: () => {
               (this.currentColorScheme as any)[colorKey] = selectedColor;
               this.onColorChange(colorKey, { target: { value: selectedColor } });
-              this.showToast(`${colorName} saved: ${selectedColor}`, 'success');
+              this.showToast(`${colorName} ${this.translationService.t('settings.colorSaved')}: ${selectedColor}`, 'success');
             }
           }
         ]

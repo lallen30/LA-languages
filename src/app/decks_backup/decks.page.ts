@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
 import { ImageService } from '../services/image.service';
+import { TranslationService } from '../services/translation.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 import { addIcons } from 'ionicons';
 import { Deck } from '../models/deck.model';
 import { CardType } from '../models/card.model';
@@ -37,7 +39,7 @@ import {
   templateUrl: './decks.page.html',
   styleUrls: ['./decks.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, TranslatePipe]
 })
 export class DecksPage implements OnInit {
   decks: Deck[] = [];
@@ -94,7 +96,8 @@ export class DecksPage implements OnInit {
     private loadingController: LoadingController,
     private modalController: ModalController,
     private storageService: StorageService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private translationService: TranslationService
   ) {
     // Register required icons
     addIcons({
@@ -328,10 +331,10 @@ export class DecksPage implements OnInit {
       // Trigger change detection
       this.filteredDecks = [...this.filteredDecks];
       
-      this.showToast('Decks refreshed successfully!');
+      this.showToast(this.translationService.t('decks.decksRefreshed'));
     } catch (error) {
       console.error('Error refreshing decks:', error);
-      this.showToast('Error refreshing decks');
+      this.showToast(this.translationService.t('decks.errorRefreshing'));
     } finally {
       this.isLoading = false;
     }
@@ -373,18 +376,18 @@ export class DecksPage implements OnInit {
     
     // Show warning alert
     const alert = await this.alertController.create({
-      header: 'Warning',
-      message: 'Importing will replace all existing decks for the current language. Do you want to continue?',
+      header: this.translationService.t('decks.warning'),
+      message: this.translationService.t('decks.importWarning'),
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translationService.t('common.cancel'),
           role: 'cancel',
           handler: () => {
             console.log('Import cancelled by user');
           }
         },
         {
-          text: 'Continue',
+          text: this.translationService.t('common.confirm'),
           handler: async () => {
             await this.importDeck();
           }
@@ -403,18 +406,18 @@ export class DecksPage implements OnInit {
       
       // Show warning alert
       const alert = await this.alertController.create({
-        header: 'Warning',
-        message: 'Importing will replace all existing decks for the current language. Do you want to continue?',
+        header: this.translationService.t('decks.warning'),
+        message: this.translationService.t('decks.importWarning'),
         buttons: [
           {
-            text: 'Cancel',
+            text: this.translationService.t('common.cancel'),
             role: 'cancel',
             handler: () => {
               console.log('Import cancelled by user');
             }
           },
           {
-            text: 'Continue',
+            text: this.translationService.t('common.confirm'),
             handler: async () => {
               await this.downloadAndImportDeck(urlToImport);
             }
@@ -457,7 +460,7 @@ export class DecksPage implements OnInit {
       
       this.filteredDecks.push(newDeck);
       this.isLoading = false;
-      this.showToast(`Successfully imported "${newDeck.name}" with ${newDeck.cardCount} cards!`);
+      this.showToast(`${this.translationService.t('decks.importSuccess')} "${newDeck.name}" ${this.translationService.t('decks.withCards')} ${newDeck.cardCount} ${this.translationService.t('decks.cards2')}!`);
       
     } catch (error) {
       this.isLoading = false;
@@ -520,7 +523,7 @@ export class DecksPage implements OnInit {
       this.filteredDecks = [...this.filteredDecks];
     }
 
-    this.showToast('Deck updated successfully!');
+    this.showToast(this.translationService.t('decks.deckUpdated'));
     this.showEditDeckModal = false;
     this.lockSelectedDeck = false;
   }
@@ -658,10 +661,10 @@ export class DecksPage implements OnInit {
         this.selectedDeck = null;
       }
 
-      this.showToast('Deck deleted successfully!');
+      this.showToast(this.translationService.t('decks.deckDeleted'));
     } catch (e) {
       console.error('Failed to delete deck:', e);
-      this.showToast('Failed to delete deck. Please try again.');
+      this.showToast(this.translationService.t('decks.deckDeleteFailed'));
     } finally {
       this.closeDeleteDeckModal();
     }
@@ -682,7 +685,7 @@ export class DecksPage implements OnInit {
   async saveNewDeck() {
     const name = (this.newDeckName || '').trim();
     if (!name) {
-      this.showToast('Please enter a deck name');
+      this.showToast(this.translationService.t('decks.enterDeckName'));
       return;
     }
 
@@ -723,128 +726,134 @@ export class DecksPage implements OnInit {
       this.filteredDecks = [...this.filteredDecks, newDeck];
     }
     this.showCreateDeckModal = false;
-    this.showToast('Deck created successfully!');
+    this.showToast(this.translationService.t('decks.deckCreated'));
   }
 
   // Action sheet button configurations
-  deckActionSheetButtons = [
-    {
-      text: 'Study Deck',
-      icon: 'play-outline',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.startSession(this.selectedDeck);
+  get deckActionSheetButtons() {
+    return [
+      {
+        text: this.translationService.t('decks.study'),
+        icon: 'play-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.startSession(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'Add Card',
-      icon: 'add-outline',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.openAddCardActionSheet(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.addCard'),
+        icon: 'add-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.openAddCardActionSheet(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'Manage Cards',
-      icon: 'library-outline',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.navigateToCardManagement(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.addCards'),
+        icon: 'library-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.navigateToCardManagement(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'Edit Deck',
-      icon: 'create-outline',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.editDeck(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.editDeck'),
+        icon: 'create-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.editDeck(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'View Statistics',
-      icon: 'stats-chart',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.viewStats(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.viewStats'),
+        icon: 'stats-chart',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.viewStats(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'Export Deck',
-      icon: 'download-outline',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.exportDeck(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.exportDeck'),
+        icon: 'download-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.exportDeck(this.selectedDeck);
+          }
         }
-      }
-    },
-    {
-      text: 'Delete Deck',
-      icon: 'trash-outline',
-      role: 'destructive',
-      handler: () => {
-        if (this.selectedDeck) {
-          this.deleteDeck(this.selectedDeck);
+      },
+      {
+        text: this.translationService.t('decks.deleteDeck'),
+        icon: 'trash-outline',
+        role: 'destructive',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.deleteDeck(this.selectedDeck);
+          }
         }
+      },
+      {
+        text: this.translationService.t('common.cancel'),
+        icon: 'close-outline',
+        role: 'cancel'
       }
-    },
-    {
-      text: 'Cancel',
-      icon: 'close-outline',
-      role: 'cancel'
-    }
-  ];
+    ];
+  }
 
-  addCardActionSheetButtons = [
-    {
-      text: 'Fill in the Blank',
-      icon: 'create-outline',
-      handler: () => {
-        this.addCardType('fill-blank');
+  get addCardActionSheetButtons() {
+    return [
+      {
+        text: this.translationService.t('decks.fillInBlank'),
+        icon: 'create-outline',
+        handler: () => {
+          this.addCardType('fill-blank');
+        }
+      },
+      {
+        text: this.translationService.t('decks.pictureWord'),
+        icon: 'add-outline',
+        handler: () => {
+          this.addCardType('picture');
+        }
+      },
+      {
+        text: this.translationService.t('decks.translate'),
+        icon: 'library-outline',
+        handler: () => {
+          this.addCardType('translate');
+        }
+      },
+      {
+        text: this.translationService.t('common.cancel'),
+        icon: 'close-outline',
+        role: 'cancel'
       }
-    },
-    {
-      text: 'Picture Word',
-      icon: 'add-outline',
-      handler: () => {
-        this.addCardType('picture');
-      }
-    },
-    {
-      text: 'Translate',
-      icon: 'library-outline',
-      handler: () => {
-        this.addCardType('translate');
-      }
-    },
-    {
-      text: 'Cancel',
-      icon: 'close-outline',
-      role: 'cancel'
-    }
-  ];
+    ];
+  }
 
-  createDeckActionSheetButtons = [
-    {
-      text: 'Create New Deck',
-      icon: 'add-outline',
-      handler: () => {
-        // Close sheet and defer to avoid presenting over action sheet on iOS
-        console.log('🟢 Create New Deck action tapped');
-        this.isCreateDeckActionSheetOpen = false;
-        setTimeout(() => this.ngZone.run(() => this.openCreateDeckModal()), 400);
+  get createDeckActionSheetButtons() {
+    return [
+      {
+        text: this.translationService.t('decks.createNewDeck'),
+        icon: 'add-outline',
+        handler: () => {
+          // Close sheet and defer to avoid presenting over action sheet on iOS
+          console.log('🟢 Create New Deck action tapped');
+          this.isCreateDeckActionSheetOpen = false;
+          setTimeout(() => this.ngZone.run(() => this.openCreateDeckModal()), 400);
+        }
+      },
+      {
+        text: this.translationService.t('common.cancel'),
+        icon: 'close-outline',
+        role: 'cancel'
       }
-    },
-    {
-      text: 'Cancel',
-      icon: 'close-outline',
-      role: 'cancel'
-    }
-  ];
+    ];
+  }
 
   // Removed importActionSheetButtons - using custom modals instead
 
@@ -1019,11 +1028,11 @@ export class DecksPage implements OnInit {
         console.error('❌ Could not find deck in filteredDecks with ID:', this.selectedDeck.id);
       }
       
-      this.showToast('Fill-in-the-blank card created successfully!');
+      this.showToast(this.translationService.t('decks.fillBlankCreated'));
       console.log('✅ Fill-blank card saved:', newCard);
     } catch (saveError) {
       console.error('💾 Failed to save fill-blank card:', saveError);
-      this.showToast('Error saving card. Please try again.');
+      this.showToast(this.translationService.t('decks.errorSavingCard'));
     }
   }
 
@@ -1099,11 +1108,11 @@ export class DecksPage implements OnInit {
           console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
         }
         
-        this.showToast(`Picture Word card created with ${imageUrls.length} images!`);
+        this.showToast(this.translationService.t('decks.pictureCardCreated'));
         console.log('✅ Picture Word card created with', imageUrls.length, 'images:', word);
       } catch (saveError) {
         console.error('💾 Failed to save card:', saveError);
-        this.showToast('Error saving card. Please try again.');
+        this.showToast(this.translationService.t('decks.errorSavingCard'));
       }
     } catch (error: any) {
       console.error('Error creating picture word card with selected images:', error);
@@ -1146,11 +1155,11 @@ export class DecksPage implements OnInit {
         console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
       }
       
-      this.showToast('Picture word card created successfully!');
+      this.showToast(this.translationService.t('decks.pictureCardCreated'));
       console.log('✅ Picture-word card saved:', newCard);
     } catch (saveError) {
       console.error('💾 Failed to save picture-word card:', saveError);
-      this.showToast('Error saving card. Please try again.');
+      this.showToast(this.translationService.t('decks.errorSavingCard'));
     }
   }
 
@@ -1188,11 +1197,11 @@ export class DecksPage implements OnInit {
         console.log(`📚 Updated deck "${deckToUpdate.name}" card count to ${savedCards.length}`);
       }
       
-      this.showToast('Translation card created successfully!');
+      this.showToast(this.translationService.t('decks.translateCardCreated'));
       console.log('✅ Translate card saved:', newCard);
     } catch (saveError) {
       console.error('💾 Failed to save translate card:', saveError);
-      this.showToast('Error saving card. Please try again.');
+      this.showToast(this.translationService.t('decks.errorSavingCard'));
     }
   }
 
@@ -1202,26 +1211,26 @@ export class DecksPage implements OnInit {
     this.isCreateDeckActionSheetOpen = false;
 
     const alert = await this.alertController.create({
-      header: 'Create New Deck',
+      header: this.translationService.t('decks.createNewDeck'),
       inputs: [
         {
           name: 'name',
           type: 'text',
-          placeholder: 'Deck name'
+          placeholder: this.translationService.t('decks.deckName')
         },
         {
           name: 'description',
           type: 'textarea',
-          placeholder: 'Description (optional)'
+          placeholder: this.translationService.t('decks.description')
         }
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translationService.t('common.cancel'),
           role: 'cancel'
         },
         {
-          text: 'Create',
+          text: this.translationService.t('common.save'),
           handler: async (data) => {
             const name = (data.name || '').trim();
             if (!name) return;
@@ -1247,7 +1256,7 @@ export class DecksPage implements OnInit {
             // Update UI arrays with new references to trigger change detection
             this.decks = [...this.decks, newDeck];
             this.filteredDecks = [...this.filteredDecks, newDeck];
-            this.showToast('Deck created successfully!');
+            this.showToast(this.translationService.t('decks.deckCreated'));
           }
         }
       ]
@@ -1308,13 +1317,13 @@ export class DecksPage implements OnInit {
         
         console.log('Current filteredDecks after push:', this.filteredDecks);
         
-        this.showToast(`Successfully imported "${deckName}" with ${cardCount} cards!`);
+        this.showToast(`${this.translationService.t('decks.importSuccess')} "${deckName}" ${this.translationService.t('decks.withCards')} ${cardCount} ${this.translationService.t('decks.cards2')}!`);
         
       } catch (error) {
         console.error('Import failed:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         console.error('Error details:', errorMessage);
-        this.showToast(`Import failed: ${errorMessage}`);
+        this.showToast(`${this.translationService.t('decks.importFailed2')}: ${errorMessage}`);
       }
     };
     
@@ -1328,8 +1337,8 @@ export class DecksPage implements OnInit {
    */
   async importFromUrl() {
     const alert = await this.alertController.create({
-      header: 'Import from URL',
-      message: 'Enter the URL to a deck JSON file:',
+      header: this.translationService.t('decks.importFromUrl'),
+      message: this.translationService.t('decks.enterUrl'),
       inputs: [
         {
           name: 'url',
@@ -1339,11 +1348,11 @@ export class DecksPage implements OnInit {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translationService.t('common.cancel'),
           role: 'cancel'
         },
         {
-          text: 'Import',
+          text: this.translationService.t('decks.importDecks'),
           handler: async (data) => {
             console.log('Import button clicked with data:', data);
             if (data.url && data.url.trim()) {
@@ -1415,7 +1424,7 @@ export class DecksPage implements OnInit {
       
       console.log('Current filteredDecks after:', this.filteredDecks);
       
-      this.showToast(`Successfully imported "${deckName}" with ${cardCount} cards!`);
+      this.showToast(`${this.translationService.t('decks.importSuccess')} "${deckName}" ${this.translationService.t('decks.withCards')} ${cardCount} ${this.translationService.t('decks.cards2')}!`);
 
     } catch (error) {
       console.error('URL import failed:', error);
@@ -1423,9 +1432,9 @@ export class DecksPage implements OnInit {
       console.error('Error message:', error instanceof Error ? error.message : String(error));
       
       const alert = await this.alertController.create({
-        header: 'Import Failed',
-        message: `Failed to download or parse deck from URL: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        buttons: ['OK']
+        header: this.translationService.t('decks.importFailed'),
+        message: `${this.translationService.t('decks.importFailedMessage')}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        buttons: [this.translationService.t('common.ok')]
       });
       await alert.present();
     }

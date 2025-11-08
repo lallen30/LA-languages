@@ -1,11 +1,11 @@
 {
   "cards": [
     {
-      "id": "card_fr_1762138353251_1",
-      "deckId": "1762138353251",
-      "type": "translate",
-      "targetLanguageWord": "Je me lève à six heures tous les jours.",
+      "id": "card_pt_1_1",
+      "deckId": "1762313789004",
+      "targetLanguageWord": "Eu me levanto \u00e0s seis todos os dias.",
       "englishTranslation": "I get up at six every day.",
+      "type": "translate",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -17,10 +17,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_2",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_2",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Peux-tu le répéter plus lentement, s'il te plaît ?",
+      "targetLanguageWord": "Voc\u00ea pode repetir mais devagar, por favor?",
       "englishTranslation": "Can you repeat it more slowly, please?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -33,10 +33,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_3",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_3",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Bonjour, comment tu as dormi ?",
+      "targetLanguageWord": "Bom dia, como voc\u00ea dormiu?",
       "englishTranslation": "Good morning, how did you sleep?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -49,10 +49,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_4",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_4",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je prends presque toujours du café et des tartines au petit-déjeuner.",
+      "targetLanguageWord": "Quase sempre tomo caf\u00e9 e torradas no caf\u00e9 da manh\u00e3.",
       "englishTranslation": "I have coffee and toast for breakfast almost always.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -65,11 +65,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_5",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_5",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je dois me doucher vite parce que je suis en retard.",
-      "englishTranslation": "I have to shower quickly because I’m running late.",
+      "targetLanguageWord": "Eu preciso tomar banho r\u00e1pido porque estou atrasado.",
+      "englishTranslation": "I have to shower quickly because I\u2019m running late.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -81,10 +81,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_6",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_6",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je quitte la maison à sept heures et demie.",
+      "targetLanguageWord": "Eu saio de casa \u00e0s sete e meia.",
       "englishTranslation": "I leave the house at seven thirty.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -97,10 +97,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_7",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_7",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "J'arrive au travail à huit heures pile.",
+      "targetLanguageWord": "Chego ao trabalho \u00e0s oito em ponto.",
       "englishTranslation": "I get to work at eight on the dot.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -113,11 +113,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_8",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_8",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui je travaille depuis la maison.",
-      "englishTranslation": "Today I’m working from home.",
+      "targetLanguageWord": "Hoje estou trabalhando de casa.",
+      "englishTranslation": "Today I\u2019m working from home.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -129,10 +129,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_9",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_9",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "À quelle heure on déjeune ?",
+      "targetLanguageWord": "Que horas a gente almo\u00e7a?",
       "englishTranslation": "What time are we having lunch?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -145,10 +145,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_10",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_10",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je déjeune avec mes collègues le lundi.",
+      "targetLanguageWord": "Eu almo\u00e7o com meus colegas nas segundas-feiras.",
       "englishTranslation": "I have lunch with my coworkers on Mondays.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -161,10 +161,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_11",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_11",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Après avoir mangé, j'ai toujours sommeil.",
+      "targetLanguageWord": "Depois de comer, sempre me d\u00e1 sono.",
       "englishTranslation": "After eating, I always get sleepy.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -177,10 +177,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_12",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_12",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je finis de travailler à cinq heures.",
+      "targetLanguageWord": "Termino de trabalhar \u00e0s cinco.",
       "englishTranslation": "I finish work at five.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -193,10 +193,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_13",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_13",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "L'après-midi, je sors le chien.",
+      "targetLanguageWord": "\u00c0 tarde eu levo o cachorro para passear.",
       "englishTranslation": "In the afternoon I take the dog out.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -209,10 +209,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_14",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_14",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Le soir je regarde une série avec ma famille.",
+      "targetLanguageWord": "\u00c0 noite eu assisto a uma s\u00e9rie com a minha fam\u00edlia.",
       "englishTranslation": "At night I watch a show with my family.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -225,10 +225,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_15",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_15",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je me couche tard le week-end.",
+      "targetLanguageWord": "Eu vou dormir tarde nos fins de semana.",
       "englishTranslation": "I go to bed late on weekends.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -241,10 +241,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_16",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_16",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Peux-tu parler plus clairement, s'il te plaît ?",
+      "targetLanguageWord": "Voc\u00ea pode falar mais claramente, por favor?",
       "englishTranslation": "Can you speak more clearly, please?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -257,11 +257,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_17",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_17",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je ne comprends pas, tu peux me l'expliquer encore une fois ?",
-      "englishTranslation": "I don’t understand, can you explain it to me again?",
+      "targetLanguageWord": "N\u00e3o entendo, voc\u00ea pode me explicar de novo?",
+      "englishTranslation": "I don\u2019t understand, can you explain it to me again?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -273,11 +273,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_18",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_18",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Une minute, je suis occupé en ce moment.",
-      "englishTranslation": "One moment, I’m busy right now.",
+      "targetLanguageWord": "Um minuto, estou ocupado agora.",
+      "englishTranslation": "One moment, I\u2019m busy right now.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -289,11 +289,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_19",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_19",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je vais au supermarché, tu as besoin de quelque chose ?",
-      "englishTranslation": "I’m going to the supermarket, do you need anything?",
+      "targetLanguageWord": "Vou ao supermercado, voc\u00ea precisa de algo?",
+      "englishTranslation": "I\u2019m going to the supermarket, do you need anything?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -305,11 +305,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_20",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_20",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Il fait très froid aujourd'hui, n'est-ce pas ?",
-      "englishTranslation": "It’s very cold today, right?",
+      "targetLanguageWord": "Est\u00e1 muito frio hoje, n\u00e3o \u00e9?",
+      "englishTranslation": "It\u2019s very cold today, right?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -321,11 +321,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_21",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_21",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Il pleut, prends une veste.",
-      "englishTranslation": "It’s raining, take a jacket.",
+      "targetLanguageWord": "Est\u00e1 chovendo, leva uma jaqueta.",
+      "englishTranslation": "It\u2019s raining, take a jacket.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -337,10 +337,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_22",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_22",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Il est quelle heure exactement ?",
+      "targetLanguageWord": "Que horas s\u00e3o exatamente?",
       "englishTranslation": "What time is it exactly?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -353,11 +353,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_23",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_23",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Il est trois heures moins le quart.",
-      "englishTranslation": "It’s a quarter to three.",
+      "targetLanguageWord": "S\u00e3o quinze para as tr\u00eas.",
+      "englishTranslation": "It\u2019s a quarter to three.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -369,11 +369,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_24",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_24",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui on est lundi, non ?",
-      "englishTranslation": "Today is Monday, isn’t it?",
+      "targetLanguageWord": "Hoje \u00e9 segunda, n\u00e9?",
+      "englishTranslation": "Today is Monday, isn\u2019t it?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -385,11 +385,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_25",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_25",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Demain je ne travaille pas, je me repose.",
-      "englishTranslation": "Tomorrow I don’t work, I rest.",
+      "targetLanguageWord": "Amanh\u00e3 eu n\u00e3o trabalho, vou descansar.",
+      "englishTranslation": "Tomorrow I don\u2019t work, I rest.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -401,10 +401,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_26",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_26",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Tu aimes te lever tôt ?",
+      "targetLanguageWord": "Voc\u00ea gosta de acordar cedo?",
       "englishTranslation": "Do you like getting up early?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -417,11 +417,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_27",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_27",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je n'aime pas cuisiner, mais je le fais.",
-      "englishTranslation": "I don’t like cooking, but I do it.",
+      "targetLanguageWord": "Eu n\u00e3o gosto de cozinhar, mas eu cozinho.",
+      "englishTranslation": "I don\u2019t like cooking, but I do it.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -433,10 +433,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_28",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_28",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "J'oublie toujours de fermer la porte.",
+      "targetLanguageWord": "Eu sempre esque\u00e7o de fechar a porta.",
       "englishTranslation": "I always forget to close the door.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -449,11 +449,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_29",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_29",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je vais préparer le dîner maintenant.",
-      "englishTranslation": "I’m going to make dinner now.",
+      "targetLanguageWord": "Vou preparar o jantar agora.",
+      "englishTranslation": "I\u2019m going to make dinner now.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -465,10 +465,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_30",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_30",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Peux-tu faire la vaisselle, s'il te plaît ?",
+      "targetLanguageWord": "Voc\u00ea pode lavar a lou\u00e7a, por favor?",
       "englishTranslation": "Can you wash the dishes, please?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -481,11 +481,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_31",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_31",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui je n'ai pas envie de sortir.",
-      "englishTranslation": "Today I don’t feel like going out.",
+      "targetLanguageWord": "Hoje eu n\u00e3o estou com vontade de sair.",
+      "englishTranslation": "Today I don\u2019t feel like going out.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -497,10 +497,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_32",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_32",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Désolé d'être en retard.",
+      "targetLanguageWord": "Desculpa pelo atraso.",
       "englishTranslation": "Sorry for being late.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -513,11 +513,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_33",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_33",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Ce n'est pas grave, pas de problème.",
-      "englishTranslation": "It’s okay, no problem.",
+      "targetLanguageWord": "Tudo bem, sem problema.",
+      "englishTranslation": "It\u2019s okay, no problem.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -529,10 +529,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_34",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_34",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Où sont les clés ?",
+      "targetLanguageWord": "Onde est\u00e3o as chaves?",
       "englishTranslation": "Where are the keys?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -545,11 +545,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_35",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_35",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Elles sont sur la table.",
-      "englishTranslation": "They’re on the table.",
+      "targetLanguageWord": "Elas est\u00e3o em cima da mesa.",
+      "englishTranslation": "They\u2019re on the table.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -561,11 +561,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_36",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_36",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Ouvre la fenêtre, il fait chaud.",
-      "englishTranslation": "Open the window, it’s hot.",
+      "targetLanguageWord": "Abra a janela, est\u00e1 calor.",
+      "englishTranslation": "Open the window, it\u2019s hot.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -577,10 +577,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_37",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_37",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Ferme la porte, s'il te plaît.",
+      "targetLanguageWord": "Feche a porta, por favor.",
       "englishTranslation": "Close the door, please.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -593,10 +593,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_38",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_38",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je peux utiliser ton téléphone ?",
+      "targetLanguageWord": "Posso usar o seu telefone?",
       "englishTranslation": "Can I use your phone?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -609,11 +609,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_39",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_39",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "J'apprends le français tous les jours.",
-      "englishTranslation": "I’m learning Spanish every day.",
+      "targetLanguageWord": "Estou aprendendo espanhol todos os dias.",
+      "englishTranslation": "I\u2019m learning Spanish every day.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -625,10 +625,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_40",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_40",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je veux pratiquer un peu plus.",
+      "targetLanguageWord": "Quero praticar mais um pouco.",
       "englishTranslation": "I want to practice a bit more.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -641,10 +641,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_41",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_41",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je ne parle qu'un peu français.",
+      "targetLanguageWord": "Eu s\u00f3 falo um pouco de espanhol.",
       "englishTranslation": "I only speak a little Spanish.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -657,10 +657,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_42",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_42",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Comment on dit ce mot en français ?",
+      "targetLanguageWord": "Como se diz esta palavra em espanhol?",
       "englishTranslation": "How do you say this word in Spanish?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -673,10 +673,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_43",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_43",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Tu peux l'écrire, s'il te plaît ?",
+      "targetLanguageWord": "Voc\u00ea pode escrever, por favor?",
       "englishTranslation": "Can you write it, please?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -689,10 +689,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_44",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_44",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Excusez-moi, où sont les toilettes ?",
+      "targetLanguageWord": "Com licen\u00e7a, onde fica o banheiro?",
       "englishTranslation": "Excuse me, where is the bathroom?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -705,10 +705,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_45",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_45",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "J'habite près d'ici.",
+      "targetLanguageWord": "Eu moro perto daqui.",
       "englishTranslation": "I live near here.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -721,11 +721,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_46",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_46",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je suis prêt, on peut y aller.",
-      "englishTranslation": "I’m ready, we can go.",
+      "targetLanguageWord": "Estou pronto, podemos ir.",
+      "englishTranslation": "I\u2019m ready, we can go.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -737,11 +737,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_47",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_47",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je ne suis pas encore prêt.",
-      "englishTranslation": "I’m not ready yet.",
+      "targetLanguageWord": "Ainda n\u00e3o estou pronto.",
+      "englishTranslation": "I\u2019m not ready yet.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -753,11 +753,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_48",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_48",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "C'est la première fois que je viens ici.",
-      "englishTranslation": "It’s the first time I come here.",
+      "targetLanguageWord": "\u00c9 a primeira vez que venho aqui.",
+      "englishTranslation": "It\u2019s the first time I come here.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -769,10 +769,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_49",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_49",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "J'aime cette ville.",
+      "targetLanguageWord": "Eu gosto desta cidade.",
       "englishTranslation": "I like this city.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -785,11 +785,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_50",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_50",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas beaucoup de temps.",
-      "englishTranslation": "I don’t have much time.",
+      "targetLanguageWord": "Eu n\u00e3o tenho muito tempo.",
+      "englishTranslation": "I don\u2019t have much time.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -801,10 +801,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_51",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_51",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Une minute, s'il te plaît.",
+      "targetLanguageWord": "S\u00f3 um minuto, por favor.",
       "englishTranslation": "Just a minute, please.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -817,10 +817,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_52",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_52",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Tu peux m'aider avec ça ?",
+      "targetLanguageWord": "Voc\u00ea pode me ajudar com isso?",
       "englishTranslation": "Can you help me with this?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -833,10 +833,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_53",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_53",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "Merci beaucoup pour ton aide.",
+      "targetLanguageWord": "Muito obrigado pela sua ajuda.",
       "englishTranslation": "Thank you very much for your help.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -849,11 +849,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138353251_54",
-      "deckId": "1762138353251",
+      "id": "card_pt_1_54",
+      "deckId": "1762313789004",
       "type": "translate",
-      "targetLanguageWord": "De rien, avec plaisir.",
-      "englishTranslation": "You’re welcome, gladly.",
+      "targetLanguageWord": "De nada, com prazer.",
+      "englishTranslation": "You\u2019re welcome, gladly.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -865,10 +865,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_1",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_1",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma sœur est très travailleuse, mais aujourd'hui elle est fatiguée.",
+      "targetLanguageWord": "Minha irm\u00e3 \u00e9 muito trabalhadora, mas hoje est\u00e1 cansada.",
       "englishTranslation": "My sister is very hard-working, but today she is tired.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -881,10 +881,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_2",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_2",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "À qui est ce cahier ?",
+      "targetLanguageWord": "De quem \u00e9 este caderno?",
       "englishTranslation": "Whose notebook is this?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -897,10 +897,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_3",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_3",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "J'ai deux frères et une petite sœur.",
+      "targetLanguageWord": "Eu tenho dois irm\u00e3os e uma irm\u00e3 mais nova.",
       "englishTranslation": "I have two brothers and a younger sister.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -913,10 +913,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_4",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_4",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma mère habite dans une autre ville.",
+      "targetLanguageWord": "Minha m\u00e3e mora em outra cidade.",
       "englishTranslation": "My mom lives in another city.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -929,10 +929,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_5",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_5",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon père est très drôle.",
+      "targetLanguageWord": "Meu pai \u00e9 muito engra\u00e7ado.",
       "englishTranslation": "My dad is very funny.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -945,10 +945,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_6",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_6",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mes grands-parents viennent du Mexique.",
+      "targetLanguageWord": "Meus av\u00f3s s\u00e3o do M\u00e9xico.",
       "englishTranslation": "My grandparents are from Mexico.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -961,10 +961,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_7",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_7",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Tu as des enfants ?",
+      "targetLanguageWord": "Voc\u00ea tem filhos?",
       "englishTranslation": "Do you have children?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -977,10 +977,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_8",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_8",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon fils a huit ans.",
+      "targetLanguageWord": "Meu filho tem oito anos.",
       "englishTranslation": "My son is eight years old.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -993,10 +993,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_9",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_9",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma fille est très créative.",
+      "targetLanguageWord": "Minha filha \u00e9 muito criativa.",
       "englishTranslation": "My daughter is very creative.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1009,10 +1009,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_10",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_10",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "C'est mon meilleur ami.",
+      "targetLanguageWord": "Este \u00e9 meu melhor amigo.",
       "englishTranslation": "This is my best friend.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1025,10 +1025,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_11",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_11",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Elle est grande et elle a les cheveux noirs.",
+      "targetLanguageWord": "Ela \u00e9 alta e tem cabelo preto.",
       "englishTranslation": "She is tall and has black hair.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1041,10 +1041,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_12",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_12",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Il est petit mais très fort.",
+      "targetLanguageWord": "Ele \u00e9 baixo, mas muito forte.",
       "englishTranslation": "He is short but very strong.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1057,10 +1057,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_13",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_13",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Nous sommes une famille très unie.",
+      "targetLanguageWord": "Somos uma fam\u00edlia muito unida.",
       "englishTranslation": "We are a very close family.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1073,10 +1073,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_14",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_14",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon cousin va se marier samedi.",
+      "targetLanguageWord": "Meu primo vai se casar no s\u00e1bado.",
       "englishTranslation": "My cousin is getting married on Saturday.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1089,10 +1089,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_15",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_15",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ta famille est comment ?",
+      "targetLanguageWord": "Como \u00e9 a sua fam\u00edlia?",
       "englishTranslation": "What is your family like?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1105,10 +1105,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_16",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_16",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon mari travaille beaucoup.",
+      "targetLanguageWord": "Meu marido trabalha muito.",
       "englishTranslation": "My husband works a lot.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1121,10 +1121,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_17",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_17",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma femme est professeure.",
+      "targetLanguageWord": "Minha esposa \u00e9 professora.",
       "englishTranslation": "My wife is a teacher.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1137,11 +1137,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_18",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_18",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Je suis célibataire pour l'instant.",
-      "englishTranslation": "I’m single for now.",
+      "targetLanguageWord": "Estou solteiro por enquanto.",
+      "englishTranslation": "I\u2019m single for now.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1153,10 +1153,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_19",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_19",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Je suis mariée depuis dix ans.",
+      "targetLanguageWord": "Estou casada h\u00e1 dez anos.",
       "englishTranslation": "I have been married for ten years.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1169,10 +1169,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_20",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_20",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Nous sommes occupés aujourd'hui.",
+      "targetLanguageWord": "Estamos ocupados hoje.",
       "englishTranslation": "We are busy today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1185,11 +1185,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_21",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_21",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Je suis chez mes parents.",
-      "englishTranslation": "I’m at my parents’ house.",
+      "targetLanguageWord": "Estou na casa dos meus pais.",
+      "englishTranslation": "I\u2019m at my parents\u2019 house.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1201,10 +1201,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_22",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_22",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma maison est petite mais confortable.",
+      "targetLanguageWord": "Minha casa \u00e9 pequena, mas confort\u00e1vel.",
       "englishTranslation": "My house is small but comfortable.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1217,10 +1217,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_23",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_23",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "À qui est ce chien ?",
+      "targetLanguageWord": "De quem \u00e9 este cachorro?",
       "englishTranslation": "Whose dog is this?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1233,11 +1233,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_24",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_24",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "C'est à mon frère.",
-      "englishTranslation": "It’s my brother’s.",
+      "targetLanguageWord": "\u00c9 do meu irm\u00e3o.",
+      "englishTranslation": "It\u2019s my brother\u2019s.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1249,10 +1249,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_25",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_25",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ce téléphone n'est pas à moi.",
+      "targetLanguageWord": "Este celular n\u00e3o \u00e9 meu.",
       "englishTranslation": "This phone is not mine.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1265,10 +1265,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_26",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_26",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Notre voisine est très aimable.",
+      "targetLanguageWord": "Nossa vizinha \u00e9 muito simp\u00e1tica.",
       "englishTranslation": "Our neighbor is very kind.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1281,10 +1281,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_27",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_27",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon patron est un peu strict.",
+      "targetLanguageWord": "Meu chefe \u00e9 um pouco r\u00edgido.",
       "englishTranslation": "My boss is a little strict.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1297,11 +1297,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_28",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_28",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui je suis très content.",
-      "englishTranslation": "Today I’m very happy.",
+      "targetLanguageWord": "Hoje estou muito contente.",
+      "englishTranslation": "Today I\u2019m very happy.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1313,11 +1313,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_29",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_29",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Elle est triste parce que son amie n'est pas venue.",
-      "englishTranslation": "She is sad because her friend didn’t come.",
+      "targetLanguageWord": "Ela est\u00e1 triste porque a amiga dela n\u00e3o veio.",
+      "englishTranslation": "She is sad because her friend didn\u2019t come.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1329,11 +1329,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_30",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_30",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Nous sommes d'ici, mais nous vivons dans un autre pays.",
-      "englishTranslation": "We’re from here, but we live in another country.",
+      "targetLanguageWord": "Somos daqui, mas moramos em outro pa\u00eds.",
+      "englishTranslation": "We\u2019re from here, but we live in another country.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1345,10 +1345,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_31",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_31",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon grand frère habite en Espagne.",
+      "targetLanguageWord": "Meu irm\u00e3o mais velho mora na Espanha.",
       "englishTranslation": "My older brother lives in Spain.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1361,11 +1361,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_32",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_32",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma tante est malade, je vais lui rendre visite.",
-      "englishTranslation": "My aunt is sick, I’m going to visit her.",
+      "targetLanguageWord": "Minha tia est\u00e1 doente, vou visit\u00e1-la.",
+      "englishTranslation": "My aunt is sick, I\u2019m going to visit her.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1377,10 +1377,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_33",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_33",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ce garçon est très intelligent.",
+      "targetLanguageWord": "Esse menino \u00e9 muito inteligente.",
       "englishTranslation": "This boy is very smart.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1393,10 +1393,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_34",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_34",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma nièce est très affectueuse.",
+      "targetLanguageWord": "Minha sobrinha \u00e9 muito carinhosa.",
       "englishTranslation": "My niece is very affectionate.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1409,11 +1409,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_35",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_35",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Je ne suis pas de bonne humeur aujourd'hui.",
-      "englishTranslation": "I’m not in a good mood today.",
+      "targetLanguageWord": "Hoje eu n\u00e3o estou de bom humor.",
+      "englishTranslation": "I\u2019m not in a good mood today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1425,10 +1425,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_36",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_36",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Tu es très jolie avec cette robe.",
+      "targetLanguageWord": "Voc\u00ea est\u00e1 muito bonita com esse vestido.",
       "englishTranslation": "You look very pretty in that dress.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1441,10 +1441,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_37",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_37",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ils sont très différents.",
+      "targetLanguageWord": "Eles s\u00e3o muito diferentes.",
       "englishTranslation": "They are very different.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1457,10 +1457,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_38",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_38",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Il est sérieux, mais elle est très bavarde.",
+      "targetLanguageWord": "Ele \u00e9 s\u00e9rio, mas ela \u00e9 muito falante.",
       "englishTranslation": "He is serious, but she is very talkative.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1473,10 +1473,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_39",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_39",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Nous sommes amis depuis l'école.",
+      "targetLanguageWord": "Somos amigos desde a escola.",
       "englishTranslation": "We have been friends since school.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1489,10 +1489,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_40",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_40",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Je veux rencontrer ta famille.",
+      "targetLanguageWord": "Quero conhecer a sua fam\u00edlia.",
       "englishTranslation": "I want to meet your family.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1505,10 +1505,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_41",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_41",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mon nom de famille est très courant.",
+      "targetLanguageWord": "Meu sobrenome \u00e9 muito comum.",
       "englishTranslation": "My last name is very common.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1521,10 +1521,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_42",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_42",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Comment ça s'écrit, ton prénom ?",
+      "targetLanguageWord": "Como se escreve o seu nome?",
       "englishTranslation": "How do you spell your name?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1537,10 +1537,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_43",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_43",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Il est toujours de bonne humeur.",
+      "targetLanguageWord": "Ele est\u00e1 sempre de bom humor.",
       "englishTranslation": "He is always in a good mood.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1553,10 +1553,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_44",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_44",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui tu es très silencieux.",
+      "targetLanguageWord": "Hoje voc\u00ea est\u00e1 muito calado.",
       "englishTranslation": "You are very quiet today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1569,10 +1569,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_45",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_45",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mes parents sont en vacances.",
+      "targetLanguageWord": "Meus pais est\u00e3o de f\u00e9rias.",
       "englishTranslation": "My parents are on vacation.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1585,10 +1585,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_46",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_46",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Leur maison est loin d'ici.",
+      "targetLanguageWord": "A casa deles \u00e9 longe daqui.",
       "englishTranslation": "Their house is far from here.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1601,10 +1601,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_47",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_47",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Cette fille est ma collègue de travail.",
+      "targetLanguageWord": "Essa garota \u00e9 minha colega de trabalho.",
       "englishTranslation": "That girl is my coworker.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1617,10 +1617,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_48",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_48",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ce monsieur est notre nouveau voisin.",
+      "targetLanguageWord": "Esse senhor \u00e9 nosso novo vizinho.",
       "englishTranslation": "This man is our new neighbor.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1633,11 +1633,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_49",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_49",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ce n'est pas mon copain, c'est juste un ami.",
-      "englishTranslation": "He’s not my boyfriend, he’s just a friend.",
+      "targetLanguageWord": "Ele n\u00e3o \u00e9 meu namorado, \u00e9 s\u00f3 um amigo.",
+      "englishTranslation": "He\u2019s not my boyfriend, he\u2019s just a friend.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1649,10 +1649,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_50",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_50",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Ma belle-famille est très grande.",
+      "targetLanguageWord": "Minha fam\u00edlia por parte do c\u00f4njuge \u00e9 muito grande.",
       "englishTranslation": "My in-laws are very big/family is very big.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1665,10 +1665,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_51",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_51",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Nous sommes cinq à la maison.",
+      "targetLanguageWord": "Somos cinco em casa.",
       "englishTranslation": "There are five of us at home.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1681,10 +1681,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138454712_52",
-      "deckId": "1762138454712",
+      "id": "card_pt_1762312456825_52",
+      "deckId": "1762313790004",
       "type": "translate",
-      "targetLanguageWord": "Mes parents sont à la retraite.",
+      "targetLanguageWord": "Meus pais est\u00e3o aposentados.",
       "englishTranslation": "My parents are retired.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1697,10 +1697,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_1",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_1",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Pouvez-vous m'apporter une bouteille d'eau, s'il vous plaît ?",
+      "targetLanguageWord": "Pode me trazer uma garrafa de \u00e1gua, por favor?",
       "englishTranslation": "Could you bring me a bottle of water, please?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1713,10 +1713,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_2",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_2",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Combien ça coûte au total ?",
+      "targetLanguageWord": "Quanto custa no total?",
       "englishTranslation": "How much is it in total?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1729,10 +1729,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_3",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_3",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je voudrais une table pour deux, s'il vous plaît.",
+      "targetLanguageWord": "Eu gostaria de uma mesa para duas pessoas, por favor.",
       "englishTranslation": "I would like a table for two, please.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1745,10 +1745,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_4",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_4",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez un menu en anglais ?",
+      "targetLanguageWord": "Voc\u00eas t\u00eam card\u00e1pio em ingl\u00eas?",
       "englishTranslation": "Do you have a menu in English?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1761,11 +1761,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_5",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_5",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Quel est le plat du jour ?",
-      "englishTranslation": "What is today’s special?",
+      "targetLanguageWord": "Qual \u00e9 o prato do dia?",
+      "englishTranslation": "What is today\u2019s special?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1777,10 +1777,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_6",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_6",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "J'aimerais goûter quelque chose de typique.",
+      "targetLanguageWord": "Eu gostaria de provar algo t\u00edpico.",
       "englishTranslation": "I would like to try something typical.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1793,10 +1793,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_7",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_7",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Pour moi, une soupe et une salade.",
+      "targetLanguageWord": "Para mim, uma sopa e uma salada.",
       "englishTranslation": "For me, a soup and a salad.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1809,10 +1809,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_8",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_8",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Qu'est-ce que vous me conseillez ?",
+      "targetLanguageWord": "O que voc\u00ea me recomenda?",
       "englishTranslation": "What do you recommend?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1825,11 +1825,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_9",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_9",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "C'est très bon, merci.",
-      "englishTranslation": "It’s very tasty, thank you.",
+      "targetLanguageWord": "Est\u00e1 muito gostoso, obrigado.",
+      "englishTranslation": "It\u2019s very tasty, thank you.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1841,10 +1841,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_10",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_10",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "L'addition, s'il vous plaît.",
+      "targetLanguageWord": "A conta, por favor.",
       "englishTranslation": "The check, please.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1857,10 +1857,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_11",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_11",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "On peut payer par carte ?",
+      "targetLanguageWord": "Pode pagar com cart\u00e3o?",
       "englishTranslation": "Can I pay with card?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1873,10 +1873,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_12",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_12",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez quelque chose sans gluten ?",
+      "targetLanguageWord": "Voc\u00eas t\u00eam algo sem gl\u00faten?",
       "englishTranslation": "Do you have anything gluten-free?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1889,11 +1889,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_13",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_13",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je suis allergique aux fruits de mer.",
-      "englishTranslation": "I’m allergic to seafood.",
+      "targetLanguageWord": "Sou al\u00e9rgico a frutos do mar.",
+      "englishTranslation": "I\u2019m allergic to seafood.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1905,11 +1905,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_14",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_14",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je ne mange pas de viande.",
-      "englishTranslation": "I don’t eat meat.",
+      "targetLanguageWord": "Eu n\u00e3o como carne.",
+      "englishTranslation": "I don\u2019t eat meat.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1921,10 +1921,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_15",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_15",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous pouvez m'apporter un peu plus d'eau ?",
+      "targetLanguageWord": "Voc\u00ea pode trazer mais \u00e1gua?",
       "englishTranslation": "Can you bring me more water?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1937,10 +1937,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_16",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_16",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Combien coûtent ces pommes ?",
+      "targetLanguageWord": "Quanto custam estas ma\u00e7\u00e3s?",
       "englishTranslation": "How much do these apples cost?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1953,10 +1953,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_17",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_17",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez quelque chose de moins cher ?",
+      "targetLanguageWord": "Voc\u00ea tem algo mais barato?",
       "englishTranslation": "Do you have something cheaper?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -1969,11 +1969,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_18",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_18",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je regarde seulement, merci.",
-      "englishTranslation": "I’m just looking, thank you.",
+      "targetLanguageWord": "S\u00f3 estou olhando, obrigado.",
+      "englishTranslation": "I\u2019m just looking, thank you.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -1985,10 +1985,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_19",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_19",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Où est la caisse ?",
+      "targetLanguageWord": "Onde fica o caixa?",
       "englishTranslation": "Where is the checkout?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2001,10 +2001,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_20",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_20",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je veux rendre ce produit.",
+      "targetLanguageWord": "Quero devolver este produto.",
       "englishTranslation": "I want to return this product.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2017,11 +2017,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_21",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_21",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Ça me va un peu grand.",
-      "englishTranslation": "It’s a bit big on me.",
+      "targetLanguageWord": "Ficou um pouco grande em mim.",
+      "englishTranslation": "It\u2019s a bit big on me.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2033,10 +2033,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_22",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_22",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez une taille plus petite ?",
+      "targetLanguageWord": "Voc\u00ea tem um tamanho menor?",
       "englishTranslation": "Do you have a smaller size?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2049,11 +2049,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_23",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_23",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je vais le prendre.",
-      "englishTranslation": "I’ll take it.",
+      "targetLanguageWord": "Eu vou levar.",
+      "englishTranslation": "I\u2019ll take it.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2065,10 +2065,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_24",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_24",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Le service est-il compris ?",
+      "targetLanguageWord": "O servi\u00e7o est\u00e1 inclu\u00eddo?",
       "englishTranslation": "Is the service included?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2081,10 +2081,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_25",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_25",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous pouvez me donner un sac ?",
+      "targetLanguageWord": "Voc\u00ea pode me dar uma sacola?",
       "englishTranslation": "Can you give me a bag?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2097,10 +2097,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_26",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_26",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "La soupe est froide.",
+      "targetLanguageWord": "A sopa est\u00e1 fria.",
       "englishTranslation": "The soup is cold.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2113,10 +2113,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_27",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_27",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Ce n'est pas ce que j'avais commandé.",
+      "targetLanguageWord": "Isso n\u00e3o foi o que eu pedi.",
       "englishTranslation": "This is not what I ordered.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2129,10 +2129,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_28",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_28",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Pardon, c'était combien ?",
+      "targetLanguageWord": "Desculpa, quanto que era?",
       "englishTranslation": "Sorry, how much was it?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2145,10 +2145,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_29",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_29",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Y a-t-il une réduction si j'en achète deux ?",
+      "targetLanguageWord": "Tem desconto se eu comprar dois?",
       "englishTranslation": "Is there a discount if I buy two?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2161,11 +2161,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_30",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_30",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je cherche un cadeau pour ma mère.",
-      "englishTranslation": "I’m looking for a gift for my mom.",
+      "targetLanguageWord": "Estou procurando um presente para minha m\u00e3e.",
+      "englishTranslation": "I\u2019m looking for a gift for my mom.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2177,10 +2177,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_31",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_31",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous êtes ouverts le dimanche ?",
+      "targetLanguageWord": "Voc\u00eas abrem aos domingos?",
       "englishTranslation": "Are you open on Sundays?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2193,10 +2193,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_32",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_32",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous fermez à quelle heure ?",
+      "targetLanguageWord": "Voc\u00eas fecham a que horas?",
       "englishTranslation": "What time do you close?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2209,10 +2209,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_33",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_33",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je peux l'essayer ?",
+      "targetLanguageWord": "Posso experimentar?",
       "englishTranslation": "Can I try it on?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2225,10 +2225,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_34",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_34",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez de la monnaie sur 50 ?",
+      "targetLanguageWord": "Voc\u00ea tem troco para 50?",
       "englishTranslation": "Do you have change for 50?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2241,10 +2241,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_35",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_35",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je veux quelque chose à emporter.",
+      "targetLanguageWord": "Quero algo para viagem.",
       "englishTranslation": "I want something to go.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2257,10 +2257,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_36",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_36",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Sur place ou à emporter ?",
+      "targetLanguageWord": "Para comer aqui ou para viagem?",
       "englishTranslation": "For here or to go?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2273,11 +2273,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_37",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_37",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "C'est très cher.",
-      "englishTranslation": "It’s very expensive.",
+      "targetLanguageWord": "Est\u00e1 muito caro.",
+      "englishTranslation": "It\u2019s very expensive.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2289,11 +2289,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_38",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_38",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "C'est en promotion aujourd'hui.",
-      "englishTranslation": "It’s on sale today.",
+      "targetLanguageWord": "Est\u00e1 em promo\u00e7\u00e3o hoje.",
+      "englishTranslation": "It\u2019s on sale today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2305,10 +2305,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_39",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_39",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "J'adore ce restaurant.",
+      "targetLanguageWord": "Eu amo este restaurante.",
       "englishTranslation": "I love this restaurant.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2321,10 +2321,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_40",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_40",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je veux réserver une table pour ce soir.",
+      "targetLanguageWord": "Quero reservar uma mesa para hoje \u00e0 noite.",
       "englishTranslation": "I want to book a table for tonight.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2337,10 +2337,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_41",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_41",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous avez des desserts ?",
+      "targetLanguageWord": "Voc\u00eas t\u00eam sobremesas?",
       "englishTranslation": "Do you have desserts?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2353,10 +2353,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_42",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_42",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Qu'est-ce que c'est ?",
+      "targetLanguageWord": "O que \u00e9 isso?",
       "englishTranslation": "What is this?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2369,10 +2369,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_43",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_43",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "C'est servi avec du riz ou avec des pommes de terre ?",
+      "targetLanguageWord": "Vem com arroz ou com batatas?",
       "englishTranslation": "Does it come with rice or with potatoes?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2385,10 +2385,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_44",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_44",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous pouvez me donner la recette ?",
+      "targetLanguageWord": "Voc\u00ea pode me dar a receita?",
       "englishTranslation": "Can you give me the recipe?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2401,10 +2401,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_45",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_45",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Payez à la caisse, s'il vous plaît.",
+      "targetLanguageWord": "Pague no caixa, por favor.",
       "englishTranslation": "Pay for it at the counter, please.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2417,10 +2417,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_46",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_46",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Le service a été excellent.",
+      "targetLanguageWord": "O atendimento foi excelente.",
       "englishTranslation": "The service was excellent.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2433,10 +2433,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_47",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_47",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Le repas est arrivé très en retard.",
+      "targetLanguageWord": "A comida chegou muito tarde.",
       "englishTranslation": "The food arrived very late.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2449,11 +2449,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_48",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_48",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas d'espèces.",
-      "englishTranslation": "I don’t have cash.",
+      "targetLanguageWord": "Eu n\u00e3o tenho dinheiro em esp\u00e9cie.",
+      "englishTranslation": "I don\u2019t have cash.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2465,10 +2465,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_49",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_49",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Vous acceptez Apple Pay ?",
+      "targetLanguageWord": "Voc\u00eas aceitam Apple Pay?",
       "englishTranslation": "Do you accept Apple Pay?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2481,11 +2481,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_50",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_50",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Il me manque une boisson.",
-      "englishTranslation": "I’m missing a drink.",
+      "targetLanguageWord": "Est\u00e1 faltando uma bebida.",
+      "englishTranslation": "I\u2019m missing a drink.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2497,10 +2497,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_51",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_51",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "C'est combien le kilo ?",
+      "targetLanguageWord": "Quanto \u00e9 o quilo?",
       "englishTranslation": "How much is it per kilo?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2513,10 +2513,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138543701_52",
-      "deckId": "1762138543701",
+      "id": "card_pt_1762312498076_52",
+      "deckId": "1762313791004",
       "type": "translate",
-      "targetLanguageWord": "Je voulais seulement une petite bouteille.",
+      "targetLanguageWord": "Eu queria s\u00f3 uma garrafa pequena.",
       "englishTranslation": "I only wanted a small bottle.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2529,11 +2529,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_1",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_1",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Nous allons sortir à huit heures, tu veux venir ?",
-      "englishTranslation": "We’re going to go out at eight, do you want to come?",
+      "targetLanguageWord": "Vamos sair \u00e0s oito, voc\u00ea quer vir?",
+      "englishTranslation": "We\u2019re going to go out at eight, do you want to come?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2545,10 +2545,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_2",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_2",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Où est l'arrêt de bus le plus proche ?",
+      "targetLanguageWord": "Onde fica o ponto de \u00f4nibus mais perto?",
       "englishTranslation": "Where is the nearest bus stop?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2561,10 +2561,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_3",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_3",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'ai besoin d'un taxi pour l'aéroport.",
+      "targetLanguageWord": "Preciso de um t\u00e1xi para o aeroporto.",
       "englishTranslation": "I need a taxi to the airport.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2577,10 +2577,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_4",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_4",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Ça prend combien de temps jusqu'au centre ?",
+      "targetLanguageWord": "Quanto tempo leva at\u00e9 o centro?",
       "englishTranslation": "How long does it take to get downtown?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2593,11 +2593,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_5",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_5",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je vais voyager demain matin.",
-      "englishTranslation": "I’m going to travel tomorrow morning.",
+      "targetLanguageWord": "Vou viajar amanh\u00e3 de manh\u00e3.",
+      "englishTranslation": "I\u2019m going to travel tomorrow morning.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2609,10 +2609,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_6",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_6",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Le train part à quelle heure ?",
+      "targetLanguageWord": "Que horas o trem sai?",
       "englishTranslation": "What time does the train leave?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2625,10 +2625,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_7",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_7",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Où est-ce que je peux acheter les billets ?",
+      "targetLanguageWord": "Onde posso comprar as passagens?",
       "englishTranslation": "Where can I buy the tickets?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2641,11 +2641,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_8",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_8",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je vais rendre visite à des amis.",
-      "englishTranslation": "I’m going to visit some friends.",
+      "targetLanguageWord": "Vou visitar alguns amigos.",
+      "englishTranslation": "I\u2019m going to visit some friends.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2657,10 +2657,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_9",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_9",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je veux aller à la plage ce week-end.",
+      "targetLanguageWord": "Quero ir \u00e0 praia neste fim de semana.",
       "englishTranslation": "I want to go to the beach this weekend.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2673,10 +2673,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_10",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_10",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "C'est loin d'ici ?",
+      "targetLanguageWord": "\u00c9 longe daqui?",
       "englishTranslation": "Is it far from here?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2689,10 +2689,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_11",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_11",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Allez tout droit puis tournez à droite.",
+      "targetLanguageWord": "Siga em frente e depois vire \u00e0 direita.",
       "englishTranslation": "Go straight ahead and then turn right.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2705,11 +2705,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_12",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_12",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "C'est à deux rues.",
-      "englishTranslation": "It’s two blocks away.",
+      "targetLanguageWord": "Fica a duas quadras.",
+      "englishTranslation": "It\u2019s two blocks away.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2721,11 +2721,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_13",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_13",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je ne sais pas où je suis.",
-      "englishTranslation": "I don’t know where I am.",
+      "targetLanguageWord": "Eu n\u00e3o sei onde estou.",
+      "englishTranslation": "I don\u2019t know where I am.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2737,10 +2737,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_14",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_14",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Vous pouvez me montrer sur le plan ?",
+      "targetLanguageWord": "Voc\u00ea pode me mostrar no mapa?",
       "englishTranslation": "Can you show me on the map?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2753,11 +2753,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_15",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_15",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On va être en retard.",
-      "englishTranslation": "We’re going to be late.",
+      "targetLanguageWord": "Vamos chegar atrasados.",
+      "englishTranslation": "We\u2019re going to be late.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2769,11 +2769,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_16",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_16",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je t'attends à l'entrée.",
-      "englishTranslation": "I’ll wait for you at the entrance.",
+      "targetLanguageWord": "Eu te espero na entrada.",
+      "englishTranslation": "I\u2019ll wait for you at the entrance.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2785,10 +2785,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_17",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_17",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Tu veux aller au cinéma ce soir ?",
+      "targetLanguageWord": "Voc\u00ea quer ir ao cinema hoje \u00e0 noite?",
       "englishTranslation": "Do you want to go to the movies tonight?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2801,11 +2801,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_18",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_18",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Aujourd'hui je ne peux pas, mais demain oui.",
-      "englishTranslation": "I can’t today, but I can tomorrow.",
+      "targetLanguageWord": "Hoje n\u00e3o posso, mas amanh\u00e3 sim.",
+      "englishTranslation": "I can\u2019t today, but I can tomorrow.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2817,10 +2817,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_19",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_19",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'ai un rendez-vous à quatre heures.",
+      "targetLanguageWord": "Tenho uma consulta \u00e0s quatro.",
       "englishTranslation": "I have an appointment at four.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2833,10 +2833,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_20",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_20",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Il y a un bus direct ?",
+      "targetLanguageWord": "Tem \u00f4nibus direto?",
       "englishTranslation": "Is there a direct bus?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2849,10 +2849,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_21",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_21",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'ai raté le train.",
+      "targetLanguageWord": "Perdi o trem.",
       "englishTranslation": "I missed the train.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2865,10 +2865,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_22",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_22",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Mon vol est retardé.",
+      "targetLanguageWord": "Meu voo est\u00e1 atrasado.",
       "englishTranslation": "My flight is delayed.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2881,10 +2881,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_23",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_23",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'ai réservé un hôtel près du centre.",
+      "targetLanguageWord": "Eu reservei um hotel perto do centro.",
       "englishTranslation": "I booked a hotel near the center.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2897,10 +2897,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_24",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_24",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Où est l'office de tourisme ?",
+      "targetLanguageWord": "Onde fica o escrit\u00f3rio de turismo?",
       "englishTranslation": "Where is the tourist office?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2913,10 +2913,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_25",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_25",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je veux découvrir le centre historique.",
+      "targetLanguageWord": "Quero conhecer o centro hist\u00f3rico.",
       "englishTranslation": "I want to see the historic center.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2929,10 +2929,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_26",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_26",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "C'est combien l'entrée ?",
+      "targetLanguageWord": "Quanto custa a entrada?",
       "englishTranslation": "How much is the ticket?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2945,11 +2945,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_27",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_27",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On va faire une excursion demain.",
-      "englishTranslation": "We’re going on a trip tomorrow.",
+      "targetLanguageWord": "Vamos fazer um passeio amanh\u00e3.",
+      "englishTranslation": "We\u2019re going on a trip tomorrow.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2961,10 +2961,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_28",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_28",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Tu peux m'emmener en voiture ?",
+      "targetLanguageWord": "Voc\u00ea pode me dar uma carona?",
       "englishTranslation": "Can you give me a ride in your car?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -2977,11 +2977,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_29",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_29",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas de voiture, je vais en train.",
-      "englishTranslation": "I don’t have a car, I go by train.",
+      "targetLanguageWord": "Eu n\u00e3o tenho carro, vou de trem.",
+      "englishTranslation": "I don\u2019t have a car, I go by train.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -2993,10 +2993,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_30",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_30",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On se voit à quelle heure ?",
+      "targetLanguageWord": "A que horas a gente se v\u00ea?",
       "englishTranslation": "What time are we meeting?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3009,10 +3009,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_31",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_31",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On se voit à sept heures au parc.",
+      "targetLanguageWord": "A gente se v\u00ea \u00e0s sete no parque.",
       "englishTranslation": "See you at seven in the park.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3025,11 +3025,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_32",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_32",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je suis en route.",
-      "englishTranslation": "I’m on my way.",
+      "targetLanguageWord": "Estou a caminho.",
+      "englishTranslation": "I\u2019m on my way.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3041,11 +3041,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_33",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_33",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'arrive dans dix minutes.",
-      "englishTranslation": "I’ll arrive in ten minutes.",
+      "targetLanguageWord": "Chego em dez minutos.",
+      "englishTranslation": "I\u2019ll arrive in ten minutes.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3057,10 +3057,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_34",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_34",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Où est-ce que je peux me garer ?",
+      "targetLanguageWord": "Onde posso estacionar?",
       "englishTranslation": "Where can I park?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3073,10 +3073,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_35",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_35",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Cet endroit est très touristique.",
+      "targetLanguageWord": "Este lugar \u00e9 muito tur\u00edstico.",
       "englishTranslation": "This place is very touristy.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3089,11 +3089,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_36",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_36",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je voudrais une chambre avec vue sur la mer.",
-      "englishTranslation": "I’d like a room with a sea view.",
+      "targetLanguageWord": "Eu gostaria de um quarto com vista para o mar.",
+      "englishTranslation": "I\u2019d like a room with a sea view.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3105,10 +3105,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_37",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_37",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Le petit déjeuner est compris ?",
+      "targetLanguageWord": "O caf\u00e9 da manh\u00e3 est\u00e1 inclu\u00eddo?",
       "englishTranslation": "Is breakfast included?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3121,11 +3121,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_38",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_38",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je vais rester ici une semaine.",
-      "englishTranslation": "I’m going to be here for a week.",
+      "targetLanguageWord": "Vou ficar aqui uma semana.",
+      "englishTranslation": "I\u2019m going to be here for a week.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3137,10 +3137,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_39",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_39",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je peux laisser ma valise ici ?",
+      "targetLanguageWord": "Posso deixar minha mala aqui?",
       "englishTranslation": "Can I leave my suitcase here?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3153,11 +3153,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_40",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_40",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je cherche cette adresse.",
-      "englishTranslation": "I’m looking for this address.",
+      "targetLanguageWord": "Estou procurando este endere\u00e7o.",
+      "englishTranslation": "I\u2019m looking for this address.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3169,10 +3169,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_41",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_41",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Ce bus passe par le centre ?",
+      "targetLanguageWord": "Este \u00f4nibus passa pelo centro?",
       "englishTranslation": "Does this bus go through downtown?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3185,10 +3185,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_42",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_42",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Descendez au prochain arrêt.",
+      "targetLanguageWord": "Des\u00e7a na pr\u00f3xima parada.",
       "englishTranslation": "Get off at the next stop.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3201,10 +3201,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_43",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_43",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Où est la station de métro ?",
+      "targetLanguageWord": "Onde fica a esta\u00e7\u00e3o de metr\u00f4?",
       "englishTranslation": "Where is the subway station?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3217,11 +3217,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_44",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_44",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On va organiser un voyage en décembre.",
-      "englishTranslation": "We’re going to organize a trip in December.",
+      "targetLanguageWord": "Vamos organizar uma viagem em dezembro.",
+      "englishTranslation": "We\u2019re going to organize a trip in December.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3233,10 +3233,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_45",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_45",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je veux changer la date du vol.",
+      "targetLanguageWord": "Quero mudar a data do voo.",
       "englishTranslation": "I want to change the flight date.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3249,11 +3249,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_46",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_46",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je ne trouve pas ma porte d'embarquement.",
-      "englishTranslation": "I can’t find my boarding gate.",
+      "targetLanguageWord": "N\u00e3o encontro meu port\u00e3o de embarque.",
+      "englishTranslation": "I can\u2019t find my boarding gate.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3265,10 +3265,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_47",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_47",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je peux prendre combien de bagages ?",
+      "targetLanguageWord": "Quantas bagagens posso levar?",
       "englishTranslation": "How much luggage can I take?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3281,10 +3281,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_48",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_48",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "J'ai besoin d'un plan de la ville.",
+      "targetLanguageWord": "Preciso de um mapa da cidade.",
       "englishTranslation": "I need a map of the city.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3297,10 +3297,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_49",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_49",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Il y a des visites guidées ?",
+      "targetLanguageWord": "Tem visitas guiadas?",
       "englishTranslation": "Are there guided tours?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3313,11 +3313,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_50",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_50",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "Je suis perdu, vous pouvez m'aider ?",
-      "englishTranslation": "I’m lost, can you help me?",
+      "targetLanguageWord": "Estou perdido, voc\u00ea pode me ajudar?",
+      "englishTranslation": "I\u2019m lost, can you help me?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3329,11 +3329,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138623983_51",
-      "deckId": "1762138623983",
+      "id": "card_pt_1762312689240_51",
+      "deckId": "1762313792004",
       "type": "translate",
-      "targetLanguageWord": "On y va ensemble, c'est plus simple.",
-      "englishTranslation": "Let’s go together, it’s easier.",
+      "targetLanguageWord": "Vamos juntos, \u00e9 mais f\u00e1cil.",
+      "englishTranslation": "Let\u2019s go together, it\u2019s easier.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3345,11 +3345,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_1",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_1",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Hier je n'ai pas pu y aller parce que je travaillais.",
-      "englishTranslation": "Yesterday I couldn’t go because I was working.",
+      "targetLanguageWord": "Ontem eu n\u00e3o pude ir porque eu estava trabalhando.",
+      "englishTranslation": "Yesterday I couldn\u2019t go because I was working.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3361,10 +3361,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_2",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_2",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai perdu ma carte de crédit.",
+      "targetLanguageWord": "Perdi meu cart\u00e3o de cr\u00e9dito.",
       "englishTranslation": "I lost my credit card.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3377,10 +3377,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_3",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_3",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai mal à la tête depuis hier.",
+      "targetLanguageWord": "Estou com dor de cabe\u00e7a desde ontem.",
       "englishTranslation": "My head has been hurting since yesterday.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3393,10 +3393,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_4",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_4",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai besoin d'un rendez-vous chez le médecin.",
+      "targetLanguageWord": "Preciso de uma consulta com o m\u00e9dico.",
       "englishTranslation": "I need an appointment with the doctor.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3409,11 +3409,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_5",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_5",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je ne me sens pas très bien aujourd'hui.",
-      "englishTranslation": "I don’t feel very well today.",
+      "targetLanguageWord": "Hoje eu n\u00e3o estou me sentindo muito bem.",
+      "englishTranslation": "I don\u2019t feel very well today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3425,11 +3425,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_6",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_6",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai perdu mes clés et je ne peux pas entrer.",
-      "englishTranslation": "I lost my keys and I can’t get in.",
+      "targetLanguageWord": "Perdi minhas chaves e n\u00e3o consigo entrar.",
+      "englishTranslation": "I lost my keys and I can\u2019t get in.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3441,10 +3441,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_7",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_7",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai oublié de payer la facture.",
+      "targetLanguageWord": "Eu esqueci de pagar a conta.",
       "englishTranslation": "I forgot to pay the bill.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3457,11 +3457,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_8",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_8",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Internet ne marche pas.",
-      "englishTranslation": "The internet isn’t working.",
+      "targetLanguageWord": "A internet n\u00e3o est\u00e1 funcionando.",
+      "englishTranslation": "The internet isn\u2019t working.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3473,10 +3473,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_9",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_9",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Hier j'ai eu un problème avec la banque.",
+      "targetLanguageWord": "Ontem eu tive um problema com o banco.",
       "englishTranslation": "Yesterday I had a problem with the bank.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3489,10 +3489,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_10",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_10",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai déjà appelé le service technique.",
+      "targetLanguageWord": "Eu j\u00e1 liguei para o suporte t\u00e9cnico.",
       "englishTranslation": "I already called technical support.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3505,11 +3505,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_11",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_11",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "La voiture n'a pas démarré ce matin.",
-      "englishTranslation": "The car didn’t start this morning.",
+      "targetLanguageWord": "O carro n\u00e3o pegou hoje de manh\u00e3.",
+      "englishTranslation": "The car didn\u2019t start this morning.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3521,10 +3521,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_12",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_12",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'avais plus de batterie.",
+      "targetLanguageWord": "A bateria acabou.",
       "englishTranslation": "My battery died.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3537,10 +3537,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_13",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_13",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "On m'a volé mon portefeuille.",
+      "targetLanguageWord": "Roubaram minha carteira.",
       "englishTranslation": "My wallet was stolen.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3553,10 +3553,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_14",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_14",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Où est-ce que je peux faire une déclaration ?",
+      "targetLanguageWord": "Onde posso registrar uma ocorr\u00eancia?",
       "englishTranslation": "Where can I file a report?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3569,11 +3569,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_15",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_15",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Ce n'était pas de ma faute.",
-      "englishTranslation": "It wasn’t my fault.",
+      "targetLanguageWord": "N\u00e3o foi culpa minha.",
+      "englishTranslation": "It wasn\u2019t my fault.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3585,10 +3585,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_16",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_16",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je suis arrivé en retard parce qu'il y avait beaucoup de trafic.",
+      "targetLanguageWord": "Cheguei atrasado porque tinha muito tr\u00e2nsito.",
       "englishTranslation": "I was late because there was a lot of traffic.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3601,11 +3601,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_17",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_17",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas pu y aller parce qu'il pleuvait beaucoup.",
-      "englishTranslation": "I couldn’t go because it was raining a lot.",
+      "targetLanguageWord": "Eu n\u00e3o pude ir porque estava chovendo muito.",
+      "englishTranslation": "I couldn\u2019t go because it was raining a lot.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3617,10 +3617,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_18",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_18",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je suis tombé et je me suis fait mal à la jambe.",
+      "targetLanguageWord": "Eu ca\u00ed e machuquei a perna.",
       "englishTranslation": "I fell and hurt my leg.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3633,10 +3633,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_19",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_19",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Il y a une pharmacie près d'ici ?",
+      "targetLanguageWord": "Tem uma farm\u00e1cia perto daqui?",
       "englishTranslation": "Is there a pharmacy nearby?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3649,10 +3649,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_20",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_20",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je dois acheter des médicaments.",
+      "targetLanguageWord": "Eu preciso comprar rem\u00e9dios.",
       "englishTranslation": "I need to buy medicine.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3665,10 +3665,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_21",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_21",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Vous pouvez répéter l'adresse ?",
+      "targetLanguageWord": "Voc\u00ea pode repetir o endere\u00e7o?",
       "englishTranslation": "Can you repeat the address?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3681,11 +3681,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_22",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_22",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas bien entendu ce que vous avez dit.",
-      "englishTranslation": "I didn’t hear well what you said.",
+      "targetLanguageWord": "Eu n\u00e3o ouvi direito o que voc\u00ea disse.",
+      "englishTranslation": "I didn\u2019t hear well what you said.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3697,10 +3697,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_23",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_23",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "La semaine dernière je suis allé dans une autre ville.",
+      "targetLanguageWord": "Na semana passada eu viajei para outra cidade.",
       "englishTranslation": "Last week I traveled to another city.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3713,10 +3713,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_24",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_24",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Hier soir on a dîné dans un nouveau restaurant.",
+      "targetLanguageWord": "Ontem \u00e0 noite jantamos em um restaurante novo.",
       "englishTranslation": "Last night we had dinner at a new restaurant.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3729,10 +3729,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_25",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_25",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "L'année dernière j'ai étudié le français en ligne.",
+      "targetLanguageWord": "Ano passado eu estudei espanhol online.",
       "englishTranslation": "Last year I studied Spanish online.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3745,10 +3745,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_26",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_26",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai déjà terminé le travail.",
+      "targetLanguageWord": "Eu j\u00e1 terminei o trabalho.",
       "englishTranslation": "I already finished the work.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3761,11 +3761,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_27",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_27",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai toujours pas reçu le mail.",
-      "englishTranslation": "I still haven’t received the email.",
+      "targetLanguageWord": "Ainda n\u00e3o recebi o e-mail.",
+      "englishTranslation": "I still haven\u2019t received the email.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3777,10 +3777,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_28",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_28",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je t'ai appelé tout à l'heure.",
+      "targetLanguageWord": "Eu te liguei h\u00e1 pouco.",
       "englishTranslation": "I called you a little while ago.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3793,10 +3793,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_29",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_29",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai oublié de répondre à ton message.",
+      "targetLanguageWord": "Eu esqueci de responder sua mensagem.",
       "englishTranslation": "I forgot to reply to your message.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3809,10 +3809,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_30",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_30",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je t'attendais.",
+      "targetLanguageWord": "Eu estava te esperando.",
       "englishTranslation": "I was waiting for you.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3825,11 +3825,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_31",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_31",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je ne savais pas que tu venais.",
-      "englishTranslation": "I didn’t know you were coming.",
+      "targetLanguageWord": "Eu n\u00e3o sabia que voc\u00ea vinha.",
+      "englishTranslation": "I didn\u2019t know you were coming.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3841,10 +3841,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_32",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_32",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je pensais que tu étais déjà parti.",
+      "targetLanguageWord": "Achei que voc\u00ea j\u00e1 tinha sa\u00eddo.",
       "englishTranslation": "I thought you had already left.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3857,11 +3857,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_33",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_33",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je voudrais éclaircir un malentendu.",
-      "englishTranslation": "I’d like to clear up a misunderstanding.",
+      "targetLanguageWord": "Eu gostaria de esclarecer um mal-entendido.",
+      "englishTranslation": "I\u2019d like to clear up a misunderstanding.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3873,11 +3873,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_34",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_34",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Ce n'est pas ce que je voulais dire.",
-      "englishTranslation": "That’s not what I meant to say.",
+      "targetLanguageWord": "N\u00e3o foi isso que eu quis dizer.",
+      "englishTranslation": "That\u2019s not what I meant to say.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3889,10 +3889,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_35",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_35",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je crois qu'il y a une erreur dans la facture.",
+      "targetLanguageWord": "Acho que houve um erro na fatura.",
       "englishTranslation": "I think there was a mistake in the bill.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3905,10 +3905,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_36",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_36",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je peux parler au responsable ?",
+      "targetLanguageWord": "Posso falar com o respons\u00e1vel?",
       "englishTranslation": "Can I speak to the person in charge?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3921,11 +3921,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_37",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_37",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas reçu toute la commande.",
-      "englishTranslation": "I didn’t receive the full order.",
+      "targetLanguageWord": "Eu n\u00e3o recebi o pedido completo.",
+      "englishTranslation": "I didn\u2019t receive the full order.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -3937,10 +3937,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_38",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_38",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "La climatisation est tombée en panne.",
+      "targetLanguageWord": "O ar-condicionado quebrou.",
       "englishTranslation": "The air conditioner broke.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3953,10 +3953,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_39",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_39",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Il n'y avait pas d'eau chaude.",
+      "targetLanguageWord": "N\u00e3o tinha \u00e1gua quente.",
       "englishTranslation": "There was no hot water.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3969,10 +3969,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_40",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_40",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Ils l'ont déjà réparé.",
+      "targetLanguageWord": "Eles j\u00e1 consertaram.",
       "englishTranslation": "They already fixed it.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -3985,10 +3985,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_41",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_41",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Qu'est-ce qui s'est passé hier ?",
+      "targetLanguageWord": "O que aconteceu ontem?",
       "englishTranslation": "What happened yesterday?",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4001,10 +4001,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_42",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_42",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Il est arrivé quelque chose d'inattendu.",
+      "targetLanguageWord": "Aconteceu algo inesperado.",
       "englishTranslation": "Something unexpected happened.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4017,10 +4017,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_43",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_43",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "On m'a dit d'appeler aujourd'hui.",
+      "targetLanguageWord": "Me disseram para ligar hoje.",
       "englishTranslation": "They told me to call today.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4033,10 +4033,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_44",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_44",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "On m'a annulé le rendez-vous.",
+      "targetLanguageWord": "Cancelaram a minha consulta.",
       "englishTranslation": "They canceled my appointment.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4049,11 +4049,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_45",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_45",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je l'ai fait, mais ça n'a pas marché.",
-      "englishTranslation": "I did it, but it didn’t work.",
+      "targetLanguageWord": "Eu fiz, mas n\u00e3o funcionou.",
+      "englishTranslation": "I did it, but it didn\u2019t work.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -4065,10 +4065,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_46",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_46",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'ai déjà tout essayé.",
+      "targetLanguageWord": "Eu j\u00e1 tentei de tudo.",
       "englishTranslation": "I already tried everything.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4081,11 +4081,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_47",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_47",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai pas bien dormi.",
-      "englishTranslation": "I couldn’t sleep well.",
+      "targetLanguageWord": "Eu n\u00e3o dormi bem.",
+      "englishTranslation": "I couldn\u2019t sleep well.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -4097,11 +4097,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_48",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_48",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "J'attends une réponse.",
-      "englishTranslation": "I’m waiting for a reply.",
+      "targetLanguageWord": "Estou esperando uma resposta.",
+      "englishTranslation": "I\u2019m waiting for a reply.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -4113,11 +4113,11 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_49",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_49",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je ne me souviens plus du mot de passe.",
-      "englishTranslation": "I don’t remember the password.",
+      "targetLanguageWord": "Eu n\u00e3o me lembro da senha.",
+      "englishTranslation": "I don\u2019t remember the password.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
       "easeFactor": 2.5,
@@ -4129,10 +4129,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_50",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_50",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Le courant a été coupé hier soir.",
+      "targetLanguageWord": "A luz caiu ontem \u00e0 noite.",
       "englishTranslation": "The power went out last night.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4145,10 +4145,10 @@
       "skipCount": 0
     },
     {
-      "id": "card_fr_1762138711874_51",
-      "deckId": "1762138711874",
+      "id": "card_pt_1762312709819_51",
+      "deckId": "1762313793004",
       "type": "translate",
-      "targetLanguageWord": "Je n'ai plus d'argent.",
+      "targetLanguageWord": "Fiquei sem dinheiro.",
       "englishTranslation": "I ran out of money.",
       "showTargetLanguageFirst": false,
       "imageUrls": [],
@@ -4163,10 +4163,10 @@
   ],
   "decks": [
     {
-      "id": "1762138353251",
-      "name": "Survival & Daily Routines French",
+      "id": "1762313789004",
+      "name": "Survival & Daily Routines Portuguese",
       "description": "Greetings, time, routine verbs, likes/dislikes",
-      "language": "French",
+      "language": "Portuguese",
       "cardCount": 50,
       "createdAt": "2025-10-02T01:15:49.015Z",
       "masteredCards": 0,
@@ -4175,42 +4175,50 @@
       "color": "#3880ff"
     },
     {
-      "id": "1762138454712",
+      "id": "1762313790004",
       "name": "People, Family & Descriptions",
       "description": "Family, physical descriptions, personality, possessions",
-      "language": "French",
+      "language": "Portuguese",
       "cardCount": 50,
       "masteredCards": 0,
+      "newCards": 0,
+      "reviewCards": 0,
       "createdAt": "2025-11-03T01:39:37.534Z",
       "color": "#FF6B6B"
     },
     {
-      "id": "1762138543701",
+      "id": "1762313791004",
       "name": "Food, Restaurants & Shopping",
       "description": "Ordering, quantities, prices, polite requests",
-      "language": "French",
+      "language": "Portuguese",
       "cardCount": 50,
       "masteredCards": 0,
+      "newCards": 0,
+      "reviewCards": 0,
       "createdAt": "2025-11-03T01:40:52.033Z",
       "color": "#4ECDC4"
     },
     {
-      "id": "1762138623983",
+      "id": "1762313792004",
       "name": "Going Places: Travel, Directions & Plans",
-      "description": "Transportation, future/near future, invitations, appointments, location questions",
-      "language": "French",
+      "description": "Transportation, future, invitations, appointments, location questions",
+      "language": "Portuguese",
       "cardCount": 50,
       "masteredCards": 0,
+      "newCards": 0,
+      "reviewCards": 0,
       "createdAt": "2025-11-03T01:42:01.902Z",
       "color": "#4ECDC4"
     },
     {
-      "id": "1762138711874",
+      "id": "1762313793004",
       "name": "Problems, Past Events & Real Life",
       "description": "Common problems, at the doctor/bank/hotel, excuses, clarifying",
-      "language": "French",
+      "language": "Portuguese",
       "cardCount": 50,
       "masteredCards": 0,
+      "newCards": 0,
+      "reviewCards": 0,
       "createdAt": "2025-11-03T01:43:26.132Z",
       "color": "#FF6B6B"
     }

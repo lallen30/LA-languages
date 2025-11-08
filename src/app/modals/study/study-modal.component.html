@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Study Settings</ion-title>
+    <ion-title>{{ 'settings.studySettings' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" aria-label="Close">
         <ion-icon name="close"></ion-icon>
@@ -13,7 +13,7 @@
     <ion-item lines="full">
       <ion-icon name="layers" slot="start"></ion-icon>
       <div class="item-content-wrapper">
-        <ion-label>Max cards per session</ion-label>
+        <ion-label>{{ 'settings.maxCardsPerSession' | translate }}</ion-label>
         <input
           type="number"
           inputmode="numeric"
@@ -29,17 +29,17 @@
     <ion-item lines="full">
       <ion-icon name="image" slot="start"></ion-icon>
       <ion-label>
-        <h2>Picture Word Cards</h2>
-        <p>Choose what to show first</p>
+        <h2>{{ 'settings.pictureWordCards' | translate }}</h2>
+        <p>{{ 'settings.chooseWhatToShow' | translate }}</p>
       </ion-label>
       <ion-select
         [(ngModel)]="settings.pictureWordDisplay"
         (ionChange)="pictureWordDisplayChange.emit()"
         interface="popover"
         placeholder="Select display mode">
-        <ion-select-option value="images-first">Images First</ion-select-option>
-        <ion-select-option value="word-first">Word First</ion-select-option>
-        <ion-select-option value="random">Random</ion-select-option>
+        <ion-select-option value="images-first">{{ 'settings.imagesFirst' | translate }}</ion-select-option>
+        <ion-select-option value="word-first">{{ 'settings.wordFirst' | translate }}</ion-select-option>
+        <ion-select-option value="random">{{ 'settings.random' | translate }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>

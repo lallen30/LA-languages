@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angu
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-study-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, IonicModule, TranslatePipe],
   templateUrl: './study-modal.component.html',
   styleUrls: ['./study-modal.component.scss'],
   encapsulation: ViewEncapsulation.None

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Data</ion-title>
+    <ion-title>{{ 'settings.data' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" aria-label="Close">
         <ion-icon name="close"></ion-icon>
@@ -12,23 +12,36 @@
   <div class="data-buttons">
     <ion-button expand="block" fill="outline" (click)="handleExportData()">
       <ion-icon name="download" slot="start"></ion-icon>
-      Export Data
+      {{ 'settings.exportData' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" (click)="handleImportData()">
       <ion-icon name="cloud-upload" slot="start"></ion-icon>
-      Import Data
+      {{ 'settings.importData' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" color="secondary" (click)="handleImportMultipleDecks()">
       <ion-icon name="add-circle" slot="start"></ion-icon>
-      Import Multiple Decks
+      {{ 'settings.importMultipleDecks' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" color="warning" (click)="handleResetSettings()">
       <ion-icon name="refresh" slot="start"></ion-icon>
-      Reset Settings
+      {{ 'settings.resetSettings' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" color="danger" (click)="handleResetData()">
       <ion-icon name="trash" slot="start"></ion-icon>
-      Delete All Data
+      {{ 'settings.deleteAllData' | translate }}
     </ion-button>
   </div>
 </ion-content>
+
+<ion-footer>
+  <div style="padding: 16px;">
+    <ion-button 
+      expand="block" 
+      (click)="close()" 
+      [style.--background]="buttonBackground"
+      [style.--color]="buttonText">
+      <ion-icon name="checkmark" slot="start"></ion-icon>
+      {{ 'settings.done' | translate }}
+    </ion-button>
+  </div>
+</ion-footer>

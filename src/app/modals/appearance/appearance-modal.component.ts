@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { ColorPickerOverlayService } from '../../services/color-picker-overlay.service';
 import { StorageService } from '../../services/storage.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-appearance-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [CommonModule, FormsModule, IonicModule, TranslatePipe],
   templateUrl: './appearance-modal.component.html',
   styleUrls: ['./appearance-modal.component.scss']
 })
@@ -81,7 +83,8 @@ export class AppearanceModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private colorPickerOverlayService: ColorPickerOverlayService,
     private storageService: StorageService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private translationService: TranslationService
   ) {}
 
   async ngOnInit() {
@@ -156,8 +159,9 @@ export class AppearanceModalComponent implements OnInit {
     this.darkModeChange.emit();
     console.log('Change event emitted');
     
+    const status = this.settings.darkMode ? this.translationService.t('common.yes') : this.translationService.t('common.no');
     await this.showToast(
-      `Dark mode ${this.settings.darkMode ? 'enabled' : 'disabled'}`,
+      `${this.translationService.t('settings.darkMode')}: ${status}`,
       'success'
     );
     console.log('=== DARK MODE CHANGE COMPLETE ===');
@@ -166,8 +170,11 @@ export class AppearanceModalComponent implements OnInit {
   async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {
     const currentColor = (this.currentColorScheme as any)[colorKey];
     
+    // Get the translated color name based on the colorKey
+    const translatedColorName = this.getTranslatedColorName(colorKey);
+    
     try {
-      const result = await this.colorPickerOverlayService.open(colorName, currentColor);
+      const result = await this.colorPickerOverlayService.open(translatedColorName, currentColor);
       
       if (result.saved && result.color) {
         const newColor = result.color;
@@ -184,12 +191,46 @@ export class AppearanceModalComponent implements OnInit {
         
         // Apply colors immediately
         this.applyColors();
-        await this.showToast(`${colorName} updated to ${newColor}`, 'success');
+        await this.showToast(`${translatedColorName} ${this.translationService.t('settings.colorUpdated')} ${newColor}`, 'success');
       }
     } catch (error) {
       console.error('Error opening color picker:', error);
-      await this.showToast('Error opening color picker', 'danger');
+      await this.showToast(this.translationService.t('settings.errorColorPicker'), 'danger');
     }
+  }
+
+  getTranslatedColorName(colorKey: string): string {
+    // Map color keys to translation keys
+    const colorKeyMap: { [key: string]: string } = {
+      'primary': 'settings.primaryColor',
+      'secondary': 'settings.secondaryColor',
+      'tertiary': 'settings.tertiaryColor',
+      'background': 'settings.pageBackground',
+      'cardBackground': 'settings.cardBackground',
+      'itemBackground': 'settings.itemBackground',
+      'textPrimary': 'settings.primaryText',
+      'textSecondary': 'settings.secondaryText',
+      'cardText': 'settings.cardText',
+      'itemText': 'settings.itemText',
+      'buttonBackground': 'settings.buttonBackground',
+      'buttonText': 'settings.buttonText',
+      'outlinedButtonColor': 'settings.outlinedButton',
+      'headerBackground': 'settings.headerBackground',
+      'headerText': 'settings.headerText',
+      'footerBackground': 'settings.footerBackground',
+      'footerText': 'settings.footerText',
+      'hardButtonBackground': 'settings.hardButtonBg',
+      'hardButtonText': 'settings.hardButtonTxt',
+      'goodButtonBackground': 'settings.goodButtonBg',
+      'goodButtonText': 'settings.goodButtonTxt',
+      'easyButtonBackground': 'settings.easyButtonBg',
+      'easyButtonText': 'settings.easyButtonTxt',
+      'incorrectButtonBackground': 'settings.incorrectButtonBg',
+      'incorrectButtonText': 'settings.incorrectButtonTxt'
+    };
+    
+    const translationKey = colorKeyMap[colorKey];
+    return translationKey ? this.translationService.t(translationKey) : colorKey;
   }
 
   resetColors() {
@@ -255,7 +296,7 @@ export class AppearanceModalComponent implements OnInit {
     }
     
     this.switchColorScheme();
-    this.showToast('Colors reset to default!', 'success');
+    this.showToast(this.translationService.t('settings.colorsReset'), 'success');
   }
 
   applyColors() {
