@@ -54,6 +54,9 @@ export class DecksPage implements OnInit {
   // Prevent selectedDeck from being cleared by action sheet dismissal while editing
   private lockSelectedDeck = false;
   
+  // Dark mode state
+  isDarkMode = false;
+  
   // Action sheet states
   isDeckActionSheetOpen = false;
   isAddCardActionSheetOpen = false;
@@ -123,6 +126,9 @@ export class DecksPage implements OnInit {
   }
 
   async ngOnInit() {
+    // Check dark mode state
+    this.isDarkMode = document.body.classList.contains('dark');
+    
     await this.initializeDecksPage();
     this.checkForReturnedData();
   }
@@ -810,21 +816,27 @@ export class DecksPage implements OnInit {
         text: this.translationService.t('decks.fillInBlank'),
         icon: 'create-outline',
         handler: () => {
-          this.addCardType('fill-blank');
+          console.log('🟢 Fill-in-Blank card action tapped');
+          this.isAddCardActionSheetOpen = false;
+          setTimeout(() => this.ngZone.run(() => this.addCardType('fill-blank')), 400);
         }
       },
       {
         text: this.translationService.t('decks.pictureWord'),
         icon: 'add-outline',
         handler: () => {
-          this.addCardType('picture');
+          console.log('🟢 Picture Word card action tapped');
+          this.isAddCardActionSheetOpen = false;
+          setTimeout(() => this.ngZone.run(() => this.addCardType('picture')), 400);
         }
       },
       {
         text: this.translationService.t('decks.translate'),
         icon: 'library-outline',
         handler: () => {
-          this.addCardType('translate');
+          console.log('🟢 Translate card action tapped');
+          this.isAddCardActionSheetOpen = false;
+          setTimeout(() => this.ngZone.run(() => this.addCardType('translate')), 400);
         }
       },
       {
@@ -935,15 +947,37 @@ export class DecksPage implements OnInit {
     
     // Use native prompts directly for iOS compatibility
     const sentence = prompt('Complete sentence (e.g., "El gato está en la mesa"):');
-    if (sentence) {
-      const missingWord = prompt('Missing word (e.g., "gato"):');
-      if (missingWord) {
-        const translation = prompt('English translation:');
-        if (translation) {
-          await this.saveFillBlankCard(sentence, missingWord, translation);
-        }
-      }
+    console.log('📝 Sentence entered:', sentence);
+    if (sentence === null) {
+      console.log('📝 User cancelled sentence prompt');
+      return;
     }
+    if (!sentence.trim()) {
+      console.log('📝 Empty sentence, aborting');
+      return;
+    }
+    
+    const missingWord = prompt('Missing word (e.g., "gato"):');
+    console.log('📝 Missing word entered:', missingWord);
+    if (missingWord === null) {
+      console.log('📝 User cancelled missing word prompt');
+      return;
+    }
+    if (!missingWord.trim()) {
+      console.log('📝 Empty missing word, aborting');
+      return;
+    }
+    
+    // English translation is optional - user can cancel or leave empty
+    const translation = prompt('English translation (optional):');
+    console.log('📝 Translation entered:', translation);
+    // Only abort if user explicitly cancelled (null), not if they left it empty
+    if (translation === null) {
+      console.log('📝 User cancelled translation prompt, but still saving card without translation');
+    }
+    
+    // Save the card with whatever translation was provided (or empty string)
+    await this.saveFillBlankCard(sentence.trim(), missingWord.trim(), (translation || '').trim());
   }
 
   async createPictureWordCard(deck: any) {

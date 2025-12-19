@@ -10,23 +10,45 @@
 </ion-header>
 
 <ion-content>
-  <!-- IonAlert: Native Language picker -->
-  <ion-alert
+  <!-- Action Sheet: Native Language picker -->
+  <ion-action-sheet
     [isOpen]="isNativeLangAlertOpen"
     [header]="'settings.nativeLanguage' | translate"
-    [inputs]="languageInputs"
     [buttons]="nativeLangButtons"
     (didDismiss)="onNativeLangAlertDidDismiss($event)">
-  </ion-alert>
+  </ion-action-sheet>
 
-  <!-- IonAlert: Target Language picker -->
-  <ion-alert
+  <!-- Action Sheet: Target Language picker -->
+  <ion-action-sheet
     [isOpen]="isTargetLangAlertOpen"
     [header]="'settings.targetLanguage' | translate"
-    [inputs]="languageInputs"
     [buttons]="targetLangButtons"
     (didDismiss)="onTargetLangAlertDidDismiss($event)">
-  </ion-alert>
+  </ion-action-sheet>
+
+  <!-- Action Sheet: Spanish Dialect picker -->
+  <ion-action-sheet
+    [isOpen]="isDialectPickerOpen"
+    header="Spanish Dialect"
+    [buttons]="dialectButtons"
+    (didDismiss)="isDialectPickerOpen = false">
+  </ion-action-sheet>
+
+  <!-- Action Sheet: Voice Gender picker -->
+  <ion-action-sheet
+    [isOpen]="isGenderPickerOpen"
+    header="Voice Gender"
+    [buttons]="genderButtons"
+    (didDismiss)="isGenderPickerOpen = false">
+  </ion-action-sheet>
+
+  <!-- Action Sheet: Voice picker -->
+  <ion-action-sheet
+    [isOpen]="isVoicePickerOpen"
+    header="Select Voice"
+    [buttons]="voiceButtons"
+    (didDismiss)="isVoicePickerOpen = false">
+  </ion-action-sheet>
 
   <ion-list>
     <!-- Native Language: Language for app interface -->
@@ -47,15 +69,66 @@
       </ion-label>
     </ion-item>
 
-    <ion-item lines="full">
-      <ion-icon name="volume-high" slot="start"></ion-icon>
-      <ion-label>{{ 'settings.autoSpeak' | translate }}</ion-label>
+    <!-- Spanish Voice Settings (only show if Spanish is selected) -->
+    <ion-item-group *ngIf="isSpanishSelected()">
+      <ion-item-divider color="light" style="padding-left: 56px;">
+        <ion-label>
+          <strong>Spanish Voice Options</strong>
+        </ion-label>
+      </ion-item-divider>
+
+      <!-- Spanish Dialect -->
+      <ion-item button detail (click)="presentSpanishDialectPicker()" lines="inset">
+        <ion-icon name="globe-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Spanish Dialect</h3>
+          <p>{{ getDialectName(settings?.spanishDialect) }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Voice Gender -->
+      <ion-item button detail (click)="presentVoiceGenderPicker()" lines="inset">
+        <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Voice Gender</h3>
+          <p>{{ settings?.spanishVoiceGender === 'male' ? 'Male' : 'Female' }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Specific Voice -->
+      <ion-item button detail (click)="presentVoicePicker()" lines="none">
+        <ion-icon name="mic-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h3>Voice</h3>
+          <p>{{ getVoiceDisplayName(settings?.spanishVoiceName) }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item lines="inset">
+      <ion-icon name="repeat" slot="start"></ion-icon>
+      <ion-label>Auto-speak on card flip</ion-label>
       <div class="custom-toggle-wrapper" slot="end">
         <label class="custom-toggle">
           <input 
             type="checkbox" 
             [(ngModel)]="settings.autoSpeak"
             (ngModelChange)="onAutoSpeakToggle($event)"
+          />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-icon name="volume-high" slot="start"></ion-icon>
+      <ion-label>Auto-speak on card load</ion-label>
+      <div class="custom-toggle-wrapper" slot="end">
+        <label class="custom-toggle">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="settings.autoSpeakOnLoad"
+            (ngModelChange)="onAutoSpeakOnLoadToggle($event)"
           />
           <span class="toggle-slider"></span>
         </label>

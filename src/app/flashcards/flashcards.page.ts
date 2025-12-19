@@ -48,6 +48,7 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   sessionProgress = { completed: 0, total: 0, percentage: 0 };
   isSessionActive = false;
   autoSpeakEnabled = false;
+  autoSpeakOnLoadEnabled = false;
   
   private subscriptions: Subscription[] = [];
 
@@ -82,9 +83,11 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    // Load auto-speak setting
+    // Load auto-speak settings
     this.autoSpeakEnabled = await this.storageService.getSetting('autoSpeak', false);
+    this.autoSpeakOnLoadEnabled = await this.storageService.getSetting('autoSpeakOnLoad', false);
     console.log('DEBUG: Loaded autoSpeakEnabled setting:', this.autoSpeakEnabled);
+    console.log('DEBUG: Loaded autoSpeakOnLoadEnabled setting:', this.autoSpeakOnLoadEnabled);
 
     // Handle query parameters for deck selection (from Study button)
     this.route.queryParams.subscribe(params => {
@@ -102,13 +105,26 @@ export class FlashcardsPage implements OnInit, OnDestroy {
 
     // Subscribe to current card
     this.subscriptions.push(
-      this.cardService.currentCard$.subscribe(card => {
+      this.cardService.currentCard$.subscribe(async card => {
         const wasSessionActive = this.isSessionActive;
         this.currentCard = card;
         this.isFlipped = false;
         this.showTranslation = false;
         this.showReviewButtons = !!card;
         this.updateSessionStatus();
+        
+        // Auto-speak on card load if enabled (check storage directly for latest value)
+        if (card) {
+          const autoSpeakOnLoad = await this.storageService.getSetting('autoSpeakOnLoad', false);
+          if (autoSpeakOnLoad) {
+            console.log('DEBUG: Auto-speak on load enabled, playing audio');
+            setTimeout(() => {
+              this.speak();
+            }, 300);
+          } else {
+            console.log('DEBUG: Auto-speak on load disabled, skipping audio');
+          }
+        }
         
         // Check if session just completed
         if (wasSessionActive && !this.isSessionActive && card === null) {
@@ -137,11 +153,17 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillEnter() {
-    // Refresh autoSpeak setting when user returns to this page (e.g., from Settings)
+    // Refresh autoSpeak settings when user returns to this page (e.g., from Settings)
     const newAutoSpeakSetting = await this.storageService.getSetting('autoSpeak', false);
     if (newAutoSpeakSetting !== this.autoSpeakEnabled) {
       this.autoSpeakEnabled = newAutoSpeakSetting;
-      console.log('DEBUG: AutoSpeak setting refreshed to:', this.autoSpeakEnabled);
+      console.log('DEBUG: AutoSpeak on flip setting refreshed to:', this.autoSpeakEnabled);
+    }
+    
+    const newAutoSpeakOnLoadSetting = await this.storageService.getSetting('autoSpeakOnLoad', false);
+    if (newAutoSpeakOnLoadSetting !== this.autoSpeakOnLoadEnabled) {
+      this.autoSpeakOnLoadEnabled = newAutoSpeakOnLoadSetting;
+      console.log('DEBUG: AutoSpeak on load setting refreshed to:', this.autoSpeakOnLoadEnabled);
     }
   }
 

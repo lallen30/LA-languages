@@ -28,8 +28,8 @@
     opacity: 1 !important;
     position: relative !important;
     z-index: 1000 !important;
-    background: #f8f8f8 !important;
-    border-bottom: 1px solid #c8c7cc !important;
+    background: var(--ion-background-color) !important;
+    border-bottom: 1px solid var(--ion-border-color, #c8c7cc) !important;
     min-height: 44px !important;
     height: auto !important;
     /* Add safe area padding for iOS status bar */
@@ -38,8 +38,8 @@
   }
 
   ion-toolbar {
-    background: #f8f8f8 !important;
-    color: #000 !important;
+    --background: var(--ion-background-color) !important;
+    --color: var(--ion-text-color) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -54,8 +54,9 @@
   ion-title {
     display: block !important;
     text-align: center !important;
-    font-size: 22px !important;
-    color: #000 !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    color: var(--ion-text-color) !important;
     margin: 0 !important;
     opacity: 1 !important;
     visibility: visible !important;

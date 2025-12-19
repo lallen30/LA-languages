@@ -96,9 +96,13 @@ export class SettingsPage implements OnInit, AfterViewInit {
     darkMode: false,
     nativeLanguage: 'en-US',
     ttsLanguage: 'es-ES',
+    spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
+    spanishVoiceGender: 'male' as 'male' | 'female',
+    spanishVoiceName: 'es-ES-Neural2-B',
     ttsRate: 1.0,
     ttsPitch: 1.0,
     autoSpeak: false,
+    autoSpeakOnLoad: false,
     studyReminders: true,
     maxCardsPerSession: 20,
     pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'
@@ -491,9 +495,13 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       this.settings.darkMode = await this.storageService.getSetting('darkMode', false);
       this.settings.nativeLanguage = await this.storageService.getSetting('nativeLanguage', 'en-US');
       this.settings.ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
+      this.settings.spanishDialect = await this.storageService.getSetting('spanishDialect', 'es-ES');
+      this.settings.spanishVoiceGender = await this.storageService.getSetting('spanishVoiceGender', 'male');
+      this.settings.spanishVoiceName = await this.storageService.getSetting('spanishVoiceName', 'es-ES-Neural2-B');
       this.settings.ttsRate = await this.storageService.getSetting('ttsRate', 1.0);
       this.settings.ttsPitch = await this.storageService.getSetting('ttsPitch', 1.0);
       this.settings.autoSpeak = await this.storageService.getSetting('autoSpeak', false);
+      this.settings.autoSpeakOnLoad = await this.storageService.getSetting('autoSpeakOnLoad', false);
       this.settings.studyReminders = await this.storageService.getSetting('studyReminders', true);
       this.settings.maxCardsPerSession = await this.storageService.getSetting('maxCardsPerSession', 20);
       this.settings.pictureWordDisplay = await this.storageService.getSetting('pictureWordDisplay', 'images-first');
@@ -508,6 +516,11 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       this.ttsService.setLanguage(this.settings.ttsLanguage);
       this.ttsService.setRate(this.settings.ttsRate);
       this.ttsService.setPitch(this.settings.ttsPitch);
+      
+      // Set Spanish voice if Spanish is selected
+      if (this.settings.spanishVoiceName && this.settings.ttsLanguage?.startsWith('es-')) {
+        this.ttsService.setSpanishVoice(this.settings.spanishVoiceName);
+      }
     } catch (error) {
       console.error('Error loading settings:', error);
     }
@@ -545,7 +558,13 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
 
   onDarkModeChange() { this.saveSetting('darkMode', this.settings.darkMode); }
   onNativeLanguageChange() { this.saveSetting('nativeLanguage', this.settings.nativeLanguage); }
-  onTtsLanguageChange() { this.saveSetting('ttsLanguage', this.settings.ttsLanguage); }
+  onTtsLanguageChange() { 
+    this.saveSetting('ttsLanguage', this.settings.ttsLanguage);
+    // Update TTS service with selected Spanish voice
+    if (this.settings.spanishVoiceName && this.settings.ttsLanguage?.startsWith('es-')) {
+      this.ttsService.setSpanishVoice(this.settings.spanishVoiceName);
+    }
+  }
   onTtsRateChange() { this.saveSetting('ttsRate', this.settings.ttsRate); }
   onTtsPitchChange() { this.saveSetting('ttsPitch', this.settings.ttsPitch); }
   onAutoSpeakChange() { 
@@ -730,9 +749,13 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       darkMode: false,
       nativeLanguage: 'en-US',
       ttsLanguage: 'es-ES',
+      spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
+      spanishVoiceGender: 'male' as 'male' | 'female',
+      spanishVoiceName: 'es-ES-Neural2-B',
       ttsRate: 1.0,
       ttsPitch: 1.0,
       autoSpeak: false,
+      autoSpeakOnLoad: false,
       studyReminders: true,
       maxCardsPerSession: 20,
       pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'

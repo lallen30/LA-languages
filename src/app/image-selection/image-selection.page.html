@@ -50,6 +50,18 @@
     </div>
   </div>
 
+  <div class="load-more-section" *ngIf="images.length > 0">
+    <ion-button 
+      expand="block" 
+      fill="outline" 
+      (click)="loadMoreImages()"
+      [disabled]="isLoadingMore">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+      <span *ngIf="!isLoadingMore">Load More Images</span>
+      <ion-spinner *ngIf="isLoadingMore" name="crescent"></ion-spinner>
+    </ion-button>
+  </div>
+
   <div class="selection-info" *ngIf="images.length > 0">
     <p>{{ selectedImages.length }} of {{ maxSelection }} images selected</p>
   </div>

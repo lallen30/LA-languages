@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonButtons, IonIcon, IonSpinner, IonItem, IonInput } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { arrowBack, checkmarkCircle, imageOutline, search } from 'ionicons/icons';
+import { arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline } from 'ionicons/icons';
 import { ImageService } from '../services/image.service';
 
 @Component({
@@ -20,11 +20,13 @@ export class ImageSelectionPage implements OnInit {
   selectedImages: string[] = [];
   loading: boolean = false;
   isSearching: boolean = false;
+  isLoadingMore: boolean = false;
   searchTimeout: any;
   maxSelection: number = 4;
+  currentPage: number = 1;
 
   constructor(private router: Router, private imageService: ImageService) {
-    addIcons({ arrowBack, checkmarkCircle, imageOutline, search });
+    addIcons({ arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline });
   }
 
   deckId: string = '';
@@ -137,6 +139,7 @@ export class ImageSelectionPage implements OnInit {
 
     console.log('🔍 Searching for images with term:', this.searchTerm);
     this.isSearching = true;
+    this.currentPage = 1;
     
     try {
       const searchResults = await this.imageService.fetchImages(this.searchTerm.trim(), 12);
@@ -155,4 +158,29 @@ export class ImageSelectionPage implements OnInit {
       this.isSearching = false;
     }
   }
+
+  async loadMoreImages() {
+    if (!this.searchTerm.trim() || this.isLoadingMore) {
+      return;
+    }
+
+    console.log('🔍 Loading more images for:', this.searchTerm);
+    this.isLoadingMore = true;
+    
+    try {
+      // Fetch more images using the current image count
+      const moreResults = await this.imageService.fetchMoreImages(this.searchTerm.trim(), 12, this.images.length);
+      
+      // Filter out duplicates and add new images
+      const newImages = moreResults.filter(img => !this.images.includes(img));
+      this.images = [...this.images, ...newImages];
+      
+      console.log('🔍 Loaded', newImages.length, 'more images. Total:', this.images.length);
+    } catch (error) {
+      console.error('Error loading more images:', error);
+    } finally {
+      this.isLoadingMore = false;
+    }
+  }
 }
+

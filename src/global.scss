@@ -117,6 +117,63 @@ ion-modal.modal-fullscreen ion-content {
 }
 
 /* ============================================================================
+   DARK MODE: Consistent header styling across all pages
+   ============================================================================ */
+body.dark {
+  ion-header {
+    ion-toolbar {
+      --background: var(--ion-background-color, #1e1e1e);
+      --color: var(--ion-text-color, #ffffff);
+      
+      ion-title {
+        color: var(--ion-text-color, #ffffff);
+      }
+      
+      ion-button {
+        --color: var(--ion-text-color, #ffffff);
+      }
+      
+      ion-icon {
+        color: var(--ion-text-color, #ffffff);
+      }
+    }
+  }
+  
+}
+
+/* ============================================================================
+   DARK MODE: Action Sheet styling
+   ============================================================================ */
+ion-action-sheet.dark-action-sheet {
+  --background: #2d2d2d;
+  --button-background: #2d2d2d;
+  --button-color: #007aff;
+  --color: #8e8e93;
+}
+
+ion-action-sheet.dark-action-sheet .action-sheet-group {
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet.dark-action-sheet .action-sheet-title {
+  color: #8e8e93 !important;
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet.dark-action-sheet .action-sheet-button {
+  background: #2d2d2d !important;
+  color: #007aff !important;
+}
+
+ion-action-sheet.dark-action-sheet .action-sheet-button.action-sheet-destructive {
+  color: #ff453a !important;
+}
+
+ion-action-sheet.dark-action-sheet .action-sheet-cancel {
+  background: #3a3a3c !important;
+}
+
+/* ============================================================================
    iOS CRITICAL FIX: Global clickability issue - NUCLEAR OPTION
    ============================================================================ */
 @media (max-width: 768px) {

@@ -1,8 +1,8 @@
 // Header - Compact
 ion-header .header-buttons {
   display: block !important; visibility: visible !important; opacity: 1 !important;
-  position: relative !important; z-index: 1000 !important; background: #f8f8f8 !important;
-  border-bottom: 1px solid #c8c7cc !important; min-height: 44px !important;
+  position: relative !important; z-index: 1000 !important; background: var(--ion-background-color) !important;
+  border-bottom: 1px solid var(--ion-border-color, #c8c7cc) !important; min-height: 44px !important;
   padding-top: env(safe-area-inset-top) !important;
 }
 .header-btn {
@@ -322,8 +322,8 @@ ion-item::part(detail-icon) {
     opacity: 1 !important;
     position: relative !important;
     z-index: 1000 !important;
-    background: #f8f8f8 !important;
-    border-bottom: 1px solid #c8c7cc !important;
+    background: var(--ion-background-color) !important;
+    border-bottom: 1px solid var(--ion-border-color, #c8c7cc) !important;
     min-height: 44px !important;
     height: auto !important;
     /* Add safe area padding for iOS status bar */
@@ -332,8 +332,8 @@ ion-item::part(detail-icon) {
   }
 }
 ion-toolbar {
-    background: #f8f8f8 !important;
-    color: #000 !important;
+    --background: var(--ion-background-color) !important;
+    --color: var(--ion-text-color) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;

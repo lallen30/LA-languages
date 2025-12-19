@@ -9,6 +9,31 @@ export class TtsService {
   private currentLanguage = 'es-MX';
   private speechRate = 1.0;
   private speechPitch = 1.0;
+  private voicesLoaded = false;
+  private useGoogleTTS = true; // Enable Google Cloud TTS for better quality
+  private audioCache: Map<string, string> = new Map(); // Cache audio URLs
+  
+  // Google Cloud TTS API configuration
+  private readonly GOOGLE_TTS_API_KEY = 'AIzaSyBxnchh6HFEe9rp33DgPSdr2DfrJrRXLUA';
+  private readonly GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
+  
+  // Language code mapping for Google Cloud TTS
+  // Available Spanish voices:
+  // Spain: es-ES-Neural2-A (female), es-ES-Neural2-B (male), es-ES-Neural2-C (female), es-ES-Neural2-D (female), es-ES-Neural2-E (female), es-ES-Neural2-F (male)
+  // US: es-US-Neural2-A (female), es-US-Neural2-B (male), es-US-Neural2-C (male)
+  // Latin America: es-US-Studio-B (male - more natural)
+  private readonly languageVoiceMap: { [key: string]: { languageCode: string, name: string } } = {
+    'es-ES': { languageCode: 'es-ES', name: 'es-ES-Neural2-B' }, // Male voice, Spain
+    'es-MX': { languageCode: 'es-US', name: 'es-US-Neural2-B' }, // Male voice, US/Latin America
+    'es-US': { languageCode: 'es-US', name: 'es-US-Neural2-B' }, // Male voice, US/Latin America
+    'en-US': { languageCode: 'en-US', name: 'en-US-Neural2-J' },
+    'en-GB': { languageCode: 'en-GB', name: 'en-GB-Neural2-B' },
+    'fr-FR': { languageCode: 'fr-FR', name: 'fr-FR-Neural2-A' },
+    'pt-BR': { languageCode: 'pt-BR', name: 'pt-BR-Neural2-A' },
+    'pt-PT': { languageCode: 'pt-PT', name: 'pt-PT-Neural2-A' },
+    'de-DE': { languageCode: 'de-DE', name: 'de-DE-Neural2-A' },
+    'it-IT': { languageCode: 'it-IT', name: 'it-IT-Neural2-A' },
+  };
 
   constructor() {
     this.synth = window.speechSynthesis;
@@ -18,41 +43,258 @@ export class TtsService {
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = () => this.loadVoices();
     }
+    
+    // iOS sometimes needs a delay to load voices
+    setTimeout(() => this.loadVoices(), 100);
+    setTimeout(() => this.loadVoices(), 500);
+    setTimeout(() => this.loadVoices(), 1000);
   }
 
   private loadVoices(): void {
-    this.voices = this.synth.getVoices();
+    try {
+      this.voices = this.synth.getVoices();
+      if (this.voices.length > 0) {
+        this.voicesLoaded = true;
+        console.log('TTS: Loaded', this.voices.length, 'browser voices');
+      }
+    } catch (error) {
+      console.warn('TTS: Error loading voices:', error);
+    }
   }
 
   /**
-   * Speak the given text using TTS
+   * Set custom Spanish voice
    */
-  speak(text: string, language?: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!text.trim()) {
-        resolve();
+  setSpanishVoice(voiceName: string): void {
+    // Update the voice map for Spanish languages
+    const dialect = voiceName.startsWith('es-ES') ? 'es-ES' : 'es-US';
+    const languageCode = dialect;
+    
+    this.languageVoiceMap['es-ES'] = { languageCode: 'es-ES', name: voiceName.startsWith('es-ES') ? voiceName : 'es-ES-Neural2-B' };
+    this.languageVoiceMap['es-MX'] = { languageCode: 'es-US', name: voiceName.startsWith('es-US') ? voiceName : 'es-US-Neural2-B' };
+    this.languageVoiceMap['es-US'] = { languageCode: 'es-US', name: voiceName.startsWith('es-US') ? voiceName : 'es-US-Neural2-B' };
+    
+    console.log('TTS: Spanish voice updated to:', voiceName);
+  }
+
+  /**
+   * Speak the given text using Google Cloud TTS (with browser fallback)
+   */
+  async speak(text: string, language?: string): Promise<void> {
+    console.log('🔊 TTS: speak() called with text:', text);
+    console.log('🔊 TTS: useGoogleTTS:', this.useGoogleTTS);
+    
+    if (!text.trim()) {
+      console.log('🔊 TTS: Empty text, returning');
+      return;
+    }
+
+    const lang = language || this.currentLanguage;
+    console.log('🔊 TTS: Language:', lang);
+    console.log('🔊 TTS: Speaking text:', text.substring(0, 50) + (text.length > 50 ? '...' : ''));
+
+    // Try Google Cloud TTS first if enabled
+    if (this.useGoogleTTS) {
+      console.log('🔊 TTS: Attempting Google Cloud TTS');
+      try {
+        await this.speakWithGoogleTTS(text, lang);
+        console.log('🔊 TTS: Google Cloud TTS completed successfully');
         return;
+      } catch (error) {
+        console.error('🔊 TTS: Google Cloud TTS failed, falling back to browser TTS:', error);
+      }
+    } else {
+      console.log('🔊 TTS: Google TTS disabled, using browser TTS');
+    }
+
+    // Fallback to browser TTS
+    console.log('🔊 TTS: Using browser TTS fallback');
+    await this.speakWithBrowserTTS(text, lang);
+  }
+
+  /**
+   * Speak using Google Cloud Text-to-Speech API
+   */
+  private async speakWithGoogleTTS(text: string, language: string): Promise<void> {
+    // Check cache first
+    const cacheKey = `${language}:${text}`;
+    let audioUrl = this.audioCache.get(cacheKey);
+
+    if (!audioUrl) {
+      // Get voice configuration for the language
+      const voiceConfig = this.getGoogleVoiceConfig(language);
+      
+      const requestBody = {
+        input: { text },
+        voice: {
+          languageCode: voiceConfig.languageCode,
+          name: voiceConfig.name,
+        },
+        audioConfig: {
+          audioEncoding: 'MP3',
+          speakingRate: this.speechRate,
+          pitch: (this.speechPitch - 1) * 4, // Convert 0-2 range to -4 to 4
+        },
+      };
+
+      console.log('TTS: Calling Google Cloud TTS API with voice:', voiceConfig.name);
+      console.log('TTS: Request body:', JSON.stringify(requestBody, null, 2));
+      
+      const response = await fetch(`${this.GOOGLE_TTS_URL}?key=${this.GOOGLE_TTS_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log('TTS: API response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('TTS: API error response:', errorText);
+        throw new Error(`Google TTS API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      
+      // Convert base64 audio to blob URL
+      const audioContent = data.audioContent;
+      const audioBlob = this.base64ToBlob(audioContent, 'audio/mp3');
+      audioUrl = URL.createObjectURL(audioBlob);
+      
+      // Cache the audio URL (limit cache size)
+      if (this.audioCache.size > 100) {
+        // Remove oldest entry
+        const firstKey = this.audioCache.keys().next().value;
+        if (firstKey) {
+          const oldUrl = this.audioCache.get(firstKey);
+          if (oldUrl) URL.revokeObjectURL(oldUrl);
+          this.audioCache.delete(firstKey);
+        }
+      }
+      this.audioCache.set(cacheKey, audioUrl);
+    }
+
+    // Play the audio
+    return new Promise((resolve, reject) => {
+      const audio = new Audio(audioUrl);
+      audio.onended = () => {
+        console.log('TTS: Google Cloud TTS playback completed');
+        resolve();
+      };
+      audio.onerror = (e) => {
+        console.error('TTS: Audio playback error:', e);
+        reject(e);
+      };
+      audio.play().catch(reject);
+    });
+  }
+
+  /**
+   * Get Google Cloud TTS voice configuration for a language
+   */
+  private getGoogleVoiceConfig(language: string): { languageCode: string, name: string } {
+    // Try exact match first
+    if (this.languageVoiceMap[language]) {
+      return this.languageVoiceMap[language];
+    }
+    
+    // Try language code only (e.g., 'es' from 'es-ES')
+    const langCode = language.split('-')[0];
+    const matchingKey = Object.keys(this.languageVoiceMap).find(k => k.startsWith(langCode));
+    if (matchingKey) {
+      return this.languageVoiceMap[matchingKey];
+    }
+    
+    // Default to Spanish
+    return this.languageVoiceMap['es-ES'];
+  }
+
+  /**
+   * Convert base64 string to Blob
+   */
+  private base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  }
+
+  /**
+   * Speak using browser's built-in TTS (fallback)
+   */
+  private speakWithBrowserTTS(text: string, language: string): Promise<void> {
+    return new Promise((resolve) => {
+      // Try to load voices if not loaded yet
+      if (!this.voicesLoaded || this.voices.length === 0) {
+        this.loadVoices();
       }
 
       // Cancel any ongoing speech
       this.synth.cancel();
+      
+      // iOS WebView workaround: need a small delay after cancel
+      setTimeout(() => {
+        try {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = language;
+          utterance.rate = this.speechRate;
+          utterance.pitch = this.speechPitch;
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language || this.currentLanguage;
-      utterance.rate = this.speechRate;
-      utterance.pitch = this.speechPitch;
+          // Find the best voice for the language
+          const voice = this.findBestVoice(language);
+          if (voice) {
+            utterance.voice = voice;
+            console.log('TTS: Using browser voice:', voice.name, voice.lang);
+          } else {
+            console.log('TTS: No specific voice found, using default for lang:', language);
+          }
 
-      // Find the best voice for the language
-      const voice = this.findBestVoice(utterance.lang);
-      if (voice) {
-        utterance.voice = voice;
-      }
+          utterance.onend = () => {
+            console.log('TTS: Browser TTS completed');
+            resolve();
+          };
+          
+          utterance.onerror = (event) => {
+            console.error('TTS: Browser TTS error:', event.error);
+            resolve();
+          };
 
-      utterance.onend = () => resolve();
-      utterance.onerror = (event) => reject(event.error);
-
-      this.synth.speak(utterance);
+          this.synth.speak(utterance);
+          
+          // iOS workaround: sometimes speech doesn't start, check and retry
+          setTimeout(() => {
+            if (!this.synth.speaking && !this.synth.pending) {
+              console.log('TTS: Speech may not have started, retrying...');
+              this.synth.speak(utterance);
+            }
+          }, 100);
+          
+        } catch (error) {
+          console.error('TTS: Exception during browser speak:', error);
+          resolve();
+        }
+      }, 50);
     });
+  }
+
+  /**
+   * Enable or disable Google Cloud TTS
+   */
+  setUseGoogleTTS(enabled: boolean): void {
+    this.useGoogleTTS = enabled;
+    console.log('TTS: Google Cloud TTS', enabled ? 'enabled' : 'disabled');
+  }
+
+  /**
+   * Check if Google Cloud TTS is enabled
+   */
+  isGoogleTTSEnabled(): boolean {
+    return this.useGoogleTTS;
   }
 
   /**

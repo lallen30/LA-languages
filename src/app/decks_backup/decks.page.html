@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar mode="md">
     <ion-title>{{ 'decks.title' | translate }}</ion-title>
     <ion-button slot="end" fill="clear" (click)="refreshDecks()">
@@ -74,6 +74,7 @@
     [isOpen]="isDeckActionSheetOpen"
     [header]="'decks.title' | translate"
     [buttons]="deckActionSheetButtons"
+    [cssClass]="isDarkMode ? 'dark-action-sheet' : ''"
     (didDismiss)="setDeckActionSheetOpen(false)">
   </ion-action-sheet>
 
@@ -82,6 +83,7 @@
     [isOpen]="isAddCardActionSheetOpen"
     [header]="'decks.addCard' | translate"
     [buttons]="addCardActionSheetButtons"
+    [cssClass]="isDarkMode ? 'dark-action-sheet' : ''"
     (didDismiss)="setAddCardActionSheetOpen(false)">
   </ion-action-sheet>
 
@@ -90,6 +92,7 @@
     [isOpen]="isCreateDeckActionSheetOpen"
     [header]="'decks.createNewDeck' | translate"
     [buttons]="createDeckActionSheetButtons"
+    [cssClass]="isDarkMode ? 'dark-action-sheet' : ''"
     (didDismiss)="setCreateDeckActionSheetOpen(false)">
   </ion-action-sheet>
 

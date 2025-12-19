@@ -83,6 +83,16 @@
   }
 }
 
+.load-more-section {
+  padding: 0 20px 20px 20px;
+  
+  ion-button {
+    --border-radius: 8px;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
 .selection-info {
   text-align: center;
   padding: 16px;
