@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonButtons, IonIcon, IonSpinner, IonItem, IonInput } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline } from 'ionicons/icons';
+import { arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline, closeCircle } from 'ionicons/icons';
 import { ImageService } from '../services/image.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class ImageSelectionPage implements OnInit {
   currentPage: number = 1;
 
   constructor(private router: Router, private imageService: ImageService) {
-    addIcons({ arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline });
+    addIcons({ arrowBack, checkmarkCircle, imageOutline, search, addCircleOutline, closeCircle });
   }
 
   deckId: string = '';
@@ -67,6 +67,15 @@ export class ImageSelectionPage implements OnInit {
     }
     
     console.log('📱 Currently selected:', this.selectedImages.length, 'images:', this.selectedImages);
+  }
+
+  removeSelectedImage(imageUrl: string) {
+    console.log('📱 Removing selected image:', imageUrl);
+    const index = this.selectedImages.indexOf(imageUrl);
+    if (index > -1) {
+      this.selectedImages.splice(index, 1);
+      console.log('📱 Image removed. Remaining:', this.selectedImages.length);
+    }
   }
 
   isImageSelected(imageUrl: string): boolean {
@@ -146,11 +155,10 @@ export class ImageSelectionPage implements OnInit {
       this.images = searchResults;
       console.log('🔍 Found', this.images.length, 'images for:', this.searchTerm);
       console.log('🔍 First few image URLs:', this.images.slice(0, 3));
+      console.log('🔍 Selected images preserved:', this.selectedImages.length);
       
-      // Clear selected images that are not in the new results
-      this.selectedImages = this.selectedImages.filter(selected => 
-        this.images.includes(selected)
-      );
+      // Keep all selected images even if they're not in the new search results
+      // This allows users to search with different keywords while keeping their selections
     } catch (error) {
       console.error('Error searching for images:', error);
       this.images = [];

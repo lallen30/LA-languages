@@ -32,6 +32,22 @@
         <ion-spinner *ngIf="isSearching" name="crescent"></ion-spinner>
       </ion-button>
     </ion-item>
+
+    <!-- Selected Images Thumbnails -->
+    <div class="selected-thumbnails" *ngIf="selectedImages.length > 0">
+      <div class="thumbnail-label">
+        <strong>Selected Images ({{ selectedImages.length }}/{{ maxSelection }})</strong>
+      </div>
+      <div class="thumbnails-grid">
+        <div class="thumbnail-item" *ngFor="let imageUrl of selectedImages; let i = index">
+          <img [src]="imageUrl" [alt]="'Selected image ' + (i + 1)" />
+          <button class="remove-btn" (click)="removeSelectedImage(imageUrl)">
+            <ion-icon name="close-circle"></ion-icon>
+          </button>
+          <div class="thumbnail-number">{{ i + 1 }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="image-grid" *ngIf="images.length > 0">
