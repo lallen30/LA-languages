@@ -271,6 +271,8 @@ export class SettingsPage implements OnInit, AfterViewInit {
         exportData: () => this.exportData(),
         importData: () => this.importData(),
         importMultipleDecks: () => this.importMultipleDecks(),
+        importMultipleDecksFromUrl: () => this.importMultipleDecksFromUrl(),
+        downloadAndImportMultipleDecks: (url: string) => this.downloadAndImportMultipleDecks(url),
         resetAllSettings: () => this.resetAllSettings()
       };
     }
@@ -742,6 +744,108 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
     };
 
     input.click();
+  }
+
+  async importMultipleDecksFromUrl() {
+    console.log('importMultipleDecksFromUrl called in settings.page.ts');
+    const alert = await this.alertController.create({
+      header: this.translationService.t('settings.importFromUrl'),
+      message: this.translationService.t('settings.enterUrlForDecks'),
+      inputs: [
+        {
+          name: 'url',
+          type: 'url',
+          placeholder: 'https://example.com/decks.json'
+        }
+      ],
+      buttons: [
+        {
+          text: this.translationService.t('common.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translationService.t('settings.importData'),
+          handler: async (data) => {
+            if (data.url && data.url.trim()) {
+              await this.downloadAndImportMultipleDecks(data.url.trim());
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async downloadAndImportMultipleDecks(url: string) {
+    console.log('downloadAndImportMultipleDecks called with URL:', url);
+
+    try {
+      console.log('Starting fetch request to:', url);
+      const response = await fetch(url);
+      console.log('Fetch response received:', response.status, response.ok);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const responseText = await response.text();
+      console.log('Response text received, length:', responseText.length);
+      
+      const data = JSON.parse(responseText);
+      console.log('JSON parsed successfully');
+      console.log('Data structure - has decks:', !!data.decks, 'has cards:', !!data.cards, 'has name:', !!data.name);
+
+      // Handle both single-deck format (name, cards) and multi-deck format (decks, cards)
+      let importData: { decks: any[], cards: any[] };
+      
+      if (data.decks && data.cards) {
+        // Multi-deck format: { decks: [...], cards: [...] }
+        console.log('Detected multi-deck format');
+        importData = data;
+      } else if (data.name && data.cards) {
+        // Single-deck format: { name, description, cards: [...] }
+        console.log('Detected single-deck format, converting to multi-deck format');
+        const deckId = Date.now().toString();
+        const newDeck = {
+          id: deckId,
+          name: data.name,
+          description: data.description || 'Imported deck',
+          cardCount: data.cards.length,
+          masteredCards: 0,
+          newCards: data.cards.length,
+          reviewCards: 0,
+          language: data.language || 'es-ES',
+          createdAt: new Date().toISOString(),
+          color: data.color || '#4CAF50'
+        };
+        const cardsWithDeckId = data.cards.map((card: any, index: number) => ({
+          ...card,
+          deckId: deckId,
+          id: card.id || `${deckId}_${index}`
+        }));
+        importData = {
+          decks: [newDeck],
+          cards: cardsWithDeckId
+        };
+      } else {
+        console.log('Invalid format - missing required fields');
+        await this.showToast(this.translationService.t('settings.invalidFileFormat'), 'danger');
+        return;
+      }
+
+      console.log('Import data prepared:', importData.decks.length, 'decks,', importData.cards.length, 'cards');
+
+      // Directly import without confirmation alert (iOS compatibility)
+      console.log('Importing decks and cards...');
+      await this.storageService.importMultipleDecks(importData);
+      console.log('Import complete!');
+      await this.showToast(`${this.translationService.t('settings.decksImported')}: ${importData.decks.length} deck(s), ${importData.cards.length} card(s)`);
+      window.location.reload();
+    } catch (error) {
+      console.error('URL import failed:', error);
+      await this.showToast(`${this.translationService.t('settings.importFailed')}: ${error instanceof Error ? error.message : 'Unknown error'}`, 'danger');
+    }
   }
 
   private async performReset() {

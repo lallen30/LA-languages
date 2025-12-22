@@ -10,10 +10,8 @@
     <!-- Show title when no session active -->
     <ion-title *ngIf="!isSessionActive">Flashcards</ion-title>
     
-    <!-- Show progress during session -->
-    <ion-title *ngIf="isSessionActive">
-      {{ sessionProgress.completed + 1 }} / {{ sessionProgress.total }}
-    </ion-title>
+    <!-- Show progress during session - size="small" prevents truncation -->
+    <ion-title *ngIf="isSessionActive" size="small">{{ currentCardNumber }}/{{ totalCardsInSession }}</ion-title>
     
     <!-- Header Action Buttons -->
     <ion-buttons slot="end" *ngIf="isSessionActive">

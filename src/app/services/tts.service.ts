@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class TtsService {
   private useGoogleTTS = true; // Enable Google Cloud TTS for better quality
   private audioCache: Map<string, string> = new Map(); // Cache audio URLs
   
-  // Google Cloud TTS API configuration
-  private readonly GOOGLE_TTS_API_KEY = 'AIzaSyBxnchh6HFEe9rp33DgPSdr2DfrJrRXLUA';
-  private readonly GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
+  // Google Cloud TTS API configuration - using environment variables
+  private readonly GOOGLE_TTS_API_KEY = environment.googleApiKey;
+  private readonly GOOGLE_TTS_URL = environment.googleTtsUrl;
   
   // Language code mapping for Google Cloud TTS
   // Available Spanish voices:
@@ -36,21 +37,30 @@ export class TtsService {
   };
 
   constructor() {
-    this.synth = window.speechSynthesis;
-    this.loadVoices();
-    
-    // Load voices when they become available
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = () => this.loadVoices();
+    // Check if SpeechSynthesis is available (not available on Android WebView)
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      this.synth = window.speechSynthesis;
+      this.loadVoices();
+      
+      // Load voices when they become available
+      if (this.synth && this.synth.onvoiceschanged !== undefined) {
+        this.synth.onvoiceschanged = () => this.loadVoices();
+      }
+      
+      // iOS sometimes needs a delay to load voices
+      setTimeout(() => this.loadVoices(), 100);
+      setTimeout(() => this.loadVoices(), 500);
+      setTimeout(() => this.loadVoices(), 1000);
+    } else {
+      console.log('TTS: SpeechSynthesis not available on this platform, using Google TTS only');
+      this.synth = null as any;
     }
-    
-    // iOS sometimes needs a delay to load voices
-    setTimeout(() => this.loadVoices(), 100);
-    setTimeout(() => this.loadVoices(), 500);
-    setTimeout(() => this.loadVoices(), 1000);
   }
 
   private loadVoices(): void {
+    if (!this.synth) {
+      return;
+    }
     try {
       this.voices = this.synth.getVoices();
       if (this.voices.length > 0) {
@@ -229,6 +239,13 @@ export class TtsService {
    */
   private speakWithBrowserTTS(text: string, language: string): Promise<void> {
     return new Promise((resolve) => {
+      // Check if synth is available
+      if (!this.synth) {
+        console.log('TTS: Browser TTS not available, skipping');
+        resolve();
+        return;
+      }
+      
       // Try to load voices if not loaded yet
       if (!this.voicesLoaded || this.voices.length === 0) {
         this.loadVoices();
@@ -301,14 +318,16 @@ export class TtsService {
    * Stop any ongoing speech
    */
   stop(): void {
-    this.synth.cancel();
+    if (this.synth) {
+      this.synth.cancel();
+    }
   }
 
   /**
    * Check if TTS is currently speaking
    */
   isSpeaking(): boolean {
-    return this.synth.speaking;
+    return this.synth ? this.synth.speaking : false;
   }
 
   /**

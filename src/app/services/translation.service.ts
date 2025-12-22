@@ -103,7 +103,10 @@ export class TranslationService {
         // Data modal
         exportData: 'Export Data',
         importData: 'Import Data',
-        importMultipleDecks: 'Import Multiple Decks',
+        importMultipleDecks: 'Import Multiple Decks (File)',
+        importMultipleDecksFromUrl: 'Import Multiple Decks (URL)',
+        importFromUrl: 'Import from URL',
+        enterUrlForDecks: 'Enter the URL of the JSON file containing decks and cards:',
         resetSettings: 'Reset Settings',
         deleteAllData: 'Delete All Data',
         // Toast messages
@@ -320,7 +323,10 @@ export class TranslationService {
         random: 'Aleatorio',
         exportData: 'Exportar Datos',
         importData: 'Importar Datos',
-        importMultipleDecks: 'Importar Múltiples Mazos',
+        importMultipleDecks: 'Importar Múltiples Mazos (Archivo)',
+        importMultipleDecksFromUrl: 'Importar Múltiples Mazos (URL)',
+        importFromUrl: 'Importar desde URL',
+        enterUrlForDecks: 'Ingrese la URL del archivo JSON que contiene mazos y tarjetas:',
         resetSettings: 'Restablecer Configuración',
         deleteAllData: 'Eliminar Todos los Datos',
         unableToOpenModal: 'No se puede abrir el modal',

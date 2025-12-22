@@ -1,3 +1,14 @@
+/* Small title styling for progress counter - centered */
+ion-title[size="small"] {
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
 .session-container {
   padding: 8px;
   padding-bottom: 20px; // Space for bottom action bar
@@ -64,6 +75,8 @@
   margin: 0;
   text-align: center !important;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  background: var(--ion-card-background, #ffffff);
+  border-radius: 12px;
 }
 
 .card-front {
@@ -471,6 +484,11 @@
     /* Ensure title is visible */
     position: relative !important;
     z-index: 1002 !important;
+    /* Prevent truncation */
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    max-width: none !important;
   }
 
   /* Adjust content to account for header */
@@ -486,18 +504,8 @@
   }
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .card-front,
-  .card-back {
-    background: var(--ion-color-dark);
-    color: var(--ion-color-light);
-  }
-  
-  .card-content h2 {
-    color: var(--ion-color-light);
-  }
-}
+// Dark mode support - removed hardcoded overrides to let Appearance settings control colors
+// The --ion-card-background variable from Appearance settings will be used instead
 
 .review-tab-bar {
   position: fixed !important;

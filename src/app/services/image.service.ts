@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -45,9 +46,9 @@ export class ImageService {
     console.log(`Fetching ${count} images from Google Images for "${searchTerm}" starting at index ${startIndex}`);
     
     try {
-      // Google Custom Search API configuration
-      const API_KEY = 'AIzaSyBxnchh6HFEe9rp33DgPSdr2DfrJrRXLUA';
-      const SEARCH_ENGINE_ID = '5274f266a7664491e';
+      // Google Custom Search API configuration - using environment variables
+      const API_KEY = environment.googleApiKey;
+      const SEARCH_ENGINE_ID = environment.googleSearchEngineId;
       
       // Google Custom Search API is now configured and ready to use
       console.log('Using Google Custom Search API for image search');

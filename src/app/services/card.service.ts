@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Card, CardResponse } from '../models/card.model';
 import { Deck } from '../models/deck.model';
 import { SrsService } from './srs.service';
@@ -25,6 +26,17 @@ export class CardService {
   public currentSession$ = this.currentSessionSubject.asObservable();
   public currentCard$ = this.currentCardSubject.asObservable();
   public sessionStats$ = this.sessionStatsSubject.asObservable();
+  
+  // Observable for session progress - derived from sessionStats$
+  public sessionProgress$ = this.sessionStatsSubject.asObservable().pipe(
+    tap(stats => console.log('📊 sessionProgress$ emitting:', stats)),
+    map(stats => ({
+      completed: stats.completedCards || 0,
+      total: stats.totalCards || 0,
+      percentage: stats.totalCards > 0 ? Math.round((stats.completedCards / stats.totalCards) * 100) : 0
+    })),
+    tap(progress => console.log('📊 sessionProgress$ mapped:', progress))
+  );
 
   constructor(
     private srsService: SrsService,
@@ -48,9 +60,18 @@ export class CardService {
   // Clear studied cards set for accurate unique card counting
   this.studiedCardIds.clear();
     
-    const cards = await this.storageService.getCardsByDeck(deckId);
-    console.log('Total cards found for deck:', cards.length);
-    console.log('Card details:', cards.map(c => ({ id: c.id, spanishWord: c.spanishWord, missingWord: c.missingWord, deckId: c.deckId })));
+    const rawCards = await this.storageService.getCardsByDeck(deckId);
+    console.log('Total cards found for deck:', rawCards.length);
+    
+    // Normalize cards - ensure isNew is properly set and dates are Date objects
+    const cards = rawCards.map(c => ({
+      ...c,
+      isNew: c.isNew === true || c.isNew === undefined || c.repetitions === 0,
+      nextReview: c.nextReview ? new Date(c.nextReview) : new Date(),
+      lastReviewed: c.lastReviewed ? new Date(c.lastReviewed) : new Date()
+    }));
+    
+    console.log('Card details:', cards.map(c => ({ id: c.id, missingWord: c.missingWord, deckId: c.deckId, isNew: c.isNew })));
     
     // Get due cards and new cards
     const dueCards = this.srsService.getDueCards(cards);
@@ -195,6 +216,14 @@ export class CardService {
       total,
       percentage: total > 0 ? Math.round((completed / total) * 100) : 0
     };
+  }
+
+  /**
+   * Get total cards in current session (directly from queue + completed)
+   */
+  getTotalCardsInSession(): number {
+    const stats = this.sessionStatsSubject.value;
+    return stats.totalCards || (this.sessionQueue.length + stats.completedCards);
   }
 
   /**

@@ -42,6 +42,18 @@ ion-modal {
   z-index: 10000;
 }
 
+/* Custom session progress counter styling */
+.session-progress-counter {
+  font-weight: 600;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+/* Dark mode support for session progress counter */
+body.dark .session-progress-counter {
+  color: #ffffff !important;
+}
+
 ion-content {
   background: var(--ion-background-color);
   color: var(--ion-text-color);

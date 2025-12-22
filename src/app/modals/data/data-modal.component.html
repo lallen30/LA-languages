@@ -9,7 +9,36 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="data-buttons">
+  <!-- URL Input Section (shown when showUrlInput is true) -->
+  <div *ngIf="showUrlInput" class="url-input-section">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ 'settings.importFromUrl' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ 'settings.enterUrlForDecks' | translate }}</p>
+        <ion-item>
+          <ion-input 
+            type="url" 
+            [(ngModel)]="importUrl" 
+            placeholder="https://example.com/decks.json"
+            [clearInput]="true">
+          </ion-input>
+        </ion-item>
+        <div class="url-buttons">
+          <ion-button fill="outline" (click)="cancelUrlInput()">
+            {{ 'common.cancel' | translate }}
+          </ion-button>
+          <ion-button [disabled]="!importUrl" (click)="submitUrlImport()">
+            {{ 'settings.importData' | translate }}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Main buttons (hidden when URL input is shown) -->
+  <div class="data-buttons" *ngIf="!showUrlInput">
     <ion-button expand="block" fill="outline" (click)="handleExportData()">
       <ion-icon name="download" slot="start"></ion-icon>
       {{ 'settings.exportData' | translate }}
@@ -19,8 +48,12 @@
       {{ 'settings.importData' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" color="secondary" (click)="handleImportMultipleDecks()">
-      <ion-icon name="add-circle" slot="start"></ion-icon>
+      <ion-icon name="documents" slot="start"></ion-icon>
       {{ 'settings.importMultipleDecks' | translate }}
+    </ion-button>
+    <ion-button expand="block" fill="outline" color="secondary" (click)="showUrlInputSection()">
+      <ion-icon name="link" slot="start"></ion-icon>
+      {{ 'settings.importMultipleDecksFromUrl' | translate }}
     </ion-button>
     <ion-button expand="block" fill="outline" color="warning" (click)="handleResetSettings()">
       <ion-icon name="refresh" slot="start"></ion-icon>

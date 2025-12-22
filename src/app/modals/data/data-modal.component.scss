@@ -1,0 +1,32 @@
+.data-buttons {
+  padding: 16px;
+  
+  ion-button {
+    margin-bottom: 12px;
+  }
+}
+
+.url-input-section {
+  padding: 16px;
+  
+  ion-card {
+    margin: 0;
+  }
+  
+  p {
+    margin-bottom: 16px;
+    color: var(--ion-text-color);
+  }
+  
+  ion-item {
+    --background: var(--ion-item-background);
+    margin-bottom: 16px;
+  }
+  
+  .url-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
+}

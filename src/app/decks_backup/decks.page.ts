@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { IonicModule, ActionSheetController, AlertController, ToastController, LoadingController, ModalController } from '@ionic/angular';
+import { IonicModule, ActionSheetController, AlertController, ToastController, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { CardType } from '../models/card.model';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { 
   add, 
   refresh, 
@@ -93,6 +94,7 @@ export class DecksPage implements OnInit {
   constructor(
     private router: Router,
     private ngZone: NgZone,
+    private navCtrl: NavController,
     private actionSheetController: ActionSheetController,
     private alertController: AlertController,
     private toastController: ToastController,
@@ -134,20 +136,15 @@ export class DecksPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    console.log('📱 DecksPage ionViewWillEnter - reloading deck counts');
+    console.log('📱 DecksPage ionViewWillEnter - reloading all decks');
     
     // Reload the selected language from settings
     await this.loadSelectedLanguage();
     
-    // Reload card counts for all decks to ensure UI is up to date
-    for (const deck of this.filteredDecks) {
-      const cards = await this.storageService.getCardsByDeck(deck.id);
-      deck.cardCount = cards.length;
-      console.log(`📚 Refreshed deck "${deck.name}" - ${cards.length} cards`);
-    }
+    // Reload ALL decks from storage (in case new decks were imported)
+    await this.loadAndFilterDecks();
     
-    // Trigger change detection by creating new array reference
-    this.filteredDecks = [...this.filteredDecks];
+    console.log(`📚 Loaded ${this.filteredDecks.length} decks after ionViewWillEnter`);
     
     this.checkForReturnedData();
   }
@@ -187,14 +184,9 @@ export class DecksPage implements OnInit {
     const ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
     console.log('📚 Loaded ttsLanguage from settings:', ttsLanguage);
     
-    // Only update if language changed
-    if (this.selectedLanguage !== ttsLanguage) {
-      this.selectedLanguage = ttsLanguage;
-      console.log('📚 Language changed to:', this.selectedLanguage);
-      
-      // Reload decks from storage and filter by language
-      await this.loadAndFilterDecks();
-    }
+    // Always update the selected language
+    this.selectedLanguage = ttsLanguage;
+    console.log('📚 Selected language set to:', this.selectedLanguage);
   }
 
   async loadAndFilterDecks() {
@@ -207,7 +199,7 @@ export class DecksPage implements OnInit {
       
       // Filter decks by selected language
       this.filteredDecks = this.decks.filter(deck => {
-        // Map language codes to language names
+        // Map language codes to language names (bidirectional)
         const languageMap: { [key: string]: string } = {
           'es-ES': 'Spanish',
           'fr-FR': 'French',
@@ -218,9 +210,10 @@ export class DecksPage implements OnInit {
         };
         
         const languageName = languageMap[this.selectedLanguage];
-        console.log(`📚 Checking deck "${deck.name}" with language "${deck.language}" against selected "${languageName}"`);
+        console.log(`📚 Checking deck "${deck.name}" with language "${deck.language}" against selected "${languageName}" (code: ${this.selectedLanguage})`);
         
-        return deck.language === languageName;
+        // Match by language name OR language code
+        return deck.language === languageName || deck.language === this.selectedLanguage;
       });
       
       console.log('📚 Filtered decks for language', this.selectedLanguage, ':', this.filteredDecks);
@@ -253,31 +246,10 @@ export class DecksPage implements OnInit {
         this.decks = storedDecks;
         await this.loadAndFilterDecks();
       } else {
-        // Fallback to mock data if no decks exist
-        console.log('📚 No decks found, creating default deck');
-        const defaultDeck: Deck = {
-          id: '1',
-          name: 'Spanish Basics',
-          description: 'Essential Spanish phrases for beginners',
-          language: 'Spanish',
-          cardCount: 0,
-          createdAt: new Date(),
-          masteredCards: 0,
-          newCards: 0,
-          reviewCards: 0,
-          color: '#3880ff'
-        };
-        
-        // Save the default deck to storage
-        await this.storageService.saveDeck(defaultDeck);
-        
-        // Update card count for default deck
-        const cards = await this.storageService.getCardsByDeck(defaultDeck.id);
-        defaultDeck.cardCount = cards.length;
-        
-        this.decks = [defaultDeck];
-        // Filter the default deck by language
-        await this.loadAndFilterDecks();
+        // No decks exist - start with empty list
+        console.log('📚 No decks found, starting with empty deck list');
+        this.decks = [];
+        this.filteredDecks = [];
       }
       
       console.log('📚 Final filtered decks:', this.filteredDecks);
@@ -380,28 +352,9 @@ export class DecksPage implements OnInit {
     console.log('importFromDevice called');
     this.showImportModal = false;
     
-    // Show warning alert
-    const alert = await this.alertController.create({
-      header: this.translationService.t('decks.warning'),
-      message: this.translationService.t('decks.importWarning'),
-      buttons: [
-        {
-          text: this.translationService.t('common.cancel'),
-          role: 'cancel',
-          handler: () => {
-            console.log('Import cancelled by user');
-          }
-        },
-        {
-          text: this.translationService.t('common.confirm'),
-          handler: async () => {
-            await this.importDeck();
-          }
-        }
-      ]
-    });
-    
-    await alert.present();
+    // Directly call importDeck - skip the confirmation alert for iOS compatibility
+    console.log('Calling importDeck directly...');
+    await this.importDeck();
   }
 
   async executeUrlImport() {
@@ -410,28 +363,9 @@ export class DecksPage implements OnInit {
       const urlToImport = this.importUrl.trim();
       this.closeUrlInputModal();
       
-      // Show warning alert
-      const alert = await this.alertController.create({
-        header: this.translationService.t('decks.warning'),
-        message: this.translationService.t('decks.importWarning'),
-        buttons: [
-          {
-            text: this.translationService.t('common.cancel'),
-            role: 'cancel',
-            handler: () => {
-              console.log('Import cancelled by user');
-            }
-          },
-          {
-            text: this.translationService.t('common.confirm'),
-            handler: async () => {
-              await this.downloadAndImportDeck(urlToImport);
-            }
-          }
-        ]
-      });
-      
-      await alert.present();
+      // Directly call downloadAndImportDeck - skip confirmation alert for iOS compatibility
+      console.log('Calling downloadAndImportDeck directly...');
+      await this.downloadAndImportDeck(urlToImport);
     } else {
       console.log('No URL provided for import');
     }
@@ -476,10 +410,24 @@ export class DecksPage implements OnInit {
   }
 
   // Deck actions
-  async startSession(deck: any) {
-    console.log('Study button: Starting session for deckId:', deck.id);
-    this.router.navigate(['/tabs/flashcards'], { 
-      queryParams: { deckId: deck.id }
+  startSession(deck: any) {
+    if (!deck) {
+      return;
+    }
+    
+    console.log('🎯 Study button clicked for deck:', deck.name, 'id:', deck.id);
+    
+    // Close any open action sheets first
+    this.isDeckActionSheetOpen = false;
+    
+    // Store the deck ID (fire and forget - don't await)
+    this.storageService.saveSetting('pendingStudyDeckId', deck.id).catch(e => console.error(e));
+    
+    // Navigate to flashcards
+    this.router.navigate(['/tabs/flashcards']).then(success => {
+      console.log('🎯 Navigation result:', success);
+    }).catch(err => {
+      console.error('🎯 Navigation error:', err);
     });
   }
 
@@ -544,6 +492,7 @@ export class DecksPage implements OnInit {
       // Create export data structure matching original implementation
       const exportData = {
         deck: {
+          id: deck.id,
           name: deck.name,
           description: deck.description,
           language: (deck as any).language || this.selectedLanguage,
@@ -737,14 +686,19 @@ export class DecksPage implements OnInit {
 
   // Action sheet button configurations
   get deckActionSheetButtons() {
+    const selectedDeck = this.selectedDeck;
     return [
       {
         text: this.translationService.t('decks.study'),
         icon: 'play-outline',
         handler: () => {
-          if (this.selectedDeck) {
-            this.startSession(this.selectedDeck);
-          }
+          // Use setTimeout to ensure handler completes before async operation
+          setTimeout(() => {
+            if (selectedDeck) {
+              this.startSession(selectedDeck);
+            }
+          }, 100);
+          return true; // Allow action sheet to close
         }
       },
       {
@@ -1299,71 +1253,111 @@ export class DecksPage implements OnInit {
   }
 
   /**
-   * Import a deck from a JSON file (simplified version)
+   * Import a deck from a JSON file using Capacitor FilePicker for iOS compatibility
    */
   async importDeck() {
-    console.log('importDeck method called');
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    console.log('importDeck method called - starting FilePicker');
     
-    input.onchange = async (event: any) => {
-      console.log('File input change event triggered');
-      const file = event.target.files[0];
-      if (!file) {
+    try {
+      console.log('About to call FilePicker.pickFiles...');
+      // Use Capacitor FilePicker for native file selection (works on iOS)
+      const result = await FilePicker.pickFiles({
+        types: ['application/json'],
+        limit: 1,
+        readData: true
+      });
+      
+      console.log('FilePicker.pickFiles returned successfully');
+      console.log('FilePicker result:', JSON.stringify(result));
+      
+      if (!result.files || result.files.length === 0) {
         console.log('No file selected');
         return;
       }
+      
+      const file = result.files[0];
       console.log('File selected:', file.name, file.size, 'bytes');
       
-      try {
-        const text = await file.text();
-        console.log('File content:', text.substring(0, 200) + '...');
-        
-        const importData = JSON.parse(text);
-        console.log('Parsed import data:', importData);
-        
-        // Simple validation - check if we have either a direct name or deck object with name
-        if (!importData.name && (!importData.deck || !importData.deck.name)) {
-          console.error('Validation failed - importData:', importData);
-          throw new Error('Invalid deck file format - missing deck name');
-        }
-        
-        // Create simplified deck object
-        const deckName = importData.name || importData.deck?.name || 'Imported Deck';
-        const cardCount = importData.cards ? importData.cards.length : 0;
-        
-        console.log('Creating deck:', deckName, 'with', cardCount, 'cards');
-        
-        const newDeck = {
-          id: Date.now().toString(),
-          name: deckName,
-          description: importData.description || importData.deck?.description || 'Imported deck',
-          cardCount: cardCount,
-          masteredCards: 0,
-          language: importData.language || importData.deck?.language || this.selectedLanguage
-        };
-        
-        console.log('New deck object:', newDeck);
-        console.log('Current filteredDecks before push:', this.filteredDecks);
-        
-        this.filteredDecks.push(newDeck);
-        
-        console.log('Current filteredDecks after push:', this.filteredDecks);
-        
-        this.showToast(`${this.translationService.t('decks.importSuccess')} "${deckName}" ${this.translationService.t('decks.withCards')} ${cardCount} ${this.translationService.t('decks.cards2')}!`);
-        
-      } catch (error) {
-        console.error('Import failed:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        console.error('Error details:', errorMessage);
-        this.showToast(`${this.translationService.t('decks.importFailed2')}: ${errorMessage}`);
+      // Get file content - it's base64 encoded in the data property
+      let text: string;
+      if (file.data) {
+        // Decode base64 data
+        text = atob(file.data);
+        console.log('File content (from base64):', text.substring(0, 200) + '...');
+      } else if (file.path) {
+        // Read from path if data not available
+        const fileContent = await Filesystem.readFile({
+          path: file.path,
+          encoding: Encoding.UTF8
+        });
+        text = typeof fileContent.data === 'string' ? fileContent.data : '';
+        console.log('File content (from path):', text.substring(0, 200) + '...');
+      } else {
+        throw new Error('Could not read file content');
       }
-    };
-    
-    console.log('About to trigger file input click');
-    input.click();
-    console.log('File input click triggered');
+      
+      const importData = JSON.parse(text);
+      console.log('Parsed import data:', importData);
+      
+      // Simple validation - check if we have either a direct name or deck object with name
+      if (!importData.name && (!importData.deck || !importData.deck.name)) {
+        console.error('Validation failed - importData:', importData);
+        throw new Error('Invalid deck file format - missing deck name');
+      }
+      
+      // Create simplified deck object
+      const deckName = importData.name || importData.deck?.name || 'Imported Deck';
+      const cardCount = importData.cards ? importData.cards.length : 0;
+      const deckId = Date.now().toString();
+      
+      console.log('Creating deck:', deckName, 'with', cardCount, 'cards');
+      
+      const newDeck: Deck = {
+        id: deckId,
+        name: deckName,
+        description: importData.description || importData.deck?.description || 'Imported deck',
+        cardCount: cardCount,
+        masteredCards: 0,
+        newCards: cardCount,
+        reviewCards: 0,
+        language: importData.language || importData.deck?.language || this.selectedLanguage,
+        createdAt: new Date(),
+        color: '#4CAF50'
+      };
+      
+      // Save deck to storage
+      await this.storageService.saveDeck(newDeck);
+      
+      // Save cards to storage with the new deck ID
+      if (importData.cards && importData.cards.length > 0) {
+        const cardsWithDeckId = importData.cards.map((card: any) => ({
+          ...card,
+          deckId: deckId,
+          id: card.id || `${deckId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        }));
+        
+        for (const card of cardsWithDeckId) {
+          await this.storageService.saveCard(card);
+        }
+        console.log('Saved', cardsWithDeckId.length, 'cards to storage');
+      }
+      
+      console.log('New deck object:', newDeck);
+      console.log('Current filteredDecks before push:', this.filteredDecks);
+      
+      this.filteredDecks.push(newDeck);
+      this.decks.push(newDeck);
+      
+      console.log('Current filteredDecks after push:', this.filteredDecks);
+      
+      this.showToast(`${this.translationService.t('decks.importSuccess')} "${deckName}" ${this.translationService.t('decks.withCards')} ${cardCount} ${this.translationService.t('decks.cards2')}!`);
+      
+    } catch (error) {
+      console.error('Import failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Error details:', errorMessage);
+      this.showToast(`${this.translationService.t('decks.importFailed2')}: ${errorMessage}`);
+    }
   }
 
   /**
@@ -1408,9 +1402,6 @@ export class DecksPage implements OnInit {
    */
   async downloadAndImportDeck(url: string) {
     console.log('downloadAndImportDeck called with URL:', url);
-    
-    // Skip loading controller on iOS - it causes the function to hang
-    console.log('Skipping loading controller, proceeding directly to fetch...');
 
     try {
       console.log('Starting fetch request to:', url);
@@ -1428,7 +1419,7 @@ export class DecksPage implements OnInit {
       
       console.log('Parsing JSON...');
       const importData = JSON.parse(responseText);
-      console.log('JSON parsed successfully:', importData);
+      console.log('JSON parsed successfully');
       
       // Simple validation - check if we have either a direct name or deck object with name
       if (!importData.name && (!importData.deck || !importData.deck.name)) {
@@ -1438,39 +1429,55 @@ export class DecksPage implements OnInit {
 
       console.log('Validation passed, creating deck object...');
 
-      // Create simplified deck object
+      // Create deck object
       const deckName = importData.name || importData.deck?.name || 'Imported Deck';
       const cardCount = importData.cards ? importData.cards.length : 0;
+      const deckId = Date.now().toString();
       
-      const newDeck = {
-        id: Date.now().toString(),
+      const newDeck: Deck = {
+        id: deckId,
         name: deckName,
         description: importData.description || importData.deck?.description || 'Imported deck',
         cardCount: cardCount,
         masteredCards: 0,
-        language: importData.language || importData.deck?.language || this.selectedLanguage
+        newCards: cardCount,
+        reviewCards: 0,
+        language: importData.language || importData.deck?.language || this.selectedLanguage,
+        createdAt: new Date(),
+        color: '#4CAF50'
       };
       
-      console.log('Adding new deck to filteredDecks:', newDeck);
-      console.log('Current filteredDecks before:', this.filteredDecks);
+      console.log('Saving deck to storage:', newDeck.name);
       
+      // Save deck to storage
+      await this.storageService.saveDeck(newDeck);
+      
+      // Save cards to storage with the new deck ID
+      if (importData.cards && importData.cards.length > 0) {
+        console.log('Saving', importData.cards.length, 'cards to storage...');
+        const cardsWithDeckId = importData.cards.map((card: any) => ({
+          ...card,
+          deckId: deckId,
+          id: card.id || `${deckId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        }));
+        
+        for (const card of cardsWithDeckId) {
+          await this.storageService.saveCard(card);
+        }
+        console.log('Saved', cardsWithDeckId.length, 'cards to storage');
+      }
+      
+      console.log('Adding new deck to UI lists');
       this.filteredDecks.push(newDeck);
+      this.decks.push(newDeck);
       
-      console.log('Current filteredDecks after:', this.filteredDecks);
-      
+      console.log('Import complete!');
       this.showToast(`${this.translationService.t('decks.importSuccess')} "${deckName}" ${this.translationService.t('decks.withCards')} ${cardCount} ${this.translationService.t('decks.cards2')}!`);
 
     } catch (error) {
       console.error('URL import failed:', error);
-      console.error('Error type:', typeof error);
       console.error('Error message:', error instanceof Error ? error.message : String(error));
-      
-      const alert = await this.alertController.create({
-        header: this.translationService.t('decks.importFailed'),
-        message: `${this.translationService.t('decks.importFailedMessage')}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        buttons: [this.translationService.t('common.ok')]
-      });
-      await alert.present();
+      this.showToast(`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
   

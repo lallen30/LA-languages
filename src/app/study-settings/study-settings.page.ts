@@ -46,12 +46,6 @@ export class StudySettingsPage implements OnInit {
     if (this.maxCards >= 5 && this.maxCards <= 500) {
       await this.storageService.saveSetting('maxCardsPerSession', this.maxCards);
       await this.storageService.saveSetting('pictureWordDisplay', this.pictureWordDisplay);
-      const toast = await this.toastController.create({
-        message: 'Study settings saved',
-        duration: 2000,
-        color: 'success'
-      });
-      await toast.present();
       this.goBack();
     } else {
       const toast = await this.toastController.create({

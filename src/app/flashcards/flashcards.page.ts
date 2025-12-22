@@ -47,13 +47,15 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   };
   sessionProgress = { completed: 0, total: 0, percentage: 0 };
   isSessionActive = false;
+  currentCardNumber = 1;
+  totalCardsInSession = 0;
   autoSpeakEnabled = false;
   autoSpeakOnLoadEnabled = false;
   
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private cardService: CardService,
+    public cardService: CardService,
     private ttsService: TtsService,
     private sessionStateService: SessionStateService,
     private storageService: StorageService,
@@ -97,6 +99,9 @@ export class FlashcardsPage implements OnInit, OnDestroy {
       }
     });
     
+    // Also check storage for pending deck ID (more reliable on Android)
+    this.checkPendingStudySession();
+    
     // Stop the endless debug loop
     console.log('=== INITIAL BUTTON STATE ===');
     console.log('currentCard exists:', !!this.currentCard);
@@ -106,29 +111,37 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     // Subscribe to current card
     this.subscriptions.push(
       this.cardService.currentCard$.subscribe(async card => {
-        const wasSessionActive = this.isSessionActive;
-        this.currentCard = card;
-        this.isFlipped = false;
-        this.showTranslation = false;
-        this.showReviewButtons = !!card;
-        this.updateSessionStatus();
-        
-        // Auto-speak on card load if enabled (check storage directly for latest value)
-        if (card) {
-          const autoSpeakOnLoad = await this.storageService.getSetting('autoSpeakOnLoad', false);
-          if (autoSpeakOnLoad) {
-            console.log('DEBUG: Auto-speak on load enabled, playing audio');
-            setTimeout(() => {
-              this.speak();
-            }, 300);
-          } else {
-            console.log('DEBUG: Auto-speak on load disabled, skipping audio');
+        try {
+          const wasSessionActive = this.isSessionActive;
+          this.currentCard = card;
+          this.isFlipped = false;
+          this.showTranslation = false;
+          this.showReviewButtons = !!card;
+          this.updateSessionStatus();
+          
+          // Auto-speak on card load if enabled (check storage directly for latest value)
+          if (card) {
+            try {
+              const autoSpeakOnLoad = await this.storageService.getSetting('autoSpeakOnLoad', false);
+              if (autoSpeakOnLoad) {
+                console.log('DEBUG: Auto-speak on load enabled, playing audio');
+                setTimeout(() => {
+                  this.speak().catch(e => console.error('Auto-speak error:', e));
+                }, 300);
+              } else {
+                console.log('DEBUG: Auto-speak on load disabled, skipping audio');
+              }
+            } catch (e) {
+              console.error('Error checking auto-speak setting:', e);
+            }
           }
-        }
-        
-        // Check if session just completed
-        if (wasSessionActive && !this.isSessionActive && card === null) {
-          this.handleSessionCompletion();
+          
+          // Check if session just completed
+          if (wasSessionActive && !this.isSessionActive && card === null) {
+            this.handleSessionCompletion();
+          }
+        } catch (error) {
+          console.error('Error in currentCard subscription:', error);
         }
       })
     );
@@ -137,6 +150,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.cardService.sessionStats$.subscribe(stats => {
         this.sessionProgress = this.cardService.getSessionProgress();
+        this.currentCardNumber = this.sessionProgress.completed + 1;
+        this.totalCardsInSession = this.cardService.getTotalCardsInSession();
       })
     );
 
@@ -153,6 +168,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillEnter() {
+    console.log('🔄 ionViewWillEnter called');
+    
     // Refresh autoSpeak settings when user returns to this page (e.g., from Settings)
     const newAutoSpeakSetting = await this.storageService.getSetting('autoSpeak', false);
     if (newAutoSpeakSetting !== this.autoSpeakEnabled) {
@@ -165,6 +182,12 @@ export class FlashcardsPage implements OnInit, OnDestroy {
       this.autoSpeakOnLoadEnabled = newAutoSpeakOnLoadSetting;
       console.log('DEBUG: AutoSpeak on load setting refreshed to:', this.autoSpeakOnLoadEnabled);
     }
+    
+    // Check for pending study session (important for navigation from Decks page)
+    await this.checkPendingStudySession();
+    
+    // Update session status
+    this.updateSessionStatus();
   }
 
   ngOnDestroy() {
@@ -579,6 +602,7 @@ export class FlashcardsPage implements OnInit, OnDestroy {
   private updateSessionStatus() {
     this.isSessionActive = this.cardService.isSessionActive();
     this.sessionProgress = this.cardService.getSessionProgress();
+    console.log('📊 Session progress updated:', this.sessionProgress);
     // Communicate session state to hide/show tab bar
     this.sessionStateService.setSessionActive(this.isSessionActive);
   }
@@ -588,32 +612,74 @@ export class FlashcardsPage implements OnInit, OnDestroy {
    */
   async startStudySession(deckId: string) {
     try {
-      console.log('Starting study session for deck:', deckId);
+      console.log('🚀 Starting study session for deck:', deckId);
       
-      // Start the study session using the card service
-      await this.cardService.startSession(deckId);
+      // Get max cards per session from settings
+      const maxCards = await this.storageService.getSetting('maxCardsPerSession', 20);
+      console.log('🚀 Max cards per session from settings:', maxCards);
       
-      // Update session status
+      // Debug: Check cards in storage before starting session
+      const cardsInStorage = await this.storageService.getCardsByDeck(deckId);
+      console.log('🚀 Cards found in storage for this deck:', cardsInStorage.length);
+      if (cardsInStorage.length > 0) {
+        console.log('🚀 First card sample:', JSON.stringify(cardsInStorage[0]));
+      }
+      
+      // Start the study session using the card service with the max cards setting
+      await this.cardService.startSession(deckId, maxCards);
+      
+      // Update session status immediately after session starts
       this.updateSessionStatus();
       
-      console.log('Study session started successfully');
+      console.log('🚀 Session active after start:', this.isSessionActive);
+      console.log('🚀 Current card after start:', this.currentCard);
+      
+      // Update card counter values - use getTotalCardsInSession for reliable total
+      const progress = this.cardService.getSessionProgress();
+      this.currentCardNumber = progress.completed + 1;
+      this.totalCardsInSession = this.cardService.getTotalCardsInSession();
+      
+      console.log('🚀 Study session started successfully - total cards:', this.totalCardsInSession);
     } catch (error) {
-      console.error('Error starting study session:', error);
+      console.error('🚀 Error starting study session:', error);
+    }
+  }
+
+  /**
+   * Check storage for pending study session (more reliable on Android than query params)
+   */
+  async checkPendingStudySession() {
+    const pendingDeckId = await this.storageService.getSetting('pendingStudyDeckId', null);
+    console.log('🔍 Checking for pending study session, deckId:', pendingDeckId);
+    
+    if (pendingDeckId) {
+      // Clear the pending deck ID immediately to prevent re-triggering
+      await this.storageService.saveSetting('pendingStudyDeckId', null);
+      console.log('🔍 Found pending deck ID, starting session:', pendingDeckId);
+      this.startStudySession(pendingDeckId);
     }
   }
 
   get highlightedBack(): string {
     if (!this.currentCard || this.currentCard.type !== 'fill-blank') return '';
     
-    const sentence = this.currentCard.sentenceBack;
+    let sentence = this.currentCard.sentenceBack;
     const word = this.currentCard.missingWord;
     
-    if (!sentence || !word) return '';
+    if (!sentence) return '';
     
-    return sentence.replace(
-      new RegExp(`\\b${word}\\b`, 'gi'),
-      `<strong class="highlighted-word">${word}</strong>`
-    );
+    // Convert **word** markdown to bold HTML
+    sentence = sentence.replace(/\*\*([^*]+)\*\*/g, '<strong class="highlighted-word">$1</strong>');
+    
+    // If no markdown was found but we have a missing word, highlight it
+    if (!sentence.includes('highlighted-word') && word) {
+      sentence = sentence.replace(
+        new RegExp(`\\b${word}\\b`, 'gi'),
+        `<strong class="highlighted-word">${word}</strong>`
+      );
+    }
+    
+    return sentence;
   }
 
   get remainingCards(): number {

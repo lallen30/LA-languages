@@ -165,27 +165,62 @@ export class StorageService {
   }
 
   async importMultipleDecks(data: any): Promise<void> {
+    console.log('StorageService.importMultipleDecks called');
+    console.log('Data received - cards:', data.cards?.length, 'decks:', data.decks?.length);
+    
     await this.ensureStorage();
+    console.log('Storage ensured');
     
     // Get existing data
     const existingCards = await this._storage?.get('cards') || [];
     const existingDecks = await this._storage?.get('decks') || [];
+    console.log('Existing data - cards:', existingCards.length, 'decks:', existingDecks.length);
     
     // Merge new cards with existing (avoid duplicates by ID)
     if (data.cards) {
       const existingCardIds = new Set(existingCards.map((c: any) => c.id));
       const newCards = data.cards.filter((c: any) => !existingCardIds.has(c.id));
+      console.log('New cards to add (after dedup):', newCards.length);
       const mergedCards = [...existingCards, ...newCards];
       await this._storage?.set('cards', mergedCards);
+      console.log('Cards saved, total:', mergedCards.length);
     }
     
-    // Merge new decks with existing (avoid duplicates by ID)
+    // Merge new decks with existing (update if same ID but different language, otherwise skip)
     if (data.decks) {
-      const existingDeckIds = new Set(existingDecks.map((d: any) => d.id));
-      const newDecks = data.decks.filter((d: any) => !existingDeckIds.has(d.id));
-      const mergedDecks = [...existingDecks, ...newDecks];
+      const existingDeckMap = new Map(existingDecks.map((d: any) => [d.id, d]));
+      console.log('Existing deck IDs:', Array.from(existingDeckMap.keys()));
+      console.log('Incoming deck IDs:', data.decks.map((d: any) => d.id));
+      
+      let addedCount = 0;
+      let updatedCount = 0;
+      
+      for (const newDeck of data.decks) {
+        const existingDeck = existingDeckMap.get(newDeck.id) as any;
+        if (existingDeck) {
+          // Check if it's a different language - if so, add as new deck with modified ID
+          if (existingDeck.language !== newDeck.language) {
+            const langSuffix = (newDeck.language || 'unknown').replace('-', '_');
+            const newId = `${newDeck.id}_${langSuffix}`;
+            console.log(`Deck "${newDeck.name}" (${newDeck.id}) exists with different language - creating new ID: ${newId}`);
+            existingDeckMap.set(newId, { ...newDeck, id: newId });
+            addedCount++;
+          } else {
+            console.log(`Deck "${newDeck.name}" (${newDeck.id}) already exists with same language - skipping`);
+          }
+        } else {
+          console.log(`Adding new deck "${newDeck.name}" (${newDeck.id})`);
+          existingDeckMap.set(newDeck.id, newDeck);
+          addedCount++;
+        }
+      }
+      
+      const mergedDecks = Array.from(existingDeckMap.values());
       await this._storage?.set('decks', mergedDecks);
+      console.log(`Decks saved - added: ${addedCount}, updated: ${updatedCount}, total: ${mergedDecks.length}`);
     }
+    
+    console.log('importMultipleDecks complete');
   }
 
   private async ensureStorage(): Promise<void> {
