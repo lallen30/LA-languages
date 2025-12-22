@@ -3,7 +3,7 @@
   
   ion-item {
     --border-radius: 8px;
-    --background: var(--ion-color-light);
+    --background: var(--app-item-background, var(--ion-color-light));
     margin-bottom: 16px;
   }
   
@@ -20,12 +20,12 @@
 .selected-thumbnails {
   margin-top: 16px;
   padding: 12px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   border-radius: 8px;
   
   .thumbnail-label {
     margin-bottom: 12px;
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
     font-size: 14px;
   }
   
@@ -67,7 +67,7 @@
       ion-icon {
         font-size: 28px;
         color: var(--ion-color-danger);
-        background: white;
+        background: var(--ion-background-color, white);
         border-radius: 50%;
       }
       
@@ -81,7 +81,7 @@
       bottom: 4px;
       left: 4px;
       background: var(--ion-color-primary);
-      color: white;
+      color: var(--ion-color-primary-contrast, white);
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -130,7 +130,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background: white;
+    background: var(--ion-background-color, white);
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -147,7 +147,7 @@
       top: -8px;
       right: -8px;
       background: var(--ion-color-primary);
-      color: white;
+      color: var(--ion-color-primary-contrast, white);
       border-radius: 50%;
       width: 18px;
       height: 18px;

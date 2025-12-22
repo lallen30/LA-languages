@@ -39,24 +39,24 @@ export class HomePage implements OnInit {
 
 
 
-  goToFlashcards() {
-    // Navigate to flashcards page
-    this.router.navigate(['/tabs/flashcards']);
+  goToDecks() {
+    this.router.navigate(['/tabs/decks_backup']);
   }
 
-  goToDecksCopy() {
-    // Navigate to decks copy page
-    this.router.navigate(['/tabs/decks-copy']);
+  goToStories() {
+    this.router.navigate(['/tabs/stories']);
   }
 
-  goToDecksBackup() {
-    // Navigate to decks backup page
-    this.router.navigate(['/tabs/decks']);
+  goToStats() {
+    this.router.navigate(['/tabs/stats']);
   }
 
-  goToExample() {
-    // Navigate to example page
-    this.router.navigate(['/tabs/example']);
+  goToSettings() {
+    this.router.navigate(['/tabs/settings']);
+  }
+
+  goToHelp() {
+    this.router.navigate(['/help']);
   }
 
 }

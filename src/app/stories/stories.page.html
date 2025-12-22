@@ -1,0 +1,187 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Stories</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportData()">
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="importData()">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showAddCategoryDialog()">
+        <ion-icon name="folder-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showAddWordCategoryDialog()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && !showAddStoryForm">
+    <!-- Category Filter Dropdown -->
+    <ion-item>
+      <ion-select 
+        label="Category" 
+        [value]="selectedCategoryId" 
+        (ionChange)="onCategoryChange($event)"
+        interface="action-sheet">
+        <ion-select-option value="all">All Stories</ion-select-option>
+        <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
+          {{ cat.name }} ({{ cat.storyCount }})
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Word Categories Section -->
+    <div class="section-header">
+      <h3>Word Categories</h3>
+      <ion-button fill="clear" size="small" (click)="showAddWordCategoryDialog()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Add
+      </ion-button>
+    </div>
+
+    <ion-list *ngIf="wordCategories.length > 0">
+      <ion-item *ngFor="let wc of wordCategories" class="word-category-row">
+        <ion-label>{{ wc.name }} ({{ wc.words.length }} words)</ion-label>
+        <ion-button fill="clear" slot="end" (click)="showWordCategoryOptions(wc)">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    <p *ngIf="wordCategories.length === 0" class="empty-message">
+      No word categories yet. Create one to organize words for story generation.
+    </p>
+
+    <!-- Stories List -->
+    <div class="section-header">
+      <h3>Generated Stories</h3>
+    </div>
+
+    <!-- Level Filter -->
+    <ion-item>
+      <ion-select 
+        label="Level" 
+        [value]="selectedLevel" 
+        (ionChange)="onLevelChange($event)"
+        interface="action-sheet">
+        <ion-select-option value="all">All Levels</ion-select-option>
+        <ion-select-option value="beginner">Beginner</ion-select-option>
+        <ion-select-option value="intermediate">Intermediate</ion-select-option>
+        <ion-select-option value="advanced">Advanced</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-list *ngIf="filteredStories.length > 0">
+      <ion-item *ngFor="let story of filteredStories" (click)="openStory(story)" class="story-row">
+        <ion-label>{{ story.title }}</ion-label>
+        <ion-button fill="clear" slot="end" (click)="showStoryOptions(story, $event)">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="filteredStories.length === 0" class="empty-state">
+      <ion-icon name="book-outline" size="large"></ion-icon>
+      <h3>No Stories Yet</h3>
+      <p>Tap the + button to generate your first AI story!</p>
+    </div>
+  </div>
+
+  <!-- Add Story Form -->
+  <div *ngIf="showAddStoryForm" class="add-story-form">
+    <div class="form-header">
+      <h2>Generate New Story</h2>
+      <ion-button fill="clear" (click)="closeAddStoryForm()">Cancel</ion-button>
+    </div>
+
+    <ion-list>
+      <!-- Subject -->
+      <ion-item>
+        <ion-label position="stacked">Subject / Topic</ion-label>
+        <ion-input [(ngModel)]="newStory.subject" placeholder="e.g., A trip to the market"></ion-input>
+      </ion-item>
+
+      <!-- Level -->
+      <ion-item>
+        <ion-label position="stacked">Difficulty Level</ion-label>
+        <ion-segment [(ngModel)]="newStory.level">
+          <ion-segment-button value="beginner">
+            <ion-label>Beginner</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="intermediate">
+            <ion-label>Intermediate</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="advanced">
+            <ion-label>Advanced</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-item>
+
+      <!-- Category -->
+      <ion-item>
+        <ion-label position="stacked">Save to Category</ion-label>
+        <ion-select [(ngModel)]="newStory.categoryId" placeholder="Select category">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button *ngIf="categories.length === 0" fill="clear" (click)="showAddCategoryDialog()">
+        + Create Category First
+      </ion-button>
+
+      <!-- Words to Include -->
+      <div class="words-section">
+        <ion-label>Words to Include</ion-label>
+        
+        <!-- Add from word categories -->
+        <div class="word-category-buttons" *ngIf="wordCategories.length > 0">
+          <p>Add from category:</p>
+          <ion-chip *ngFor="let wc of wordCategories" (click)="addWordsFromCategory(wc)" color="secondary">
+            <ion-icon name="add-outline"></ion-icon>
+            <ion-label>{{ wc.name }}</ion-label>
+          </ion-chip>
+        </div>
+
+        <!-- Manual word input -->
+        <div class="word-input-row">
+          <ion-input [(ngModel)]="newStory.wordInput" placeholder="Type a word" (keyup.enter)="addWordToStory()"></ion-input>
+          <ion-button (click)="addWordToStory()" fill="solid" size="small">Add</ion-button>
+        </div>
+
+        <!-- Selected words -->
+        <div class="selected-words" *ngIf="newStory.words.length > 0">
+          <ion-chip *ngFor="let word of newStory.words" (click)="removeWordFromStory(word)">
+            <ion-label>{{ word }}</ion-label>
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-chip>
+        </div>
+        <p *ngIf="newStory.words.length === 0" class="hint">Add words that should appear in the story</p>
+      </div>
+    </ion-list>
+
+    <ion-button expand="block" (click)="generateStory()" [disabled]="!newStory.subject || !newStory.categoryId || newStory.words.length === 0">
+      <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+      Generate Story with AI
+    </ion-button>
+  </div>
+
+  <!-- FAB Button -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!showAddStoryForm">
+    <ion-fab-button (click)="openAddStoryForm()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

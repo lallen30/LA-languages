@@ -175,7 +175,7 @@ ion-content {
   font-size: 12px;
   font-weight: 600;
   color: var(--ion-color-medium);
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   padding: 4px 8px;
   border-radius: 4px;
   min-width: 70px;
@@ -186,8 +186,8 @@ ion-content {
   font-family: 'Courier New', monospace;
   font-size: 12px;
   font-weight: 600;
-  color: var(--ion-color-dark);
-  background: var(--ion-color-light);
+  color: var(--ion-text-color);
+  background: var(--app-item-background, var(--ion-color-light));
   border: 1px solid var(--ion-color-medium);
   border-radius: 4px;
   padding: 4px 8px;

@@ -57,6 +57,21 @@ export const routes: Routes = [
           import('../study-settings/study-settings.page').then((m) => m.StudySettingsPage),
       },
       {
+        path: 'stories',
+        loadComponent: () =>
+          import('../stories/stories.page').then((m) => m.StoriesPage),
+      },
+      {
+        path: 'story-detail/:id',
+        loadComponent: () =>
+          import('../story-detail/story-detail.page').then((m) => m.StoryDetailPage),
+      },
+      {
+        path: 'word-category-edit/:id',
+        loadComponent: () =>
+          import('../word-category-edit/word-category-edit.page').then((m) => m.WordCategoryEditPage),
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full',

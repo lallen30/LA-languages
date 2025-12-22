@@ -140,10 +140,35 @@ export class StorageService {
     const decks = await this.getAllDecks();
     const stats = await this.getStats();
     
+    // Get all settings
+    const settings: Record<string, any> = {};
+    const settingKeys = [
+      'darkMode', 'nativeLanguage', 'ttsLanguage', 'spanishDialect', 
+      'spanishVoiceGender', 'spanishVoiceName', 'ttsRate', 'ttsPitch',
+      'autoSpeak', 'autoSpeakOnLoad', 'studyReminders', 'maxCardsPerSession',
+      'pictureWordDisplay', 'lightColorScheme', 'darkColorScheme'
+    ];
+    for (const key of settingKeys) {
+      const value = await this._storage?.get(`setting_${key}`);
+      if (value !== null && value !== undefined) {
+        settings[key] = value;
+      }
+    }
+    
+    // Get story data
+    const stories = await this._storage?.get('stories') || [];
+    const storyCategories = await this._storage?.get('storyCategories') || [];
+    const wordCategories = await this._storage?.get('wordCategories') || [];
+    
     return {
+      version: '2.0',
       cards,
       decks,
       stats,
+      settings,
+      stories,
+      storyCategories,
+      wordCategories,
       exportDate: new Date().toISOString()
     };
   }
@@ -161,6 +186,26 @@ export class StorageService {
     
     if (data.stats) {
       await this._storage?.set('user_stats', data.stats);
+    }
+    
+    // Import settings (v2.0 format)
+    if (data.settings) {
+      for (const [key, value] of Object.entries(data.settings)) {
+        await this._storage?.set(`setting_${key}`, value);
+      }
+    }
+    
+    // Import story data
+    if (data.stories) {
+      await this._storage?.set('stories', data.stories);
+    }
+    
+    if (data.storyCategories) {
+      await this._storage?.set('storyCategories', data.storyCategories);
+    }
+    
+    if (data.wordCategories) {
+      await this._storage?.set('wordCategories', data.wordCategories);
     }
   }
 
@@ -227,5 +272,16 @@ export class StorageService {
     if (!this._storage) {
       await this.init();
     }
+  }
+
+  // Generic get/set for any data type
+  async get(key: string): Promise<any> {
+    await this.ensureStorage();
+    return await this._storage?.get(key) || null;
+  }
+
+  async set(key: string, value: any): Promise<void> {
+    await this.ensureStorage();
+    await this._storage?.set(key, value);
   }
 }

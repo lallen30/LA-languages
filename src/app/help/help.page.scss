@@ -2,6 +2,7 @@ ion-content {
   --padding-start: 16px;
   --padding-end: 16px;
   --padding-top: 16px;
+  --padding-bottom: 120px;
 }
 
 ion-card {
@@ -101,8 +102,8 @@ ion-card {
     gap: 12px;
     margin-bottom: 16px;
     padding: 12px;
-    background: var(--ion-color-light);
-    color: var(--ion-color-dark);
+    background: var(--app-item-background, var(--ion-color-light));
+    color: var(--ion-text-color);
     border-radius: 8px;
     
     ion-icon {
@@ -134,7 +135,7 @@ ion-note {
   margin-top: 12px;
   padding: 12px;
   border-radius: 8px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   
   ion-icon {
     margin-top: 2px;
@@ -148,18 +149,44 @@ ion-note {
   
   &[color="success"] {
     background: var(--ion-color-success-tint);
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
   }
+  
+  &[color="warning"] {
+    background: var(--ion-color-primary-tint);
+    color: var(--ion-color-light);
+  }
+}
+
+// AI Stories card - extra spacing and larger text
+.ai-stories-card {
+  margin-top: 24px;
+  
+  ion-card-content {
+    p {
+      font-size: 1.05em;
+    }
+  }
+}
+
+// Settings card - extra spacing above
+:host ion-card.settings-card {
+  margin-top: 48px !important;
+}
+
+// Also add a spacer div approach as backup
+.settings-spacer {
+  height: 32px;
 }
 
 // Dark mode adjustments
 @media (prefers-color-scheme: dark) {
   .tips-list .tip-item {
-    background: var(--ion-color-dark);
+    background: var(--app-item-background);
   }
   
   ion-note {
-    background: var(--ion-color-dark);
+    background: var(--app-item-background);
     
     &[color="primary"] {
       background: rgba(var(--ion-color-primary-rgb), 0.2);
@@ -167,6 +194,11 @@ ion-note {
     
     &[color="success"] {
       background: rgba(var(--ion-color-success-rgb), 0.2);
+    }
+    
+    &[color="warning"] {
+      background: var(--ion-color-primary-tint);
+      color: var(--ion-color-light);
     }
   }
 }

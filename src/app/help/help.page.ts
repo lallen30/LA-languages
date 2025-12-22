@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { IonicModule, NavController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
   arrowBack,
@@ -54,13 +53,13 @@ addIcons({
 })
 export class HelpPage implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private navCtrl: NavController) { }
 
   ngOnInit() {
   }
 
   goBack() {
-    this.router.navigate(['/tabs/settings']);
+    this.navCtrl.back();
   }
 
 }

@@ -1,0 +1,84 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ story?.title || 'Story' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirmDeleteStory()" color="danger">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && story" class="story-container">
+    <!-- Story Header -->
+    <div class="story-header">
+      <div class="story-meta">
+        <ion-chip [color]="getLevelColor(story.level)" size="small">
+          <ion-icon name="school-outline"></ion-icon>
+          <ion-label>{{ story.level | titlecase }}</ion-label>
+        </ion-chip>
+        <span class="subject">{{ story.subject }}</span>
+      </div>
+    </div>
+
+    <!-- TTS Controls -->
+    <div class="tts-controls">
+      <ion-button *ngIf="!isPlaying" (click)="startReading()" fill="solid" color="primary">
+        <ion-icon name="play-outline" slot="start"></ion-icon>
+        Listen to Story
+      </ion-button>
+      
+      <div *ngIf="isPlaying" class="playback-controls">
+        <ion-button *ngIf="!isPaused" (click)="pauseReading()" fill="outline">
+          <ion-icon name="pause-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="isPaused" (click)="resumeReading()" fill="outline">
+          <ion-icon name="play-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button (click)="stopReading()" fill="outline" color="danger">
+          <ion-icon name="stop-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <ion-progress-bar *ngIf="isPlaying" [value]="readingProgress"></ion-progress-bar>
+    </div>
+
+    <!-- Story Content with Sentence Highlighting -->
+    <div class="story-content">
+      <p *ngFor="let sentence of story.sentences; let i = index" 
+         [class.current-sentence]="i === currentSentenceIndex"
+         [class.read-sentence]="i < currentSentenceIndex"
+         class="sentence">
+        {{ sentence }}
+      </p>
+    </div>
+
+    <!-- Words Included Section -->
+    <div class="words-used">
+      <strong>Words included:</strong>
+      <div class="word-chips">
+        <ion-chip *ngFor="let word of story.wordsUsed" size="small" color="tertiary" (click)="speakWord(word)">
+          <ion-icon name="volume-medium-outline"></ion-icon>
+          {{ word }}
+        </ion-chip>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Not Found -->
+  <div *ngIf="!isLoading && !story" class="not-found">
+    <h3>Story not found</h3>
+    <ion-button routerLink="/tabs/stories">Back to Stories</ion-button>
+  </div>
+</ion-content>

@@ -37,14 +37,14 @@ ion-footer {
   ion-item {
     --border-radius: 8px;
     --background: var(--ion-color-step-50);
-    --color: var(--ion-color-dark);
+    --color: var(--ion-text-color);
     --border-color: var(--ion-color-medium);
     --border-style: solid;
     --border-width: 1px;
     
     ion-input {
       --padding-start: 8px;
-      --color: var(--ion-color-dark);
+      --color: var(--ion-text-color);
       --placeholder-color: var(--ion-color-medium);
     }
     
@@ -85,12 +85,12 @@ ion-footer {
   text-align: center;
   margin-bottom: 16px;
   padding: 12px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   border-radius: 8px;
   
   p {
     margin: 0;
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
   }
   
   .searching-text {
@@ -157,7 +157,7 @@ ion-footer {
   position: absolute;
   top: 4px;
   right: 4px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--ion-background-color, rgba(255, 255, 255, 0.9));
   border-radius: 50%;
   width: 28px;
   height: 28px;
@@ -228,11 +228,11 @@ ion-footer {
   .search-section {
     ion-item {
       --background: var(--ion-color-step-150);
-      --color: var(--ion-color-light);
+      --color: var(--ion-text-color);
       --border-color: var(--ion-color-step-200);
       
       ion-input {
-        --color: var(--ion-color-light);
+        --color: var(--ion-text-color);
         --placeholder-color: var(--ion-color-step-400);
       }
     }
@@ -242,7 +242,7 @@ ion-footer {
     background: var(--ion-color-step-150);
     
     p {
-      color: var(--ion-color-light);
+      color: var(--ion-text-color);
     }
   }
   
@@ -251,7 +251,7 @@ ion-footer {
   }
   
   .no-images h3 {
-    color: var(--ion-color-light);
+    color: var(--ion-text-color);
   }
 }
 
@@ -278,7 +278,7 @@ ion-footer {
 // Dark mode support for load more button
 .dark .load-more-section {
   ion-button {
-    --color: var(--ion-color-light);
+    --color: var(--ion-text-color);
     --border-color: var(--ion-color-step-200);
   }
 }

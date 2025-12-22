@@ -16,6 +16,27 @@
     </ion-toolbar>
   </ion-header>
 
+  <!-- Welcome -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="sparkles" slot="start"></ion-icon>
+        Welcome to FluentFlip
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>FluentFlip is a powerful language learning app that combines <strong>flashcard-based spaced repetition</strong> with <strong>AI-generated stories</strong> to help you master vocabulary and reading comprehension.</p>
+      
+      <h4>Main Features:</h4>
+      <ul>
+        <li><strong>Flashcard Decks</strong> - Create and study vocabulary with spaced repetition</li>
+        <li><strong>AI Stories</strong> - Generate custom stories using your vocabulary words</li>
+        <li><strong>Text-to-Speech</strong> - Hear correct pronunciation of words and stories</li>
+        <li><strong>Progress Tracking</strong> - Monitor your learning with detailed statistics</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Spaced Repetition System -->
   <ion-card>
     <ion-card-header>
@@ -25,7 +46,7 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>This app uses a scientifically-proven <strong>spaced repetition algorithm</strong> to help you learn more effectively by showing cards at optimal intervals.</p>
+      <p>FluentFlip uses a scientifically-proven <strong>spaced repetition algorithm</strong> to help you learn more effectively by showing cards at optimal intervals.</p>
       
       <h4>How It Works:</h4>
       <ul>
@@ -108,8 +129,153 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Settings Guide -->
+  <!-- Decks & Cards -->
   <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="albums" slot="start"></ion-icon>
+        Decks & Cards
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h4>Creating Decks:</h4>
+      <p>Decks are collections of flashcards organized by topic. To create a deck:</p>
+      <ol>
+        <li>Go to the <strong>Decks</strong> tab</li>
+        <li>Tap the <strong>+</strong> button in the header</li>
+        <li>Enter a name and optional description</li>
+        <li>Choose a language for the deck</li>
+      </ol>
+
+      <h4>Card Types:</h4>
+      <ul>
+        <li><strong>Picture-Word:</strong> Image with target language word and English translation. Great for visual learners!</li>
+        <li><strong>Fill-in-the-Blank:</strong> Complete sentences with missing words. Helps learn words in context.</li>
+        <li><strong>Translation:</strong> Translate between languages. Cards randomly show either direction for comprehensive practice.</li>
+      </ul>
+
+      <h4>Adding Cards:</h4>
+      <ol>
+        <li>Select a deck from the Decks page</li>
+        <li>Tap the <strong>+</strong> button</li>
+        <li>Choose the card type (Picture, Fill-in-Blank, or Translate)</li>
+        <li>Enter the required information</li>
+      </ol>
+
+      <h4>Managing Cards:</h4>
+      <ul>
+        <li><strong>Manage Deck:</strong> View, edit, or delete individual cards</li>
+        <li><strong>Reset Progress:</strong> Reset individual cards or entire decks to start fresh</li>
+        <li><strong>Import/Export:</strong> Share decks between devices or with others</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- AI Stories -->
+  <ion-card class="ai-stories-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="book" slot="start"></ion-icon>
+        AI Stories
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Generate custom stories using AI that incorporate your vocabulary words. This helps you see words used in context and improves reading comprehension.</p>
+
+      <h4>Story Categories:</h4>
+      <p>Organize your stories into categories (e.g., "Travel", "Food", "Daily Life"):</p>
+      <ul>
+        <li>Tap the <strong>folder icon</strong> in the Stories header to create a category</li>
+        <li>Filter stories by category using the dropdown</li>
+      </ul>
+
+      <h4>Word Categories:</h4>
+      <p>Create collections of vocabulary words to use in story generation:</p>
+      <ul>
+        <li>Tap the <strong>+</strong> button to create a word category</li>
+        <li>Add words you want to practice</li>
+        <li>Use these words when generating new stories</li>
+      </ul>
+
+      <h4>Generating Stories:</h4>
+      <ol>
+        <li>Go to the <strong>Stories</strong> tab</li>
+        <li>Tap a word category and select "Use in New Story"</li>
+        <li>Choose a subject, difficulty level, and story category</li>
+        <li>The AI will generate a story incorporating your vocabulary</li>
+      </ol>
+
+      <h4>Reading Stories:</h4>
+      <ul>
+        <li>Tap any story to read it</li>
+        <li>Use the <strong>speaker icon</strong> to hear the story read aloud</li>
+        <li>Tap individual words in the "Words included" section to hear pronunciation</li>
+        <li>Filter stories by level (Beginner, Intermediate, Advanced)</li>
+      </ul>
+
+      <h4>Export & Import Stories:</h4>
+      <ul>
+        <li>Export all stories or just a selected category</li>
+        <li>Export individual stories from the menu</li>
+        <li>Import stories on another device - categories are created automatically</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Data Backup & Restore -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="cloud-download" slot="start"></ion-icon>
+        Data Management
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Manage your app data from <strong>Settings → Data</strong>.</p>
+
+      <h4>Export All App Data:</h4>
+      <p>Create a complete backup of everything including:</p>
+      <ul>
+        <li>All decks and flashcards</li>
+        <li>Study progress and statistics</li>
+        <li>All stories and categories</li>
+        <li>Word categories</li>
+        <li>App settings (language, appearance, study preferences)</li>
+      </ul>
+
+      <h4>Import And Replace All App Data:</h4>
+      <p>Restore from a backup file. This will replace all current data with the backup.</p>
+
+      <ion-note color="warning">
+        <ion-icon name="warning" slot="start"></ion-icon>
+        <div>
+          <strong>Important:</strong><br>
+          Importing data replaces all existing data. Export your current data first if you want to keep it.
+        </div>
+      </ion-note>
+
+      <h4>Import Multiple Decks (File):</h4>
+      <p>Add decks from a JSON file without replacing your existing data. Great for importing shared deck collections.</p>
+
+      <h4>Import Multiple Decks (URL):</h4>
+      <p>Import decks directly from a web URL. Useful for downloading community-shared deck collections.</p>
+
+      <h4>Reset Settings:</h4>
+      <p>Restore all app settings to their default values. This does not affect your decks, cards, or stories.</p>
+
+      <h4>Delete All Data:</h4>
+      <p>Permanently remove all decks, cards, stories, and progress. Use with caution - this cannot be undone!</p>
+
+      <ion-note color="primary">
+        <ion-icon name="bulb" slot="start"></ion-icon>
+        <strong>Tip:</strong> Regularly export your data to keep a backup of your learning progress.
+      </ion-note>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="settings-spacer"></div>
+  <!-- Settings Guide -->
+  <ion-card class="settings-card">
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="settings" slot="start"></ion-icon>
@@ -117,24 +283,35 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h4>Max Cards Per Session:</h4>
-      <p>Control how many cards you study in each session (5-500 cards). The app will show:</p>
+      <h4>Language Settings:</h4>
       <ul>
-        <li><strong>Due cards</strong> that are ready for review</li>
-        <li><strong>New cards</strong> to fill up to your maximum</li>
+        <li><strong>Native Language:</strong> Language for the app interface</li>
+        <li><strong>Target Language:</strong> Language you are learning</li>
       </ul>
-      
+
+      <h4>Text-to-Speech:</h4>
+      <ul>
+        <li><strong>Voice Selection:</strong> Choose from available voices for your target language</li>
+        <li><strong>Speech Rate:</strong> Adjust how fast words are spoken</li>
+        <li><strong>Auto-speak:</strong> Automatically pronounce words when cards flip</li>
+      </ul>
+
+      <h4>Study Settings:</h4>
+      <ul>
+        <li><strong>Max Cards Per Session:</strong> Control how many cards you study (5-500)</li>
+        <li><strong>Study Reminders:</strong> Get notifications to maintain your streak</li>
+      </ul>
+
+      <h4>Appearance:</h4>
+      <ul>
+        <li><strong>Dark Mode:</strong> Switch between light and dark themes</li>
+        <li><strong>Color Customization:</strong> Personalize button colors and backgrounds</li>
+      </ul>
+
       <ion-note color="success">
         <ion-icon name="bulb" slot="start"></ion-icon>
-        <strong>Tip:</strong> Start with 20 cards per session and adjust based on your available time and energy.
+        <strong>Tip:</strong> Start with 20 cards per session and adjust based on your available time.
       </ion-note>
-
-      <h4>Other Customizations:</h4>
-      <ul>
-        <li><strong>Auto-speak on card flip:</strong> Automatically pronounce words when you flip cards</li>
-        <li><strong>Color themes:</strong> Customize button colors and appearance</li>
-        <li><strong>Text-to-speech:</strong> Configure voice and language settings</li>
-      </ul>
     </ion-card-content>
   </ion-card>
 
@@ -163,16 +340,9 @@
         </div>
         
         <div class="tip-item">
-          <ion-icon name="refresh" color="warning"></ion-icon>
+          <ion-icon name="book" color="tertiary"></ion-icon>
           <div>
-            <strong>Use "Review Missed Cards":</strong> Immediately practice difficult cards for better retention.
-          </div>
-        </div>
-        
-        <div class="tip-item">
-          <ion-icon name="analytics" color="tertiary"></ion-icon>
-          <div>
-            <strong>Check your stats:</strong> Monitor progress and accuracy in the Stats tab to track improvement.
+            <strong>Read AI stories:</strong> Stories help you see vocabulary in context and improve reading comprehension.
           </div>
         </div>
         
@@ -184,37 +354,19 @@
         </div>
         
         <div class="tip-item">
+          <ion-icon name="cloud-upload" color="warning"></ion-icon>
+          <div>
+            <strong>Backup regularly:</strong> Export your data periodically to avoid losing progress.
+          </div>
+        </div>
+        
+        <div class="tip-item">
           <ion-icon name="library" color="primary"></ion-icon>
           <div>
-            <strong>Organize your decks:</strong> Create focused decks by topic or difficulty level for targeted learning.
+            <strong>Organize your content:</strong> Create focused decks and story categories for targeted learning.
           </div>
         </div>
       </div>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Card Management -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        <ion-icon name="create" slot="start"></ion-icon>
-        Card Management
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <h4>Managing Your Cards:</h4>
-      <ul>
-        <li><strong>Manage Deck:</strong> View, edit, or delete individual cards</li>
-        <li><strong>Reset Progress:</strong> Reset individual cards or entire decks to start fresh</li>
-        <li><strong>Search Cards:</strong> Find specific cards within your decks</li>
-      </ul>
-      
-      <h4>Card Types:</h4>
-      <ul>
-        <li><strong>Picture-Word:</strong> Image with Spanish word and English translation</li>
-        <li><strong>Fill-in-the-Blank:</strong> Complete sentences with missing words</li>
-        <li><strong>Translation:</strong> Translate between languages in both directions</li>
-      </ul>
     </ion-card-content>
   </ion-card>
 
@@ -227,12 +379,15 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
+      <h4>Quick Start Guide:</h4>
       <ol>
-        <li><strong>Create a deck</strong> or import existing cards</li>
-        <li><strong>Add cards</strong> using the + button on the Decks page</li>
-        <li><strong>Start studying</strong> by tapping the Study button</li>
+        <li><strong>Create a deck</strong> in the Decks tab or import existing cards</li>
+        <li><strong>Add cards</strong> using the + button (Picture, Fill-in-Blank, or Translate)</li>
+        <li><strong>Start studying</strong> by tapping the Study button on a deck</li>
         <li><strong>Answer honestly</strong> using Easy, Good, Hard, or "I don't know"</li>
-        <li><strong>Review missed cards</strong> for immediate reinforcement</li>
+        <li><strong>Review missed cards</strong> at the end of each session</li>
+        <li><strong>Create word categories</strong> in the Stories tab</li>
+        <li><strong>Generate AI stories</strong> using your vocabulary words</li>
         <li><strong>Study daily</strong> to maintain momentum and see progress</li>
       </ol>
       

@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
 import { ImageService } from '../services/image.service';
 import { TranslationService } from '../services/translation.service';
+import { StoryService } from '../services/story.service';
+import { WordCategory } from '../models/story.model';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { addIcons } from 'ionicons';
 import { Deck } from '../models/deck.model';
@@ -32,7 +34,8 @@ import {
   createOutline,
   trashOutline,
   downloadOutline,
-  close
+  close,
+  bookOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -102,7 +105,8 @@ export class DecksPage implements OnInit {
     private modalController: ModalController,
     private storageService: StorageService,
     private imageService: ImageService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private storyService: StoryService
   ) {
     // Register required icons
     addIcons({
@@ -123,7 +127,8 @@ export class DecksPage implements OnInit {
       createOutline,
       trashOutline,
       downloadOutline,
-      close
+      close,
+      bookOutline
     });
   }
 
@@ -684,6 +689,108 @@ export class DecksPage implements OnInit {
     this.showToast(this.translationService.t('decks.deckCreated'));
   }
 
+  /**
+   * Add all words from a deck to a word category for story generation
+   */
+  async addDeckWordsToCategory(deck: Deck) {
+    // Get all cards from this deck
+    const allCards = await this.storageService.getAllCards();
+    const deckCards = allCards.filter(c => c.deckId === deck.id);
+    
+    if (deckCards.length === 0) {
+      this.showToast('No cards in this deck');
+      return;
+    }
+
+    // Extract words from cards
+    const words: string[] = [];
+    for (const card of deckCards) {
+      if (card.type === 'fill-blank' && card.missingWord) {
+        words.push(card.missingWord);
+      } else if (card.type === 'picture-word' && card.spanishWord) {
+        words.push(card.spanishWord);
+      } else if (card.type === 'translate' && card.targetLanguageWord) {
+        words.push(card.targetLanguageWord);
+      }
+    }
+
+    if (words.length === 0) {
+      this.showToast('No words found in deck cards');
+      return;
+    }
+
+    // Get existing word categories
+    const wordCategories = await this.storyService.getWordCategories();
+
+    if (wordCategories.length === 0) {
+      // Create a new category with deck name
+      const alert = await this.alertController.create({
+        header: 'Create Word Category',
+        message: `No word categories exist. Create one to add ${words.length} words from "${deck.name}"?`,
+        inputs: [
+          { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deck.name }
+        ],
+        buttons: [
+          { text: 'Cancel', role: 'cancel' },
+          {
+            text: 'Create & Add',
+            handler: async (data) => {
+              if (data.categoryName?.trim()) {
+                const newCategory = await this.storyService.createWordCategory(data.categoryName.trim());
+                await this.storyService.addWordsToCategory(newCategory.id, words);
+                this.showToast(`Added ${words.length} words to "${newCategory.name}"`);
+              }
+            }
+          }
+        ]
+      });
+      await alert.present();
+    } else {
+      // Let user choose a category
+      const buttons = wordCategories.map(cat => ({
+        text: `${cat.name} (${cat.words.length} words)`,
+        handler: async () => {
+          await this.storyService.addWordsToCategory(cat.id, words);
+          this.showToast(`Added ${words.length} words to "${cat.name}"`);
+        }
+      }));
+
+      buttons.push({
+        text: 'Create New Category',
+        handler: async () => {
+          const alert = await this.alertController.create({
+            header: 'New Word Category',
+            inputs: [
+              { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deck.name }
+            ],
+            buttons: [
+              { text: 'Cancel', role: 'cancel' },
+              {
+                text: 'Create & Add',
+                handler: async (data) => {
+                  if (data.categoryName?.trim()) {
+                    const newCategory = await this.storyService.createWordCategory(data.categoryName.trim());
+                    await this.storyService.addWordsToCategory(newCategory.id, words);
+                    this.showToast(`Added ${words.length} words to "${newCategory.name}"`);
+                  }
+                }
+              }
+            ]
+          });
+          await alert.present();
+        }
+      });
+
+      buttons.push({ text: 'Cancel', handler: async () => {} });
+
+      const actionSheet = await this.actionSheetController.create({
+        header: `Add ${words.length} words to category`,
+        buttons: buttons as any
+      });
+      await actionSheet.present();
+    }
+  }
+
   // Action sheet button configurations
   get deckActionSheetButtons() {
     const selectedDeck = this.selectedDeck;
@@ -743,6 +850,15 @@ export class DecksPage implements OnInit {
         handler: () => {
           if (this.selectedDeck) {
             this.exportDeck(this.selectedDeck);
+          }
+        }
+      },
+      {
+        text: 'Add Words to Story Category',
+        icon: 'book-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.addDeckWordsToCategory(this.selectedDeck);
           }
         }
       },

@@ -3,6 +3,11 @@ ion-item {
   --padding-start: 0;
 }
 
+.picture-word-label {
+  margin-top: 24px;
+  margin-bottom: -8px;
+}
+
 .native-input {
   width: 100%;
   font-size: 16px;
@@ -21,7 +26,7 @@ ion-item {
 }
 
 ion-item.selected {
-  --background: var(--ion-color-primary-tint, rgba(56, 128, 255, 0.1));
+  --background: transparent;
   
   h3 {
     color: var(--ion-color-primary, #3880ff);

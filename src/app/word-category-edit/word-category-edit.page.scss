@@ -1,0 +1,67 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.content-container {
+  padding: 16px;
+}
+
+.add-word-section {
+  margin-bottom: 16px;
+  
+  ion-item {
+    --background: var(--ion-card-background);
+    border-radius: 8px;
+  }
+}
+
+.word-count {
+  padding: 8px 16px;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+ion-list {
+  background: transparent;
+  
+  ion-item {
+    --background: var(--ion-card-background);
+    margin-bottom: 8px;
+    border-radius: 8px;
+  }
+}
+
+.speak-icon {
+  margin-right: 8px;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+
+ion-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--ion-color-medium);
+}
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  
+  h3 {
+    margin-bottom: 16px;
+    color: var(--ion-text-color);
+  }
+}

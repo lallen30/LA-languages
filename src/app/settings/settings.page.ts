@@ -36,6 +36,7 @@ import { TranslatePipe } from '../pipes/translate.pipe';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 
 import { addIcons } from 'ionicons';
 import {
@@ -663,42 +664,67 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   }
 
   async importData() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    try {
+      // Use Capacitor FilePicker for native file selection (works on iOS)
+      const result = await FilePicker.pickFiles({
+        types: ['application/json'],
+        limit: 1,
+        readData: true
+      });
 
-    input.onchange = async (event: any) => {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      try {
-        const text = await file.text();
-        const data = JSON.parse(text);
-
-        const alert = await this.alertController.create({
-          header: this.translationService.t('settings.importDataTitle'),
-          message: this.translationService.t('settings.importDataMsg'),
-          buttons: [
-            { text: this.translationService.t('common.cancel'), role: 'cancel' },
-            {
-              text: this.translationService.t('settings.importData'),
-              handler: async () => {
-                await this.storageService.importData(data);
-                await this.showToast(this.translationService.t('settings.dataImported'));
-                window.location.reload();
-              }
-            }
-          ]
-        });
-
-        await alert.present();
-      } catch (error) {
-        console.error('Import failed:', error);
-        await this.showToast(this.translationService.t('settings.importFailed'), 'danger');
+      if (!result.files || result.files.length === 0) {
+        console.log('No file selected');
+        return;
       }
-    };
 
-    input.click();
+      const file = result.files[0];
+      let text: string;
+
+      if (file.data) {
+        // Data is base64 encoded
+        text = atob(file.data);
+      } else if (file.path) {
+        // Read from path
+        const fileContent = await Filesystem.readFile({
+          path: file.path,
+          encoding: Encoding.UTF8
+        });
+        text = typeof fileContent.data === 'string' ? fileContent.data : '';
+      } else {
+        throw new Error('No file data available');
+      }
+
+      const data = JSON.parse(text);
+
+      const alert = await this.alertController.create({
+        header: this.translationService.t('settings.importDataTitle'),
+        message: this.translationService.t('settings.importDataMsg'),
+        buttons: [
+          { text: this.translationService.t('common.cancel'), role: 'cancel' },
+          {
+            text: this.translationService.t('settings.importData'),
+            role: 'confirm'
+          }
+        ]
+      });
+
+      await alert.present();
+      const { role } = await alert.onDidDismiss();
+      
+      if (role === 'confirm') {
+        try {
+          await this.storageService.importData(data);
+          await this.showToast(this.translationService.t('settings.dataImported'));
+          window.location.reload();
+        } catch (importError) {
+          console.error('Import storage failed:', importError);
+          await this.showToast(this.translationService.t('settings.importFailed'), 'danger');
+        }
+      }
+    } catch (error) {
+      console.error('Import failed:', error);
+      await this.showToast(this.translationService.t('settings.importFailed'), 'danger');
+    }
   }
 
   async importMultipleDecks() {
@@ -1149,7 +1175,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   }
 
   openHelp() { this.router.navigate(['/tabs/help']); }
-  openBuyMeCoffee() { window.open('https://buymeacoffee.com/lallen30', '_blank'); }
+  openBuyMeCoffee() { window.open('https://paypal.me/lallen300', '_blank'); }
 
   async openCustomColorPicker(colorKey: string, colorName: string, evt?: Event) {
     const currentColor = (this.currentColorScheme as any)[colorKey];

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { StorageService } from '../../services/storage.service';
+import { TtsService } from '../../services/tts.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
@@ -68,7 +69,8 @@ export class TtsModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private ttsService: TtsService
   ) {}
   
   async ngOnInit() {
@@ -182,6 +184,56 @@ export class TtsModalComponent implements OnInit {
 
   onTargetLangAlertDidDismiss(ev: CustomEvent<any>) {
     this.isTargetLangAlertOpen = false;
+  }
+
+  formatRate = (value: number) => {
+    return `${value.toFixed(1)}x`;
+  };
+
+  private ratePreviewTimeout: any = null;
+
+  async onTtsRateChange() {
+    console.log('TTS Modal: Speech rate changed to:', this.settings.ttsRate);
+    
+    // Update TTS service directly
+    this.ttsService.setRate(this.settings.ttsRate);
+    
+    // Save directly to storage
+    try {
+      await this.storageService.saveSetting('ttsRate', this.settings.ttsRate);
+      console.log('TTS Modal: Speech rate saved to storage successfully');
+      // Emit for any listeners
+      this.ttsRateChange.emit();
+    } catch (error) {
+      console.error('TTS Modal: Failed to save ttsRate setting:', error);
+    }
+    
+    // Debounce the voice preview to avoid playing on every slider tick
+    // This is outside try/catch so it always runs
+    if (this.ratePreviewTimeout) {
+      clearTimeout(this.ratePreviewTimeout);
+    }
+    this.ratePreviewTimeout = setTimeout(() => {
+      console.log('TTS Modal: Debounce timeout fired, calling playRatePreview');
+      this.playRatePreview();
+    }, 500); // Wait 500ms after user stops sliding
+  }
+
+  /**
+   * Play a preview of the current speech rate
+   */
+  private async playRatePreview() {
+    const dialect = this.settings?.spanishDialect || 'es-ES';
+    const voiceName = this.settings?.spanishVoiceName || 'es-ES-Neural2-B';
+    const sampleText = this.getVoiceSampleText(dialect);
+    
+    console.log('TTS Modal: Playing rate preview at', this.settings.ttsRate, 'x speed');
+    
+    try {
+      await this.ttsService.speakWithVoice(sampleText, dialect, voiceName);
+    } catch (error) {
+      console.error('TTS Modal: Failed to play rate preview:', error);
+    }
   }
 
   async onAutoSpeakToggle(newValue: boolean) {
@@ -313,6 +365,8 @@ export class TtsModalComponent implements OnInit {
             this.settings.spanishVoiceName = voice.name;
             await this.storageService.saveSetting('spanishVoiceName', voice.name);
             this.emitTtsLanguageChange();
+            // Play a preview of the selected voice
+            this.playVoicePreview(voice.name, dialect);
           }
           this.isVoicePickerOpen = false;
           return true;
@@ -321,6 +375,40 @@ export class TtsModalComponent implements OnInit {
       { text: 'Cancel', role: 'cancel' }
     ];
     this.isVoicePickerOpen = true;
+  }
+
+  /**
+   * Play a preview of the selected voice
+   */
+  private async playVoicePreview(voiceName: string, languageCode: string) {
+    const sampleText = this.getVoiceSampleText(languageCode);
+    console.log('TTS Modal: Playing voice preview for', voiceName, 'with text:', sampleText);
+    
+    try {
+      // Use the TTS service to speak the sample text with the selected voice
+      await this.ttsService.speakWithVoice(sampleText, languageCode, voiceName);
+    } catch (error) {
+      console.error('TTS Modal: Failed to play voice preview:', error);
+    }
+  }
+
+  /**
+   * Get a sample text for voice preview based on language
+   */
+  private getVoiceSampleText(languageCode: string): string {
+    if (languageCode.startsWith('es-')) {
+      return 'Hola, ¿cómo estás?';
+    } else if (languageCode.startsWith('fr-')) {
+      return 'Bonjour, comment allez-vous?';
+    } else if (languageCode.startsWith('de-')) {
+      return 'Hallo, wie geht es Ihnen?';
+    } else if (languageCode.startsWith('it-')) {
+      return 'Ciao, come stai?';
+    } else if (languageCode.startsWith('pt-')) {
+      return 'Olá, como você está?';
+    } else {
+      return 'Hello, how are you?';
+    }
   }
 
   private async updateVoiceForDialect(dialect: 'es-ES' | 'es-US') {

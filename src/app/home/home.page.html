@@ -1,12 +1,38 @@
 <ion-header>
   <ion-toolbar mode="md">
-    <ion-title>{{ 'tabs.home' | translate }}</ion-title>
+    <ion-title>FluentFlip</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="welcome-content">
-    <!-- <h2>Master your Language</h2> -->
-    <img src="assets/images/alien.png" alt="Alien" class="alien-image" />
+<ion-content [fullscreen]="true" class="home-content">
+  <div class="home-container">
+    <!-- Top Row: Decks (left) and Stories (right) -->
+    <div class="nav-row top-row">
+      <div class="nav-item" (click)="goToDecks()">
+        <img src="assets/images/alien.png" alt="Decks" class="nav-icon" />
+        <span class="nav-label">Decks</span>
+      </div>
+      <div class="nav-item" (click)="goToStories()">
+        <img src="assets/images/alien-right.png" alt="Stories" class="nav-icon" />
+        <span class="nav-label">Stories</span>
+      </div>
+    </div>
+
+    <!-- Center: Dealer Image - links to Help & Guide -->
+    <div class="center-image" (click)="goToHelp()">
+      <img src="assets/images/dealer.png" alt="FluentFlip" class="dealer-image" />
+    </div>
+
+    <!-- Bottom Row: Stats (left) and Settings (right) -->
+    <div class="nav-row bottom-row">
+      <div class="nav-item" (click)="goToStats()">
+        <img src="assets/images/alien.png" alt="Stats" class="nav-icon" />
+        <span class="nav-label">Stats</span>
+      </div>
+      <div class="nav-item" (click)="goToSettings()">
+        <img src="assets/images/alien-right.png" alt="Settings" class="nav-icon" />
+        <span class="nav-label">Settings</span>
+      </div>
+    </div>
   </div>
 </ion-content>

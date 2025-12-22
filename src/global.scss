@@ -51,7 +51,7 @@ ion-modal {
 
 /* Dark mode support for session progress counter */
 body.dark .session-progress-counter {
-  color: #ffffff !important;
+  color: var(--ion-text-color, #ffffff) !important;
 }
 
 ion-content {
@@ -157,24 +157,24 @@ body.dark {
    DARK MODE: Action Sheet styling
    ============================================================================ */
 ion-action-sheet.dark-action-sheet {
-  --background: #2d2d2d;
-  --button-background: #2d2d2d;
-  --button-color: #007aff;
-  --color: #8e8e93;
+  --background: var(--ion-card-background, #2d2d2d);
+  --button-background: var(--ion-card-background, #2d2d2d);
+  --button-color: var(--ion-color-primary, #007aff);
+  --color: var(--ion-color-medium, #8e8e93);
 }
 
 ion-action-sheet.dark-action-sheet .action-sheet-group {
-  background: #2d2d2d !important;
+  background: var(--ion-card-background, #2d2d2d) !important;
 }
 
 ion-action-sheet.dark-action-sheet .action-sheet-title {
-  color: #8e8e93 !important;
-  background: #2d2d2d !important;
+  color: var(--ion-color-medium, #8e8e93) !important;
+  background: var(--ion-card-background, #2d2d2d) !important;
 }
 
 ion-action-sheet.dark-action-sheet .action-sheet-button {
-  background: #2d2d2d !important;
-  color: #007aff !important;
+  background: var(--ion-card-background, #2d2d2d) !important;
+  color: var(--ion-color-primary, #007aff) !important;
 }
 
 ion-action-sheet.dark-action-sheet .action-sheet-button.action-sheet-destructive {
@@ -182,7 +182,7 @@ ion-action-sheet.dark-action-sheet .action-sheet-button.action-sheet-destructive
 }
 
 ion-action-sheet.dark-action-sheet .action-sheet-cancel {
-  background: #3a3a3c !important;
+  background: var(--app-item-background, #3a3a3c) !important;
 }
 
 /* ============================================================================

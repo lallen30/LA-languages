@@ -87,7 +87,7 @@ ion-content {
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   border-radius: 12px;
   
   .stat-icon {
@@ -116,14 +116,14 @@ ion-content {
 .metric-explanations {
   margin: 20px 0;
   padding: 16px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   border-radius: 12px;
   
   h4 {
     margin: 0 0 12px 0;
     font-size: 14px;
     font-weight: 600;
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
   }
   
   .explanation-item {
@@ -160,7 +160,7 @@ ion-content {
 
 .deck-stat-item {
   padding: 16px;
-  background: var(--ion-color-light);
+  background: var(--app-item-background, var(--ion-color-light));
   border-radius: 12px;
 }
 
@@ -232,7 +232,7 @@ ion-content {
   
   .detail-value {
     font-weight: 500;
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
   }
 }
 
@@ -251,7 +251,7 @@ ion-content {
   }
   
   h2 {
-    color: var(--ion-color-dark);
+    color: var(--ion-text-color);
     margin-bottom: 12px;
     font-size: 24px;
   }

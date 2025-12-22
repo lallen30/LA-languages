@@ -123,6 +123,82 @@ export class TtsService {
   }
 
   /**
+   * Speak with a specific voice (for voice preview)
+   */
+  async speakWithVoice(text: string, languageCode: string, voiceName: string): Promise<void> {
+    console.log('🔊 TTS: speakWithVoice() called with voice:', voiceName);
+    
+    if (!text.trim()) {
+      return;
+    }
+
+    // Use Google Cloud TTS with the specific voice
+    try {
+      await this.speakWithGoogleTTSVoice(text, languageCode, voiceName);
+    } catch (error) {
+      console.error('TTS: Failed to speak with voice:', error);
+      // Fallback to regular speak
+      await this.speak(text, languageCode);
+    }
+  }
+
+  /**
+   * Speak using Google Cloud TTS with a specific voice name
+   */
+  private async speakWithGoogleTTSVoice(text: string, languageCode: string, voiceName: string): Promise<void> {
+    const requestBody = {
+      input: { text },
+      voice: {
+        languageCode: languageCode,
+        name: voiceName,
+      },
+      audioConfig: {
+        audioEncoding: 'MP3',
+        speakingRate: this.speechRate,
+        pitch: (this.speechPitch - 1) * 4,
+      },
+    };
+
+    console.log('TTS: Calling Google Cloud TTS API with specific voice:', voiceName);
+    
+    const response = await fetch(`${this.GOOGLE_TTS_URL}?key=${this.GOOGLE_TTS_API_KEY}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Google TTS API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    
+    // Convert base64 audio to blob URL
+    const audioContent = data.audioContent;
+    const audioBlob = this.base64ToBlob(audioContent, 'audio/mp3');
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    // Play the audio
+    return new Promise((resolve, reject) => {
+      const audio = new Audio(audioUrl);
+      audio.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+        console.log('TTS: Voice preview playback completed');
+        resolve();
+      };
+      audio.onerror = (e) => {
+        URL.revokeObjectURL(audioUrl);
+        console.error('TTS: Audio playback error:', e);
+        reject(e);
+      };
+      audio.play().catch(reject);
+    });
+  }
+
+  /**
    * Speak using Google Cloud Text-to-Speech API
    */
   private async speakWithGoogleTTS(text: string, language: string): Promise<void> {
@@ -342,6 +418,21 @@ export class TtsService {
    */
   setRate(rate: number): void {
     this.speechRate = Math.max(0.1, Math.min(10, rate));
+    // Clear audio cache since rate affects audio generation
+    this.clearCache();
+    console.log('TTS: Speech rate set to:', this.speechRate);
+  }
+
+  /**
+   * Clear the audio cache
+   */
+  clearCache(): void {
+    // Revoke all cached audio URLs to free memory
+    this.audioCache.forEach((url) => {
+      URL.revokeObjectURL(url);
+    });
+    this.audioCache.clear();
+    console.log('TTS: Audio cache cleared');
   }
 
   /**

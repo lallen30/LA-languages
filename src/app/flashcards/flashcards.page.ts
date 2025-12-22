@@ -24,8 +24,11 @@ import {
   folder,
   addCircle,
   languageOutline,
-  language
+  language,
+  bookmarkOutline
 } from 'ionicons/icons';
+import { StoryService } from '../services/story.service';
+import { WordCategory } from '../models/story.model';
 
 @Component({
   selector: 'app-flashcards',
@@ -64,7 +67,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     private actionSheetController: ActionSheetController,
     private alertController: AlertController,
     private toastController: ToastController,
-    private platform: Platform
+    private platform: Platform,
+    private storyService: StoryService
   ) {
     // Register all required icons
     addIcons({
@@ -80,7 +84,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
       'folder': folder,
       'add-circle': addCircle,
       'language-outline': languageOutline,
-      'language': language
+      'language': language,
+      'bookmark-outline': bookmarkOutline
     });
   }
 
@@ -854,5 +859,125 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     }
   }
 
-  
+  /**
+   * Add the current card's word to a story word category
+   */
+  async addWordToStoryCategory() {
+    if (!this.currentCard) {
+      return;
+    }
+
+    // Extract word from current card based on card type
+    let word = '';
+    if (this.currentCard.type === 'fill-blank' && this.currentCard.missingWord) {
+      word = this.currentCard.missingWord;
+    } else if (this.currentCard.type === 'picture-word' && this.currentCard.spanishWord) {
+      word = this.currentCard.spanishWord;
+    } else if (this.currentCard.type === 'translate' && this.currentCard.targetLanguageWord) {
+      word = this.currentCard.targetLanguageWord;
+    }
+
+    if (!word) {
+      const toast = await this.toastController.create({
+        message: 'No word found on this card',
+        duration: 2000,
+        position: 'bottom'
+      });
+      await toast.present();
+      return;
+    }
+
+    // Get existing word categories
+    const wordCategories = await this.storyService.getWordCategories();
+
+    if (wordCategories.length === 0) {
+      // No categories exist - prompt to create one
+      const alert = await this.alertController.create({
+        header: 'New Word Category',
+        inputs: [
+          { name: 'categoryName', type: 'text', placeholder: 'Category name' }
+        ],
+        buttons: [
+          { text: 'Cancel', role: 'cancel' },
+          { text: 'Create & Add', role: 'confirm' }
+        ]
+      });
+      await alert.present();
+      
+      const result = await alert.onDidDismiss();
+      if (result.role === 'confirm' && result.data?.values?.categoryName?.trim()) {
+        const categoryName = result.data.values.categoryName.trim();
+        const newCategory = await this.storyService.createWordCategory(categoryName);
+        await this.storyService.addWordsToCategory(newCategory.id, [word]);
+        const toast = await this.toastController.create({
+          message: `Added "${word}" to "${newCategory.name}"`,
+          duration: 2000,
+          position: 'bottom'
+        });
+        await toast.present();
+      }
+    } else {
+      // Let user choose a category using action sheet
+      const buttons: any[] = wordCategories.map(cat => ({
+        text: `${cat.name} (${cat.words.length} words)`,
+        data: { categoryId: cat.id, categoryName: cat.name }
+      }));
+
+      buttons.push({
+        text: 'Create New Category',
+        data: { createNew: true }
+      });
+
+      buttons.push({ text: 'Cancel', role: 'cancel' });
+
+      const actionSheet = await this.actionSheetController.create({
+        header: `Add "${word}" to category`,
+        buttons: buttons
+      });
+      await actionSheet.present();
+      
+      const result = await actionSheet.onDidDismiss();
+      
+      if (result.role === 'cancel' || !result.data) {
+        return;
+      }
+      
+      if (result.data.createNew) {
+        // Show create category alert
+        const alert = await this.alertController.create({
+          header: 'New Word Category',
+          inputs: [
+            { name: 'categoryName', type: 'text', placeholder: 'Category name' }
+          ],
+          buttons: [
+            { text: 'Cancel', role: 'cancel' },
+            { text: 'Create & Add', role: 'confirm' }
+          ]
+        });
+        await alert.present();
+        
+        const alertResult = await alert.onDidDismiss();
+        if (alertResult.role === 'confirm' && alertResult.data?.values?.categoryName?.trim()) {
+          const categoryName = alertResult.data.values.categoryName.trim();
+          const newCategory = await this.storyService.createWordCategory(categoryName);
+          await this.storyService.addWordsToCategory(newCategory.id, [word]);
+          const toast = await this.toastController.create({
+            message: `Added "${word}" to "${newCategory.name}"`,
+            duration: 2000,
+            position: 'bottom'
+          });
+          await toast.present();
+        }
+      } else if (result.data.categoryId) {
+        // Add to existing category
+        await this.storyService.addWordsToCategory(result.data.categoryId, [word]);
+        const toast = await this.toastController.create({
+          message: `Added "${word}" to "${result.data.categoryName}"`,
+          duration: 2000,
+          position: 'bottom'
+        });
+        await toast.present();
+      }
+    }
+  }
 }

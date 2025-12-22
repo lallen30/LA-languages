@@ -1,13 +1,17 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" *ngIf="!isSessionActive">
     <ion-tab-button tab="home" href="/tabs/home">
-      <ion-icon aria-hidden="true" name="home"></ion-icon>
-      <ion-label>{{ 'tabs.home' | translate }}</ion-label>
+      <img src="assets/images/alien.png" alt="Home" class="tab-alien-icon" />
     </ion-tab-button>
 
     <ion-tab-button tab="decks_backup" href="/tabs/decks_backup">
       <ion-icon aria-hidden="true" name="library"></ion-icon>
       <ion-label>{{ 'tabs.decks' | translate }}</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="stories" href="/tabs/stories">
+      <ion-icon aria-hidden="true" name="book"></ion-icon>
+      <ion-label>Stories</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="stats" href="/tabs/stats">

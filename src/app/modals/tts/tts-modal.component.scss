@@ -166,3 +166,56 @@
 }
 
 /* 5) Custom toggle used instead of ion-toggle to bypass iOS Shadow DOM issues */
+
+/* Speech Rate slider styling */
+.range-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+.custom-range-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  padding: 8px 0;
+  
+  .range-label {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+    min-width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+}
+
+.custom-range {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--ion-color-light-shade, #d7d8da);
+  border-radius: 3px;
+  outline: none;
+  
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--ion-color-primary, #3880ff);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  &::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--ion-color-primary, #3880ff);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
