@@ -621,20 +621,29 @@ export class DecksPage implements OnInit {
     const remaining = Math.max(total - mastered, 0);
     const progress = total > 0 ? Math.round((mastered / total) * 100) : 0;
 
-    // Populate modal fields
-    this.statsDeckName = deck.name;
-    this.statsTotal = total;
-    this.statsMastered = mastered;
-    this.statsRemaining = remaining;
-    this.statsProgress = progress;
-
-    // Close any action sheet under iOS and show modal
+    // Close any action sheet under iOS
     this.isDeckActionSheetOpen = false;
-    this.showStatsModal = true;
-  }
-
-  closeStatsModal() {
-    this.showStatsModal = false;
+    
+    const alert = await this.alertController.create({
+      header: this.translationService.t('decks.viewStats'),
+      subHeader: deck.name,
+      message: `
+        <div class="stats-info">
+          <p><strong>${this.translationService.t('stats.totalCards')}:</strong> ${total}</p>
+          <p><strong>${this.translationService.t('stats.mastered')}:</strong> ${mastered}</p>
+          <p><strong>${this.translationService.t('stats.learning')}:</strong> ${remaining}</p>
+          <p><strong>${this.translationService.t('decks.deckProgress')}:</strong> ${progress}%</p>
+        </div>
+      `,
+      buttons: [
+        {
+          text: this.translationService.t('common.ok'),
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
   async deleteDeck(deck: any) {

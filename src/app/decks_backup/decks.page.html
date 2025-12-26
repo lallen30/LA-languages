@@ -148,26 +148,6 @@
     </div>
   </div>
 
-  <!-- View Statistics Modal -->
-  <div class="custom-modal-overlay" *ngIf="showStatsModal" (click)="closeStatsModal()">
-    <div class="custom-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.viewStats' | translate }}</h2>
-        <button class="close-btn" (click)="closeStatsModal()">×</button>
-      </div>
-      <div class="modal-content stats-modal">
-        <h3 class="deck-title">{{ statsDeckName }}</h3>
-        <div class="stats-row"><strong>{{ 'stats.totalCards' | translate }}:</strong> {{ statsTotal }}</div>
-        <div class="stats-row"><strong>{{ 'stats.mastered' | translate }}:</strong> {{ statsMastered }}</div>
-        <div class="stats-row"><strong>{{ 'stats.learning' | translate }}:</strong> {{ statsRemaining }}</div>
-        <div class="stats-row"><strong>{{ 'decks.deckProgress' | translate }}:</strong> {{ statsProgress }}%</div>
-        <div class="modal-buttons">
-          <button class="modal-btn primary stats-btn" (click)="closeStatsModal()">{{ 'common.ok' | translate }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Word Selection Modal -->
   <div class="custom-modal-overlay" *ngIf="showWordSelectionModal" (click)="closeWordSelectionModal()">
     <div class="custom-modal word-selection-modal" (click)="$event.stopPropagation()">
