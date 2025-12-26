@@ -365,48 +365,74 @@ export class DecksPage implements OnInit {
     toast.present();
   }
 
-  // Import functionality
-  showImportOptions() {
+  // Import functionality - Using Ionic ActionSheet for proper dark mode styling
+  async showImportOptions() {
     console.log('showImportOptions called');
-    this.showImportModal = true;
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translationService.t('decks.importDecks'),
+      buttons: [
+        {
+          text: this.translationService.t('decks.importFromUrl'),
+          icon: 'download-outline',
+          handler: () => {
+            this.showUrlInputAlert();
+          }
+        },
+        {
+          text: this.translationService.t('decks.importFromFile'),
+          icon: 'cloud-upload-outline',
+          handler: () => {
+            this.importFromDevice();
+          }
+        },
+        {
+          text: this.translationService.t('common.cancel'),
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await actionSheet.present();
   }
 
-  closeImportModal() {
-    this.showImportModal = false;
-  }
-
-  showUrlInput() {
-    console.log('showUrlInput called');
-    this.showImportModal = false;
-    this.showUrlInputModal = true;
-  }
-
-  closeUrlInputModal() {
-    this.showUrlInputModal = false;
-    this.importUrl = '';
+  async showUrlInputAlert() {
+    const alert = await this.alertController.create({
+      header: this.translationService.t('decks.importFromUrl'),
+      message: this.translationService.t('decks.enterUrl'),
+      inputs: [
+        {
+          name: 'url',
+          type: 'url',
+          placeholder: 'https://example.com/deck.json'
+        }
+      ],
+      buttons: [
+        {
+          text: this.translationService.t('common.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translationService.t('decks.importDecks'),
+          handler: async (data) => {
+            if (data.url && data.url.trim()) {
+              await this.downloadAndImportDeck(data.url.trim());
+            }
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
   async importFromDevice() {
     console.log('importFromDevice called');
-    this.showImportModal = false;
     
     // Directly call importDeck - skip the confirmation alert for iOS compatibility
     console.log('Calling importDeck directly...');
     await this.importDeck();
-  }
-
-  async executeUrlImport() {
-    console.log('executeUrlImport called with URL:', this.importUrl);
-    if (this.importUrl && this.importUrl.trim()) {
-      const urlToImport = this.importUrl.trim();
-      this.closeUrlInputModal();
-      
-      // Directly call downloadAndImportDeck - skip confirmation alert for iOS compatibility
-      console.log('Calling downloadAndImportDeck directly...');
-      await this.downloadAndImportDeck(urlToImport);
-    } else {
-      console.log('No URL provided for import');
-    }
   }
 
   async fetchDeckFromUrl(url: string) {
@@ -1002,6 +1028,15 @@ export class DecksPage implements OnInit {
         handler: () => {
           if (this.selectedDeck) {
             this.navigateToCardManagement(this.selectedDeck);
+          }
+        }
+      },
+      {
+        text: this.translationService.t('decks.editCards'),
+        icon: 'list-outline',
+        handler: () => {
+          if (this.selectedDeck) {
+            this.navigateToEditCards(this.selectedDeck);
           }
         }
       },
@@ -1781,6 +1816,14 @@ export class DecksPage implements OnInit {
      */
     async navigateToCardManagement(deck: Deck) {
       console.log('Navigating to card management for deck:', deck.name);
+      this.router.navigate(['/tabs/card-management', deck.id]);
+    }
+
+    /**
+     * Navigate to edit cards page for the deck
+     */
+    async navigateToEditCards(deck: Deck) {
+      console.log('Navigating to edit cards for deck:', deck.name);
       this.router.navigate(['/tabs/card-management', deck.id]);
     }
 

@@ -393,6 +393,239 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     }
   }
 
+  async openCardActions() {
+    if (!this.currentCard) return;
+    
+    let headerText = '';
+    if (this.currentCard.type === 'translate') {
+      headerText = this.currentCard.targetLanguageWord || 'Card';
+    } else if (this.currentCard.type === 'picture-word') {
+      headerText = this.currentCard.spanishWord || 'Card';
+    } else if (this.currentCard.type === 'fill-blank') {
+      headerText = this.currentCard.missingWord || 'Card';
+    }
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: headerText,
+      buttons: [
+        {
+          text: 'Edit Card',
+          icon: 'create-outline',
+          handler: () => {
+            this.editCurrentCard();
+          }
+        },
+        {
+          text: 'Delete Card',
+          icon: 'trash-outline',
+          role: 'destructive',
+          handler: () => {
+            this.deleteCurrentCard();
+          }
+        },
+        {
+          text: 'Reset Progress',
+          icon: 'refresh-outline',
+          handler: () => {
+            this.resetCurrentCardProgress();
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    
+    await actionSheet.present();
+  }
+
+  async editCurrentCard() {
+    if (!this.currentCard) return;
+    
+    let inputs: any[] = [];
+    
+    if (this.currentCard.type === 'translate') {
+      inputs = [
+        {
+          name: 'targetLanguageWord',
+          type: 'text',
+          placeholder: 'Target Language Word',
+          value: this.currentCard.targetLanguageWord
+        },
+        {
+          name: 'englishTranslation',
+          type: 'textarea',
+          placeholder: 'English Translation',
+          value: this.currentCard.englishTranslation
+        }
+      ];
+    } else if (this.currentCard.type === 'fill-blank') {
+      inputs = [
+        {
+          name: 'sentenceFront',
+          type: 'textarea',
+          placeholder: 'Sentence with blank (use ____ for blank)',
+          value: this.currentCard.sentenceFront
+        },
+        {
+          name: 'missingWord',
+          type: 'text',
+          placeholder: 'Missing word',
+          value: this.currentCard.missingWord
+        },
+        {
+          name: 'sentenceBack',
+          type: 'textarea',
+          placeholder: 'Complete sentence',
+          value: this.currentCard.sentenceBack
+        }
+      ];
+    } else if (this.currentCard.type === 'picture-word') {
+      inputs = [
+        {
+          name: 'spanishWord',
+          type: 'text',
+          placeholder: 'Spanish Word',
+          value: this.currentCard.spanishWord
+        },
+        {
+          name: 'englishTranslation',
+          type: 'textarea',
+          placeholder: 'English Translation',
+          value: this.currentCard.englishTranslation
+        }
+      ];
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Edit Card',
+      inputs: inputs,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Save',
+          handler: async (data) => {
+            await this.saveCardEdits(data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async saveCardEdits(data: any) {
+    if (!this.currentCard) return;
+    
+    const updatedCard = { ...this.currentCard };
+    
+    if (this.currentCard.type === 'translate') {
+      if (data.targetLanguageWord) updatedCard.targetLanguageWord = data.targetLanguageWord;
+      if (data.englishTranslation) updatedCard.englishTranslation = data.englishTranslation;
+    } else if (this.currentCard.type === 'fill-blank') {
+      if (data.sentenceFront) updatedCard.sentenceFront = data.sentenceFront;
+      if (data.missingWord) updatedCard.missingWord = data.missingWord;
+      if (data.sentenceBack) updatedCard.sentenceBack = data.sentenceBack;
+    } else if (this.currentCard.type === 'picture-word') {
+      if (data.spanishWord) updatedCard.spanishWord = data.spanishWord;
+      if (data.englishTranslation) updatedCard.englishTranslation = data.englishTranslation;
+    }
+    
+    await this.storageService.updateCard(updatedCard);
+    this.currentCard = updatedCard;
+    
+    const toast = await this.toastController.create({
+      message: 'Card updated successfully',
+      duration: 2000,
+      position: 'bottom'
+    });
+    await toast.present();
+  }
+
+  async deleteCurrentCard() {
+    if (!this.currentCard) return;
+    
+    const alert = await this.alertController.create({
+      header: 'Delete Card',
+      message: 'Are you sure you want to delete this card?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: async () => {
+            await this.storageService.deleteCard(this.currentCard!.id);
+            
+            const toast = await this.toastController.create({
+              message: 'Card deleted',
+              duration: 2000,
+              position: 'bottom'
+            });
+            await toast.present();
+            
+            // Reload the session to get the next card
+            const currentDeckId = this.cardService.getCurrentDeckId();
+            if (currentDeckId && this.remainingCards > 0) {
+              // Process as if user answered to move to next card
+              const response: CardResponse = { correct: true, difficulty: 'easy' };
+              await this.cardService.processCardResponse(this.currentCard!, response);
+            } else {
+              // No more cards, end session
+              this.endSession();
+              this.goToDecks();
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async resetCurrentCardProgress() {
+    if (!this.currentCard) return;
+    
+    const alert = await this.alertController.create({
+      header: 'Reset Progress',
+      message: 'Reset learning progress for this card?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Reset',
+          handler: async () => {
+            this.currentCard!.isNew = true;
+            this.currentCard!.repetitions = 0;
+            this.currentCard!.easeFactor = 2.5;
+            this.currentCard!.interval = 1;
+            this.currentCard!.nextReview = new Date();
+            
+            await this.storageService.updateCard(this.currentCard!);
+            
+            const toast = await this.toastController.create({
+              message: 'Card progress reset',
+              duration: 2000,
+              position: 'bottom'
+            });
+            await toast.present();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   async showCopyCardOptions() {
     if (!this.currentCard) return;
     

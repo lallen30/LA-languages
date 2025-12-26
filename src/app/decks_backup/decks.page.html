@@ -103,51 +103,6 @@
     (didDismiss)="setCreateDeckActionSheetOpen(false)">
   </ion-action-sheet>
 
-  <!-- Custom Import Modal -->
-  <div class="custom-modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
-    <div class="custom-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.importDecks' | translate }}</h2>
-        <button class="close-btn" (click)="closeImportModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <p>{{ 'decks.importDecks' | translate }}</p>
-        <div class="import-options">
-          <button class="import-btn url-btn" (click)="showUrlInput()">
-            <ion-icon name="download-outline"></ion-icon>
-            {{ 'decks.importFromUrl' | translate }}
-          </button>
-          <button class="import-btn device-btn" (click)="importFromDevice()">
-            <ion-icon name="cloud-upload-outline"></ion-icon>
-            {{ 'decks.importFromFile' | translate }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Custom URL Input Modal -->
-  <div class="custom-modal-overlay" *ngIf="showUrlInputModal" (click)="closeUrlInputModal()">
-    <div class="custom-modal url-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.importFromUrl' | translate }}</h2>
-        <button class="close-btn" (click)="closeUrlInputModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <p>{{ 'decks.enterUrl' | translate }}</p>
-        <input 
-          type="url" 
-          [(ngModel)]="importUrl" 
-          placeholder="https://example.com/deck.json"
-          class="url-input">
-        <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeUrlInputModal()">{{ 'common.cancel' | translate }}</button>
-          <button class="import-btn" (click)="executeUrlImport()" [disabled]="!importUrl">{{ 'decks.importDecks' | translate }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Word Selection Modal -->
   <div class="custom-modal-overlay" *ngIf="showWordSelectionModal" (click)="closeWordSelectionModal()">
     <div class="custom-modal word-selection-modal" (click)="$event.stopPropagation()">

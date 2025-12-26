@@ -43,11 +43,11 @@
         <div class="card-header-content">
           <div class="card-words">
             <ion-card-title>
-              <span *ngIf="card.type === 'translate'">{{ card.targetLanguageWord }}</span>
-              <span *ngIf="card.type === 'picture-word'">{{ card.spanishWord }}</span>
-              <span *ngIf="card.type === 'fill-blank'">{{ card.missingWord }}</span>
+              <span *ngIf="card.type === 'translate'">{{ card.targetLanguageWord }} - </span>
+              <span *ngIf="card.type === 'picture-word'">{{ card.spanishWord }} - </span>
+              <span *ngIf="card.type === 'fill-blank'">{{ card.missingWord }} - </span>
+              {{ card.englishTranslation }}
             </ion-card-title>
-            <ion-card-subtitle>{{ card.englishTranslation }}</ion-card-subtitle>
           </div>
           <ion-chip [color]="getCardStatusColor(card)" class="status-chip">
             <ion-label>{{ getCardStatusText(card) }}</ion-label>

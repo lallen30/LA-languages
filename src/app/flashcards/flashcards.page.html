@@ -37,6 +37,14 @@
         (click)="showTranslation = !showTranslation">
         <ion-icon name="language"></ion-icon>
       </ion-button>
+      
+      <!-- Edit Card Button -->
+      <ion-button 
+        *ngIf="currentCard"
+        fill="clear" 
+        (click)="openCardActions()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

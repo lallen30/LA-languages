@@ -375,6 +375,14 @@ ion-alert.hex-input-alert + ion-backdrop {
 }
 
 /* ============================================================================
+   Alert textarea styling - Make description fields larger
+   ============================================================================ */
+ion-alert textarea.alert-input {
+  min-height: 100px !important;
+  height: auto !important;
+}
+
+/* ============================================================================
    iOS CRITICAL FIX: Global clickability issue - NUCLEAR OPTION
    ============================================================================ */
 @media (max-width: 768px) {
