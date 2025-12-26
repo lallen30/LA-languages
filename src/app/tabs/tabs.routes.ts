@@ -72,6 +72,11 @@ export const routes: Routes = [
           import('../word-category-edit/word-category-edit.page').then((m) => m.WordCategoryEditPage),
       },
       {
+        path: 'progression-map',
+        loadComponent: () =>
+          import('../progression-map/progression-map.page').then((m) => m.ProgressionMapPage),
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full',

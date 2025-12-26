@@ -1,41 +1,19 @@
-@media (max-width: 768px) {
-  ion-header {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
-    z-index: 1000 !important;
-    background: var(--ion-background-color) !important;
-    border-bottom: 1px solid var(--ion-border-color, #c8c7cc) !important;
-    /* Add safe area padding for iOS status bar */
-    padding-top: env(safe-area-inset-top) !important;
-    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
-  }
-
+// Header styling - match Home/Stories height
+// Fix Android header z-index issue - content scrolls behind header
+ion-header {
+  position: relative;
+  z-index: 100;
+  background: var(--ion-background-color, #1c1c1e);
+  
   ion-toolbar {
-    --background: var(--ion-background-color) !important;
-    --color: var(--ion-text-color) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 8px 16px !important;
-    /* Ensure toolbar content is visible */
-    position: relative !important;
-    z-index: 1001 !important;
-  }
-
-  ion-title {
-    display: block !important;
-    text-align: center !important;
-    font-size: 17px !important;
-    font-weight: 600 !important;
-    color: var(--ion-text-color) !important;
-    margin: 0 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    /* Ensure title is visible */
-    position: relative !important;
-    z-index: 1002 !important;
+    --background: var(--ion-background-color, #1c1c1e);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-width: 0 0 0.55px 0;
+    border-bottom: 0.55px solid rgba(255, 255, 255, 0.1);
+    
+    ion-title {
+      text-align: center;
+    }
   }
 }
 

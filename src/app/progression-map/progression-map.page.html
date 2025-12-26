@@ -1,0 +1,108 @@
+<ion-header [translucent]="true">
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()" class="menu-button">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Progression Map</ion-title>
+    <ion-buttons slot="end">
+      <ion-button style="visibility: hidden;">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="map-content" [class.light-mode]="!isDarkMode">
+  <!-- Background (only shown in dark mode) -->
+  <div class="map-background" *ngIf="isDarkMode">
+    <img src="assets/images/fluentflip_map_background.png" alt="Map Background" />
+  </div>
+
+  <!-- Stats Header -->
+  <div class="stats-header">
+    <div class="mastered-count">
+      <span class="count">{{ totalMasteredCards }}</span>
+      <span class="label">Cards Mastered</span>
+    </div>
+    <div class="current-level">
+      <span class="label">Current Level</span>
+      <span class="level">{{ currentLevel }}</span>
+    </div>
+  </div>
+
+  <!-- Levels Container -->
+  <div class="levels-container">
+    <ng-container *ngFor="let level of levels; let i = index; let last = last">
+      <!-- Level Node -->
+      <div class="level-node" 
+           [class.left]="level.position === 'left'"
+           [class.right]="level.position === 'right'"
+           [class.locked]="getLevelStatus(level) === 'locked'"
+           [class.current]="getLevelStatus(level) === 'current'"
+           [class.completed]="getLevelStatus(level) === 'completed'">
+        
+        <!-- Level Image -->
+        <div class="level-image-container">
+          <img [src]="level.image" [alt]="level.title" class="level-image" />
+          
+          <!-- Lock Overlay for locked levels -->
+          <div class="lock-overlay" *ngIf="getLevelStatus(level) === 'locked'">
+            <ion-icon name="lock-closed"></ion-icon>
+          </div>
+          
+          <!-- Checkmark for completed levels -->
+          <div class="completed-badge" *ngIf="getLevelStatus(level) === 'completed'">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+          
+          <!-- Progress ring for current level -->
+          <div class="progress-ring" *ngIf="getLevelStatus(level) === 'current'">
+            <svg viewBox="0 0 100 100">
+              <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+              <circle class="progress-bar" cx="50" cy="50" r="45"
+                      [style.stroke-dasharray]="'283'"
+                      [style.stroke-dashoffset]="283 - (283 * getLevelProgress(level) / 100)">
+              </circle>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Level Info -->
+        <div class="level-info">
+          <span class="level-number">Level {{ level.id }}</span>
+          <span class="level-title">{{ level.title }}</span>
+          
+          <!-- Progress text for current level -->
+          <span class="progress-text" *ngIf="getLevelStatus(level) === 'current'">
+            {{ getCardsToNextLevel(level) }} cards to go
+          </span>
+          
+          <!-- Cards required for locked levels -->
+          <span class="cards-required" *ngIf="getLevelStatus(level) === 'locked'">
+            {{ level.cumulativeCards }} cards needed
+          </span>
+        </div>
+      </div>
+
+      <!-- Connector Line (except after last level) -->
+      <div class="connector" *ngIf="!last"
+           [class.left-to-right]="level.position === 'left'"
+           [class.right-to-left]="level.position === 'right'"
+           [class.active]="getLevelStatus(level) === 'completed'">
+        <img *ngIf="level.position === 'left'" 
+             src="assets/images/left_to_right_link.png" 
+             alt="connector" 
+             class="connector-image" />
+        <img *ngIf="level.position === 'right'" 
+             src="assets/images/right_to_left_link.png" 
+             alt="connector" 
+             class="connector-image" />
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Bottom Padding -->
+  <div class="bottom-spacer"></div>
+</ion-content>

@@ -128,6 +128,25 @@ export class StorageService {
     };
   }
 
+  async resetAllCardProgress(): Promise<void> {
+    await this.ensureStorage();
+    const cards = await this.getAllCards();
+    
+    // Reset progress for all cards
+    const resetCards = cards.map(card => ({
+      ...card,
+      isNew: true,
+      repetitions: 0,
+      easeFactor: 2.5,
+      interval: 1,
+      lastReviewed: new Date(),
+      nextReview: new Date(),
+      skipCount: 0
+    }));
+    
+    await this._storage?.set('cards', resetCards);
+  }
+
   // Utility methods
   async clearAllData(): Promise<void> {
     await this.ensureStorage();

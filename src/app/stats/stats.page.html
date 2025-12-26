@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()" class="menu-button">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'stats.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>

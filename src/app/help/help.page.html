@@ -61,6 +61,14 @@
         <ion-icon name="information-circle" slot="start"></ion-icon>
         The algorithm automatically adjusts based on your performance to optimize long-term retention.
       </ion-note>
+
+      <h4>Mastered Cards:</h4>
+      <p>A card is considered <strong>mastered</strong> when it meets both criteria:</p>
+      <ul>
+        <li>The card has been <strong>studied at least once</strong> (no longer "new")</li>
+        <li>The card has been <strong>successfully reviewed 3 or more times</strong></li>
+      </ul>
+      <p>The "Mastered" count on each deck shows how many cards you've learned well enough that they're in your long-term memory.</p>
     </ion-card-content>
   </ion-card>
   <!-- Study Session Guide -->
@@ -75,19 +83,31 @@
       <h4>During Study Sessions:</h4>
       <div class="response-guide">
         <div class="response-item">
-          <ion-button size="small" color="success" fill="outline">Easy</ion-button>
+          <ion-button size="small" color="success" fill="outline">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Easy
+          </ion-button>
           <span>You knew the answer immediately and confidently</span>
         </div>
         <div class="response-item">
-          <ion-button size="small" color="primary" fill="outline">Good</ion-button>
+          <ion-button size="small" color="primary" fill="outline">
+            <ion-icon name="thumbs-up" slot="start"></ion-icon>
+            Good
+          </ion-button>
           <span>You knew the answer after thinking briefly</span>
         </div>
         <div class="response-item">
-          <ion-button size="small" color="warning" fill="outline">Hard</ion-button>
+          <ion-button size="small" color="warning" fill="outline">
+            <ion-icon name="thumbs-down" slot="start"></ion-icon>
+            Hard
+          </ion-button>
           <span>You struggled but eventually remembered</span>
         </div>
         <div class="response-item">
-          <ion-button size="small" color="danger" fill="outline">I don't know</ion-button>
+          <ion-button size="small" color="danger" fill="outline">
+            <ion-icon name="close" slot="start"></ion-icon>
+            Again
+          </ion-button>
           <span>You couldn't remember or got it wrong</span>
         </div>
       </div>

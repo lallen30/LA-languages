@@ -7,6 +7,9 @@ import { Card } from '../models/card.model';
 import { StorageService } from '../services/storage.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslationService } from '../services/translation.service';
+import { MenuService } from '../services/menu.service';
+import { addIcons } from 'ionicons';
+import { menuOutline, menu } from 'ionicons/icons';
 
 @Component({
   selector: 'app-stats',
@@ -30,8 +33,16 @@ export class StatsPage implements OnInit {
 
   constructor(
     private storageService: StorageService,
-    private translationService: TranslationService
-  ) {}
+    private translationService: TranslationService,
+    private menuService: MenuService
+  ) {
+    addIcons({ menuOutline, menu });
+  }
+
+  openMenu() {
+    console.log('openMenu called from Stats');
+    this.menuService.open();
+  }
 
   async ngOnInit() {
     // Don't load stats here to avoid double loading
@@ -56,9 +67,24 @@ export class StatsPage implements OnInit {
       const allDecks = await this.storageService.getAllDecks();
       console.log('DEBUG: Total decks before filtering:', allDecks.length);
       
+      // Map language codes to language names (same as Decks page)
+      const languageMap: { [key: string]: string } = {
+        'es-ES': 'Spanish',
+        'fr-FR': 'French',
+        'de-DE': 'German',
+        'pt-PT': 'Portuguese',
+        'it-IT': 'Italian',
+        'en-US': 'English'
+      };
+      const languageName = languageMap[selectedLanguage];
+      console.log('DEBUG: Looking for language name:', languageName, 'or code:', selectedLanguage);
+      
       // Filter by selected language and remove duplicates
       const uniqueDecks = this.removeDuplicateDecks(allDecks);
-      const filteredDecks = uniqueDecks.filter(deck => deck.language === selectedLanguage);
+      // Match by language name OR language code (same logic as Decks page)
+      const filteredDecks = uniqueDecks.filter(deck => 
+        deck.language === languageName || deck.language === selectedLanguage
+      );
       console.log('DEBUG: Decks after deduplication:', uniqueDecks.length);
       console.log('DEBUG: Decks after language filtering:', filteredDecks.length);
       
@@ -204,12 +230,18 @@ export class StatsPage implements OnInit {
     const confirmed = confirm(this.translationService.t('stats.resetConfirm'));
     
     if (confirmed) {
+      // Reset user stats
       await this.storageService.saveStats({
         totalReviews: 0,
         streak: 0,
         lastReviewDate: null,
         masteredCards: 0
       });
+      
+      // Reset all card progress (repetitions, isNew, etc.)
+      await this.storageService.resetAllCardProgress();
+      
+      // Reload stats to reflect the changes
       await this.loadStats();
     }
   }

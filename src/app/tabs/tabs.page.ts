@@ -2,9 +2,10 @@ import { Component, EnvironmentInjector, inject, OnInit, OnDestroy } from '@angu
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { home, library, barChart, settings, flask, book } from 'ionicons/icons';
+import { home, library, barChart, settings, flask, book, menu, mapOutline } from 'ionicons/icons';
 import { SessionStateService } from '../services/session-state.service';
 import { TranslationService } from '../services/translation.service';
+import { MenuService } from '../services/menu.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { Subscription } from 'rxjs';
 
@@ -21,9 +22,14 @@ export class TabsPage implements OnInit, OnDestroy {
 
   constructor(
     private sessionStateService: SessionStateService,
-    public translationService: TranslationService
+    public translationService: TranslationService,
+    private menuService: MenuService
   ) {
-    addIcons({ home, library, barChart, settings, flask, book });
+    addIcons({ home, library, barChart, settings, flask, book, menu, mapOutline });
+  }
+
+  openMenu() {
+    this.menuService.open();
   }
 
   ngOnInit() {

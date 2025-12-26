@@ -7,6 +7,9 @@
     </ion-buttons>
     <ion-title>{{ story?.title || 'Story' }}</ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="openEditStory()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="confirmDeleteStory()" color="danger">
         <ion-icon name="trash-outline"></ion-icon>
       </ion-button>

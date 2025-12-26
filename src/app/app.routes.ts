@@ -17,4 +17,8 @@ export const routes: Routes = [
     path: 'help',
     loadComponent: () => import('./help/help.page').then( m => m.HelpPage)
   },
+  {
+    path: 'progression-map',
+    loadComponent: () => import('./progression-map/progression-map.page').then( m => m.ProgressionMapPage)
+  },
 ];

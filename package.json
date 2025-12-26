@@ -30,6 +30,7 @@
     "@capacitor/keyboard": "7.0.1",
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/share": "^7.0.2",
+    "@capacitor/splash-screen": "^7.0.4",
     "@capacitor/status-bar": "7.0.1",
     "@capawesome/capacitor-file-picker": "^8.0.0",
     "@ionic/angular": "^8.0.0",

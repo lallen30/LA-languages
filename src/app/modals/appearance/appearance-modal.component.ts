@@ -22,19 +22,21 @@ export class AppearanceModalComponent implements OnInit {
 
   // Color schemes for light and dark modes
   lightColorScheme = {
-    primary: '#3880ff',
+    primary: '#74D105',
     secondary: '#3dc2ff',
     tertiary: '#5260ff',
     background: '#ffffff',
     cardBackground: '#f8f9fa',
     headerBackground: '#ffffff',
     footerBackground: '#ffffff',
+    menuBackground: '#ffffff',
+    menuText: '#74D105',
     itemBackground: '#ffffff',
     textPrimary: '#000000',
     textSecondary: '#666666',
     cardText: '#000000',
-    headerText: '#000000',
-    footerText: '#000000',
+    headerText: '#74D105',
+    footerText: '#74D105',
     itemText: '#000000',
     buttonBackground: '#3880ff',
     buttonText: '#ffffff',
@@ -50,19 +52,21 @@ export class AppearanceModalComponent implements OnInit {
   };
 
   darkColorScheme = {
-    primary: '#428cff',
+    primary: '#74D105',
     secondary: '#50c8ff',
     tertiary: '#6370ff',
     background: '#121212',
     cardBackground: '#1e1e1e',
     headerBackground: '#1f1f1f',
     footerBackground: '#1f1f1f',
+    menuBackground: '#2d2d2d',
+    menuText: '#74D105',
     itemBackground: '#1e1e1e',
     textPrimary: '#ffffff',
     textSecondary: '#b0b0b0',
     cardText: '#ffffff',
-    headerText: '#ffffff',
-    footerText: '#ffffff',
+    headerText: '#74D105',
+    footerText: '#74D105',
     itemText: '#ffffff',
     buttonBackground: '#428cff',
     buttonText: '#ffffff',
@@ -167,6 +171,46 @@ export class AppearanceModalComponent implements OnInit {
     console.log('=== DARK MODE CHANGE COMPLETE ===');
   }
 
+  async onThemeModeChange() {
+    console.log('=== THEME MODE CHANGE ===');
+    console.log('New theme mode value:', this.settings.themeMode);
+    
+    // Save the theme mode setting
+    await this.storageService.saveSetting('themeMode', this.settings.themeMode);
+    
+    // Determine if dark mode should be active based on theme mode
+    let isDark = false;
+    if (this.settings.themeMode === 'dark') {
+      isDark = true;
+    } else if (this.settings.themeMode === 'light') {
+      isDark = false;
+    } else {
+      // System mode - check system preference
+      isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    
+    // Update darkMode setting to match
+    this.settings.darkMode = isDark;
+    await this.storageService.saveSetting('darkMode', isDark);
+    
+    // Apply dark mode to body
+    document.body.classList.toggle('dark', isDark);
+    
+    // Switch color scheme and apply
+    this.switchColorScheme();
+    this.applyColors();
+    
+    // Emit the change event
+    this.darkModeChange.emit();
+    
+    const modeLabel = this.translationService.t(`settings.themeMode${this.settings.themeMode.charAt(0).toUpperCase() + this.settings.themeMode.slice(1)}`);
+    await this.showToast(
+      `${this.translationService.t('settings.themeMode')}: ${modeLabel}`,
+      'success'
+    );
+    console.log('=== THEME MODE CHANGE COMPLETE ===');
+  }
+
   async openCustomColorPicker(colorKey: string, colorName: string, event?: Event) {
     const currentColor = (this.currentColorScheme as any)[colorKey];
     
@@ -215,6 +259,8 @@ export class AppearanceModalComponent implements OnInit {
       'buttonBackground': 'settings.buttonBackground',
       'buttonText': 'settings.buttonText',
       'outlinedButtonColor': 'settings.outlinedButton',
+      'menuBackground': 'settings.menuBackground',
+      'menuText': 'settings.menuText',
       'headerBackground': 'settings.headerBackground',
       'headerText': 'settings.headerText',
       'footerBackground': 'settings.footerBackground',
@@ -237,19 +283,21 @@ export class AppearanceModalComponent implements OnInit {
     // Reset to default colors
     if (this.settings.darkMode) {
       this.darkColorScheme = {
-        primary: '#428cff',
+        primary: '#74D105',
         secondary: '#50c8ff',
         tertiary: '#6370ff',
         background: '#121212',
         cardBackground: '#1e1e1e',
         headerBackground: '#1f1f1f',
         footerBackground: '#1f1f1f',
+        menuBackground: '#2d2d2d',
+        menuText: '#74D105',
         itemBackground: '#1e1e1e',
         textPrimary: '#ffffff',
         textSecondary: '#b0b0b0',
         cardText: '#ffffff',
-        headerText: '#ffffff',
-        footerText: '#ffffff',
+        headerText: '#74D105',
+        footerText: '#74D105',
         itemText: '#ffffff',
         buttonBackground: '#428cff',
         buttonText: '#ffffff',
@@ -266,19 +314,21 @@ export class AppearanceModalComponent implements OnInit {
       this.storageService.saveSetting('darkColorScheme', this.darkColorScheme);
     } else {
       this.lightColorScheme = {
-        primary: '#3880ff',
+        primary: '#74D105',
         secondary: '#3dc2ff',
         tertiary: '#5260ff',
         background: '#ffffff',
         cardBackground: '#f8f9fa',
         headerBackground: '#ffffff',
         footerBackground: '#ffffff',
+        menuBackground: '#ffffff',
+        menuText: '#74D105',
         itemBackground: '#ffffff',
         textPrimary: '#000000',
         textSecondary: '#666666',
         cardText: '#000000',
-        headerText: '#000000',
-        footerText: '#000000',
+        headerText: '#74D105',
+        footerText: '#74D105',
         itemText: '#000000',
         buttonBackground: '#3880ff',
         buttonText: '#ffffff',
@@ -342,6 +392,8 @@ export class AppearanceModalComponent implements OnInit {
     root.style.setProperty('--ion-toolbar-background', this.currentColorScheme.headerBackground);
     root.style.setProperty('--ion-tab-bar-background', this.currentColorScheme.footerBackground);
     root.style.setProperty('--app-footer-background', this.currentColorScheme.footerBackground);
+    root.style.setProperty('--app-menu-background', this.currentColorScheme.menuBackground);
+    root.style.setProperty('--app-menu-text', this.currentColorScheme.menuText);
     
     // Text colors
     root.style.setProperty('--ion-text-color', this.currentColorScheme.textPrimary);

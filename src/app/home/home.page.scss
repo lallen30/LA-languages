@@ -1,5 +1,5 @@
 ion-content.home-content {
-  --background: var(--app-background, #000000);
+  --background: var(--ion-background-color, #ffffff);
   --padding-bottom: calc(56px + env(safe-area-inset-bottom));
 }
 
@@ -12,9 +12,10 @@ ion-title {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background: var(--app-background, #000000);
-  padding: 16px;
+  background: var(--ion-background-color, #ffffff);
+  padding: 0;
   box-sizing: border-box;
+  margin-top: -8px;
 }
 
 .nav-row {
@@ -37,17 +38,8 @@ ion-title {
     transform: scale(0.95);
     opacity: 0.8;
   }
-  
-  // Left items - move label to the left (outward)
-  &:first-child .nav-label {
-    margin-right: 30%;
-  }
-  
-  // Right items - move label to the right (outward)
-  &:last-child .nav-label {
-    margin-left: 26%;
-  }
 }
+
 
 .nav-icon {
   width: 100%;
@@ -59,7 +51,7 @@ ion-title {
 .nav-label {
   font-size: 24px;
   font-weight: bold;
-  color: var(--app-text-color, #ffffff);
+  color: var(--ion-text-color, #000000);
   text-align: center;
 }
 

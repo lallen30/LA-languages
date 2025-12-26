@@ -20,7 +20,17 @@ import {
   library,
   create,
   rocket,
-  heart
+  heart,
+  checkmark,
+  thumbsUp,
+  thumbsDown,
+  close,
+  sparkles,
+  albums,
+  book,
+  cloudDownload,
+  warning,
+  cloudUpload
 } from 'ionicons/icons';
 
 // Register all icons used in the help page
@@ -41,7 +51,17 @@ addIcons({
   'library': library,
   'create': create,
   'rocket': rocket,
-  'heart': heart
+  'heart': heart,
+  'checkmark': checkmark,
+  'thumbs-up': thumbsUp,
+  'thumbs-down': thumbsDown,
+  'close': close,
+  'sparkles': sparkles,
+  'albums': albums,
+  'book': book,
+  'cloud-download': cloudDownload,
+  'warning': warning,
+  'cloud-upload': cloudUpload
 });
 
 @Component({

@@ -1,35 +1,125 @@
-import { Component, OnInit } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { 
+  IonApp, IonRouterOutlet, IonIcon, IonButton, ModalController
+} from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
+import { addIcons } from 'ionicons';
+import { homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline } from 'ionicons/icons';
 import { StorageService } from './services/storage.service';
+import { AboutModalComponent } from './modals/about/about-modal.component';
+import { MenuService } from './services/menu.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet],
+  styleUrls: ['app.component.scss'],
+  imports: [
+    IonApp, IonRouterOutlet, IonIcon, IonButton, CommonModule
+  ],
 })
-export class AppComponent implements OnInit {
-  constructor(private storageService: StorageService) {}
+export class AppComponent implements OnInit, OnDestroy {
+  isMenuOpen = false;
+  private menuSubscription?: Subscription;
+
+  constructor(
+    private storageService: StorageService,
+    private router: Router,
+    private menuService: MenuService,
+    private modalController: ModalController
+  ) {
+    addIcons({ homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline });
+  }
+
+  closeMenu() {
+    this.menuService.close();
+  }
+
+  navigateTo(path: string) {
+    this.closeMenu();
+    this.router.navigate([path]);
+  }
+
+  async openAbout() {
+    this.closeMenu();
+    const modal = await this.modalController.create({
+      component: AboutModalComponent
+    });
+    await modal.present();
+  }
 
   async ngOnInit() {
+    // Subscribe to menu state
+    this.menuSubscription = this.menuService.menuOpen$.subscribe(isOpen => {
+      this.isMenuOpen = isOpen;
+    });
+    
     // Apply saved colors on app startup
     await this.initializeColors();
+  }
+
+  ngOnDestroy() {
+    this.menuSubscription?.unsubscribe();
   }
 
   private async initializeColors() {
     try {
       // Load saved settings
-      const darkMode = await this.storageService.getSetting('darkMode', false);
+      const themeMode = await this.storageService.getSetting('themeMode', 'system');
       const lightColorScheme = await this.storageService.getSetting('lightColorScheme', this.getDefaultLightColorScheme());
       const darkColorScheme = await this.storageService.getSetting('darkColorScheme', this.getDefaultDarkColorScheme());
       
+      // Determine if dark mode should be active based on theme mode
+      let isDark = false;
+      if (themeMode === 'dark') {
+        isDark = true;
+      } else if (themeMode === 'light') {
+        isDark = false;
+      } else {
+        // System mode - check system preference
+        isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      
+      // Save the resolved darkMode setting
+      await this.storageService.saveSetting('darkMode', isDark);
+      
+      // Apply dark mode class to body
+      document.body.classList.toggle('dark', isDark);
+      
       // Apply the appropriate color scheme
-      const currentColorScheme = darkMode ? darkColorScheme : lightColorScheme;
+      const currentColorScheme = isDark ? darkColorScheme : lightColorScheme;
       this.applyColors(currentColorScheme);
       
-      console.log('DEBUG: Colors initialized on app startup');
+      // Listen for system theme changes if in system mode
+      if (themeMode === 'system') {
+        this.setupSystemThemeListener();
+      }
+      
+      console.log('DEBUG: Colors initialized on app startup, theme mode:', themeMode, 'isDark:', isDark);
     } catch (error) {
       console.error('Error initializing colors:', error);
     }
+  }
+
+  private setupSystemThemeListener() {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', async (e) => {
+      // Check if still in system mode
+      const themeMode = await this.storageService.getSetting('themeMode', 'system');
+      if (themeMode === 'system') {
+        const isDark = e.matches;
+        await this.storageService.saveSetting('darkMode', isDark);
+        document.body.classList.toggle('dark', isDark);
+        
+        const lightColorScheme = await this.storageService.getSetting('lightColorScheme', this.getDefaultLightColorScheme());
+        const darkColorScheme = await this.storageService.getSetting('darkColorScheme', this.getDefaultDarkColorScheme());
+        const currentColorScheme = isDark ? darkColorScheme : lightColorScheme;
+        this.applyColors(currentColorScheme);
+        
+        console.log('DEBUG: System theme changed, isDark:', isDark);
+      }
+    });
   }
 
   private applyColors(colorScheme: any) {
@@ -139,19 +229,21 @@ export class AppComponent implements OnInit {
 
   private getDefaultLightColorScheme() {
     return {
-      primary: '#0080ff',
+      primary: '#74D105',
       secondary: '#ff6b35',
       tertiary: '#7044ff',
       background: '#ffffff',
       cardBackground: '#f8f9fa',
       headerBackground: '#ffffff',
       footerBackground: '#ffffff',
+      menuBackground: '#ffffff',
+      menuText: '#74D105',
       itemBackground: '#ffffff',
       buttonBackground: '#0080ff',
       textPrimary: '#000000',
       textSecondary: '#666666',
-      headerText: '#000000',
-      footerText: '#000000',
+      headerText: '#74D105',
+      footerText: '#74D105',
       cardText: '#000000',
       itemText: '#000000',
       buttonText: '#ffffff'
@@ -160,19 +252,21 @@ export class AppComponent implements OnInit {
 
   private getDefaultDarkColorScheme() {
     return {
-      primary: '#0080ff',
+      primary: '#74D105',
       secondary: '#ff6b35',
       tertiary: '#7044ff',
       background: '#000000',
       cardBackground: '#1a1a1a',
       headerBackground: '#1a1a1a',
       footerBackground: '#1a1a1a',
+      menuBackground: '#2d2d2d',
+      menuText: '#74D105',
       itemBackground: '#1a1a1a',
       buttonBackground: '#0080ff',
       textPrimary: '#ffffff',
       textSecondary: '#cccccc',
-      headerText: '#ffffff',
-      footerText: '#ffffff',
+      headerText: '#74D105',
+      footerText: '#74D105',
       cardText: '#ffffff',
       itemText: '#ffffff',
       buttonText: '#ffffff'

@@ -32,6 +32,7 @@ import { ImageService } from '../services/image.service';
 import { StorageService } from '../services/storage.service';
 import { TranslationService } from '../services/translation.service';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { MenuService } from '../services/menu.service';
 
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -46,7 +47,10 @@ import {
   server,
   informationCircle,
   image,
-  close
+  close,
+  map,
+  menuOutline,
+  menu
 } from 'ionicons/icons';
 
 // Ensure ion-modal is defined when creating it programmatically
@@ -61,7 +65,10 @@ try {
     server,
     'information-circle': informationCircle,
     image,
-    close
+    close,
+    map,
+    'menu-outline': menuOutline,
+    menu
   });
 } catch {}
 
@@ -95,6 +102,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
   // ---- STATE ----
   settings = {
     darkMode: false,
+    themeMode: 'system' as 'system' | 'light' | 'dark',
     nativeLanguage: 'en-US',
     ttsLanguage: 'es-ES',
     spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
@@ -110,19 +118,21 @@ export class SettingsPage implements OnInit, AfterViewInit {
   };
 
   lightColorScheme = {
-    primary: '#3880ff',
+    primary: '#74D105',
     secondary: '#3dc2ff',
     tertiary: '#5260ff',
     background: '#ffffff',
     cardBackground: '#f8f9fa',
     headerBackground: '#ffffff',
     footerBackground: '#ffffff',
+    menuBackground: '#ffffff',
+    menuText: '#74D105',
     itemBackground: '#ffffff',
     textPrimary: '#000000',
     textSecondary: '#666666',
     cardText: '#000000',
-    headerText: '#000000',
-    footerText: '#000000',
+    headerText: '#74D105',
+    footerText: '#74D105',
     itemText: '#000000',
     buttonBackground: '#3880ff',
     buttonText: '#ffffff',
@@ -138,19 +148,21 @@ export class SettingsPage implements OnInit, AfterViewInit {
   };
 
   darkColorScheme = {
-    primary: '#428cff',
+    primary: '#74D105',
     secondary: '#50c8ff',
     tertiary: '#6370ff',
     background: '#121212',
     cardBackground: '#1e1e1e',
     headerBackground: '#1f1f1f',
     footerBackground: '#1f1f1f',
+    menuBackground: '#2d2d2d',
+    menuText: '#74D105',
     itemBackground: '#1e1e1e',
     textPrimary: '#ffffff',
     textSecondary: '#b0b0b0',
     cardText: '#ffffff',
-    headerText: '#ffffff',
-    footerText: '#ffffff',
+    headerText: '#74D105',
+    footerText: '#74D105',
     itemText: '#ffffff',
     buttonBackground: '#428cff',
     buttonText: '#ffffff',
@@ -199,8 +211,14 @@ export class SettingsPage implements OnInit, AfterViewInit {
     private platform: Platform,
     private el: ElementRef<HTMLElement>,
     private cdr: ChangeDetectorRef,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private menuService: MenuService
   ) {}
+
+  openMenu() {
+    console.log('openMenu called from Settings');
+    this.menuService.open();
+  }
 
   // Platform helpers
   get isIOS(): boolean {
@@ -216,7 +234,8 @@ export class SettingsPage implements OnInit, AfterViewInit {
         server,
         'information-circle': informationCircle,
         image,
-        close
+        close,
+        map
       });
     } catch {}
     // On some builds, ion-modal may not be registered until first use in templates.
@@ -496,6 +515,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   async loadSettings() {
     try {
       this.settings.darkMode = await this.storageService.getSetting('darkMode', false);
+      this.settings.themeMode = await this.storageService.getSetting('themeMode', 'system');
       this.settings.nativeLanguage = await this.storageService.getSetting('nativeLanguage', 'en-US');
       this.settings.ttsLanguage = await this.storageService.getSetting('ttsLanguage', 'es-ES');
       this.settings.spanishDialect = await this.storageService.getSetting('spanishDialect', 'es-ES');
@@ -877,6 +897,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   private async performReset() {
     this.settings = {
       darkMode: false,
+      themeMode: 'system' as 'system' | 'light' | 'dark',
       nativeLanguage: 'en-US',
       ttsLanguage: 'es-ES',
       spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
@@ -1108,19 +1129,21 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   resetColors() {
     if (this.settings.darkMode) {
       this.darkColorScheme = {
-        primary: '#428cff',
+        primary: '#74D105',
         secondary: '#50c8ff',
         tertiary: '#6370ff',
         background: '#121212',
         cardBackground: '#1e1e1e',
         headerBackground: '#1f1f1f',
         footerBackground: '#1f1f1f',
+        menuBackground: '#2d2d2d',
+        menuText: '#74D105',
         itemBackground: '#1e1e1e',
         textPrimary: '#ffffff',
         textSecondary: '#b0b0b0',
         cardText: '#ffffff',
-        headerText: '#ffffff',
-        footerText: '#ffffff',
+        headerText: '#74D105',
+        footerText: '#74D105',
         itemText: '#ffffff',
         buttonBackground: '#428cff',
         buttonText: '#ffffff',
@@ -1137,19 +1160,21 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
       this.saveSetting('darkColorScheme', this.darkColorScheme);
     } else {
       this.lightColorScheme = {
-        primary: '#3880ff',
+        primary: '#74D105',
         secondary: '#3dc2ff',
         tertiary: '#5260ff',
         background: '#ffffff',
         cardBackground: '#f8f9fa',
         headerBackground: '#ffffff',
         footerBackground: '#ffffff',
+        menuBackground: '#ffffff',
+        menuText: '#74D105',
         itemBackground: '#ffffff',
         textPrimary: '#000000',
         textSecondary: '#666666',
         cardText: '#000000',
-        headerText: '#000000',
-        footerText: '#000000',
+        headerText: '#74D105',
+        footerText: '#74D105',
         itemText: '#000000',
         buttonBackground: '#3880ff',
         buttonText: '#ffffff',
@@ -1175,6 +1200,7 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   }
 
   openHelp() { this.router.navigate(['/tabs/help']); }
+  openProgressionMap() { this.router.navigate(['/progression-map']); }
   openBuyMeCoffee() { window.open('https://paypal.me/lallen300', '_blank'); }
 
   async openCustomColorPicker(colorKey: string, colorName: string, evt?: Event) {

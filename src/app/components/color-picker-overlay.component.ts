@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslationService } from '../services/translation.service';
 
@@ -61,14 +61,12 @@ import { TranslationService } from '../services/translation.service';
           <div class="color-info">
             <div class="color-preview" [style.background-color]="selectedColor"></div>
             <div class="color-details">
-              <input 
-                type="text" 
-                [(ngModel)]="hexInput" 
-                (input)="onHexInputChange()"
-                (blur)="validateHexInput()"
-                class="hex-input"
-                placeholder="#000000"
-                maxlength="7">
+              <div class="hex-display-row">
+                <span class="hex-value">{{ hexInput }}</span>
+                <ion-button fill="clear" size="small" (click)="openHexInputAlert()">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
               <div class="rgb-display">
                 RGB: {{ getRgbString() }}
               </div>
@@ -233,18 +231,24 @@ import { TranslationService } from '../services/translation.service';
     
     .color-details {
       flex: 1;
+      pointer-events: auto !important;
     }
     
-    .hex-input {
-      width: 100%;
+    .hex-display-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ion-color-step-100, #f5f5f5);
+      border-radius: 8px;
       padding: 8px 12px;
-      border: 1px solid var(--ion-color-light);
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 14px;
       margin-bottom: 4px;
-      background: var(--ion-color-step-50, #ffffff);
+    }
+    
+    .hex-value {
+      font-family: monospace;
+      font-size: 16px;
       color: var(--ion-color-dark);
+      flex: 1;
     }
     
     .rgb-display {
@@ -373,6 +377,14 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
   // Output callback
   onColorSelected?: (color: string) => void;
   onCancel?: () => void;
+
+  // Alert controller for hex input
+  private alertController: AlertController;
+
+  constructor() {
+    // We need to get AlertController from the injector since this component is created dynamically
+    this.alertController = new AlertController();
+  }
 
   ngOnInit() {
     this.selectedColor = this.currentColor;
@@ -576,6 +588,14 @@ export class ColorPickerOverlayComponent implements OnInit, AfterViewInit {
       this.currentHue = hsb.h;
       this.currentSaturation = hsb.s;
       this.currentBrightness = hsb.b;
+    }
+  }
+
+  openHexInputAlert() {
+    const newHex = prompt('Enter Hex Color', this.hexInput);
+    if (newHex !== null && newHex.trim() !== '') {
+      this.hexInput = newHex.trim();
+      this.validateHexInput();
     }
   }
 

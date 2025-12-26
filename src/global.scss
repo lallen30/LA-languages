@@ -135,18 +135,18 @@ body.dark {
   ion-header {
     ion-toolbar {
       --background: var(--ion-background-color, #1e1e1e);
-      --color: var(--ion-text-color, #ffffff);
+      --color: var(--ion-toolbar-color, var(--ion-text-color, #ffffff));
       
       ion-title {
-        color: var(--ion-text-color, #ffffff);
+        color: var(--ion-toolbar-color, var(--ion-text-color, #ffffff));
       }
       
       ion-button {
-        --color: var(--ion-text-color, #ffffff);
+        --color: var(--ion-toolbar-color, var(--ion-text-color, #ffffff));
       }
       
       ion-icon {
-        color: var(--ion-text-color, #ffffff);
+        color: var(--ion-toolbar-color, var(--ion-text-color, #ffffff));
       }
     }
   }
@@ -154,35 +154,224 @@ body.dark {
 }
 
 /* ============================================================================
-   DARK MODE: Action Sheet styling
+   Android Safe Area: Add padding for status bar
    ============================================================================ */
-ion-action-sheet.dark-action-sheet {
-  --background: var(--ion-card-background, #2d2d2d);
-  --button-background: var(--ion-card-background, #2d2d2d);
-  --button-color: var(--ion-color-primary, #007aff);
-  --color: var(--ion-color-medium, #8e8e93);
+.md ion-header {
+  padding-top: env(safe-area-inset-top, 24px);
 }
 
-ion-action-sheet.dark-action-sheet .action-sheet-group {
-  background: var(--ion-card-background, #2d2d2d) !important;
+/* ============================================================================
+   Faint header border for all pages (matching Home screen style)
+   ============================================================================ */
+ion-header ion-toolbar {
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-width: 0 0 0.55px 0;
 }
 
-ion-action-sheet.dark-action-sheet .action-sheet-title {
-  color: var(--ion-color-medium, #8e8e93) !important;
-  background: var(--ion-card-background, #2d2d2d) !important;
+/* Target the Decks page header border specifically */
+app-decks ion-header ion-toolbar,
+ion-header ion-toolbar:last-of-type {
+  --border-color: rgba(255, 255, 255, 0.1) !important;
+  --border-width: 0 0 0.55px 0 !important;
+  border-bottom: 0.55px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-ion-action-sheet.dark-action-sheet .action-sheet-button {
-  background: var(--ion-card-background, #2d2d2d) !important;
-  color: var(--ion-color-primary, #007aff) !important;
+/* Override any ::after pseudo-element border */
+app-decks ion-header::after,
+app-decks ion-toolbar::after {
+  background: rgba(255, 255, 255, 0.1) !important;
+  height: 0.55px !important;
+  opacity: 1 !important;
 }
 
-ion-action-sheet.dark-action-sheet .action-sheet-button.action-sheet-destructive {
+/* ============================================================================
+   DARK MODE: Action Sheet styling - Force dark mode for all action sheets
+   ============================================================================ */
+
+/* Force dark mode styling for ALL action sheets globally */
+ion-action-sheet {
+  --background: #2d2d2d !important;
+  --button-background: #2d2d2d !important;
+  --button-color: #4da3ff !important;
+  --color: #b0b0b0 !important;
+}
+
+ion-action-sheet .action-sheet-wrapper {
+  --background: #2d2d2d !important;
+}
+
+ion-action-sheet .action-sheet-container {
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet .action-sheet-group {
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet .action-sheet-group-cancel {
+  background: #3a3a3c !important;
+}
+
+ion-action-sheet .action-sheet-title {
+  color: #b0b0b0 !important;
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet .action-sheet-button {
+  background: #2d2d2d !important;
+  color: #4da3ff !important;
+}
+
+ion-action-sheet .action-sheet-button .action-sheet-button-inner {
+  color: #4da3ff !important;
+}
+
+ion-action-sheet .action-sheet-button ion-icon {
+  color: #4da3ff !important;
+}
+
+ion-action-sheet .action-sheet-button.action-sheet-destructive {
   color: #ff453a !important;
 }
 
-ion-action-sheet.dark-action-sheet .action-sheet-cancel {
-  background: var(--app-item-background, #3a3a3c) !important;
+ion-action-sheet .action-sheet-button.action-sheet-destructive .action-sheet-button-inner {
+  color: #ff453a !important;
+}
+
+ion-action-sheet .action-sheet-button.action-sheet-destructive ion-icon {
+  color: #ff453a !important;
+}
+
+ion-action-sheet .action-sheet-cancel {
+  background: #3a3a3c !important;
+}
+
+ion-action-sheet .action-sheet-cancel .action-sheet-button-inner {
+  color: #4da3ff !important;
+}
+
+/* iOS-specific: Use ::part selectors for shadow DOM */
+ion-action-sheet::part(container) {
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet::part(group) {
+  background: #2d2d2d !important;
+}
+
+ion-action-sheet::part(button) {
+  background: #2d2d2d !important;
+  color: #4da3ff !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+ion-action-sheet::part(button destructive) {
+  color: #ff453a !important;
+}
+
+ion-action-sheet::part(cancel) {
+  background: #3a3a3c !important;
+}
+
+/* Force left alignment for iOS action sheet buttons */
+.ios ion-action-sheet .action-sheet-button {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+.ios ion-action-sheet .action-sheet-button .action-sheet-button-inner {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+/* ============================================================================
+   DARK MODE: Alert/Popup styling - Force dark mode for all alerts
+   ============================================================================ */
+ion-alert {
+  --background: #2d2d2d !important;
+  --backdrop-opacity: 0.6 !important;
+}
+
+ion-alert .alert-wrapper {
+  background: #2d2d2d !important;
+  border-radius: 14px !important;
+}
+
+ion-alert .alert-head {
+  background: #2d2d2d !important;
+}
+
+ion-alert .alert-title {
+  color: #ffffff !important;
+}
+
+ion-alert .alert-sub-title {
+  color: #b0b0b0 !important;
+}
+
+ion-alert .alert-message {
+  color: #b0b0b0 !important;
+  background: #2d2d2d !important;
+}
+
+ion-alert .alert-input-group {
+  background: #2d2d2d !important;
+}
+
+ion-alert .alert-input {
+  background: #3a3a3c !important;
+  color: #ffffff !important;
+  border-color: #4a4a4c !important;
+}
+
+ion-alert .alert-input::placeholder {
+  color: #8e8e93 !important;
+}
+
+ion-alert .alert-button-group {
+  background: #2d2d2d !important;
+}
+
+ion-alert .alert-button {
+  color: #4da3ff !important;
+  background: transparent !important;
+}
+
+ion-alert .alert-button.alert-button-role-cancel {
+  color: #8e8e93 !important;
+}
+
+ion-alert .alert-button.alert-button-role-destructive {
+  color: #ff453a !important;
+}
+
+/* iOS-specific: Use ::part selectors for shadow DOM */
+ion-alert::part(container) {
+  background: #2d2d2d !important;
+}
+
+ion-alert::part(header) {
+  background: #2d2d2d !important;
+}
+
+ion-alert::part(message) {
+  color: #b0b0b0 !important;
+}
+
+ion-alert::part(button) {
+  color: #4da3ff !important;
+}
+
+/* ============================================================================
+   Hex Input Alert - Ensure it appears above color picker overlay
+   ============================================================================ */
+ion-alert.hex-input-alert {
+  z-index: 30000 !important;
+}
+
+ion-alert.hex-input-alert + ion-backdrop {
+  z-index: 29999 !important;
 }
 
 /* ============================================================================

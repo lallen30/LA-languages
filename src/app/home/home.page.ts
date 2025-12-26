@@ -4,12 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { MenuService } from '../services/menu.service';
 import { addIcons } from 'ionicons';
 import { 
   library,
   folder,
   copy,
-  play
+  play,
+  menuOutline,
+  menu
 } from 'ionicons/icons';
 
 @Component({
@@ -22,15 +25,23 @@ import {
 export class HomePage implements OnInit {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private menuService: MenuService
   ) {
     // Register required icons
     addIcons({
       'library': library,
       'folder': folder,
       'copy': copy,
-      'play': play
+      'play': play,
+      'menu-outline': menuOutline,
+      'menu': menu
     });
+  }
+
+  openMenu() {
+    console.log('openMenu called');
+    this.menuService.open();
   }
 
   ngOnInit() {
@@ -49,6 +60,10 @@ export class HomePage implements OnInit {
 
   goToStats() {
     this.router.navigate(['/tabs/stats']);
+  }
+
+  goToMap() {
+    this.router.navigate(['/tabs/progression-map']);
   }
 
   goToSettings() {

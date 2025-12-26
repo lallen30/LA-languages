@@ -1,13 +1,15 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Stories</ion-title>
-    <ion-buttons slot="end">
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
       <ion-button (click)="exportData()">
         <ion-icon name="download-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="importData()">
         <ion-icon name="cloud-upload-outline"></ion-icon>
       </ion-button>
+    </ion-buttons>
+    <ion-title>Stories</ion-title>
+    <ion-buttons slot="end">
       <ion-button (click)="showAddCategoryDialog()">
         <ion-icon name="folder-outline"></ion-icon>
       </ion-button>
@@ -115,24 +117,25 @@
 
       <!-- Level -->
       <ion-item>
-        <ion-label position="stacked">Difficulty Level</ion-label>
-        <ion-segment [(ngModel)]="newStory.level">
-          <ion-segment-button value="beginner">
-            <ion-label>Beginner</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="intermediate">
-            <ion-label>Intermediate</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="advanced">
-            <ion-label>Advanced</ion-label>
-          </ion-segment-button>
-        </ion-segment>
+        <ion-select 
+          label="Difficulty Level" 
+          label-placement="stacked"
+          [(ngModel)]="newStory.level"
+          interface="action-sheet">
+          <ion-select-option value="beginner">Beginner</ion-select-option>
+          <ion-select-option value="intermediate">Intermediate</ion-select-option>
+          <ion-select-option value="advanced">Advanced</ion-select-option>
+        </ion-select>
       </ion-item>
 
       <!-- Category -->
       <ion-item>
-        <ion-label position="stacked">Save to Category</ion-label>
-        <ion-select [(ngModel)]="newStory.categoryId" placeholder="Select category">
+        <ion-select 
+          label="Save to Category" 
+          label-placement="stacked"
+          [(ngModel)]="newStory.categoryId" 
+          placeholder="Select category"
+          interface="action-sheet">
           <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
             {{ cat.name }}
           </ion-select-option>

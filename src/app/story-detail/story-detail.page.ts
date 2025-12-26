@@ -10,7 +10,7 @@ import {
 import { addIcons } from 'ionicons';
 import { 
   playOutline, pauseOutline, stopOutline, volumeHighOutline,
-  arrowBackOutline, schoolOutline, trashOutline, volumeMediumOutline } from 'ionicons/icons';
+  arrowBackOutline, schoolOutline, trashOutline, volumeMediumOutline, createOutline } from 'ionicons/icons';
 import { StoryService } from '../services/story.service';
 import { TtsService } from '../services/tts.service';
 import { Story, StoryLevel } from '../models/story.model';
@@ -48,7 +48,7 @@ export class StoryDetailPage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController
   ) {
-    addIcons({trashOutline,schoolOutline,playOutline,pauseOutline,stopOutline,volumeMediumOutline,volumeHighOutline,arrowBackOutline});
+    addIcons({trashOutline,schoolOutline,playOutline,pauseOutline,stopOutline,volumeMediumOutline,volumeHighOutline,arrowBackOutline,createOutline});
   }
 
   async ngOnInit() {
@@ -180,6 +180,78 @@ export class StoryDetailPage implements OnInit, OnDestroy {
   }
 
   // ============ STORY ACTIONS ============
+
+  async openEditStory() {
+    if (!this.story) return;
+
+    const alert = await this.alertController.create({
+      header: 'Edit Story',
+      inputs: [
+        {
+          name: 'title',
+          type: 'text',
+          placeholder: 'Story Title',
+          value: this.story.title
+        },
+        {
+          name: 'content',
+          type: 'textarea',
+          placeholder: 'Story Content',
+          value: this.story.content,
+          attributes: {
+            rows: 8
+          }
+        }
+      ],
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Save',
+          handler: async (data) => {
+            if (!data.title?.trim()) {
+              this.showToast('Title is required');
+              return false;
+            }
+            if (!data.content?.trim()) {
+              this.showToast('Content is required');
+              return false;
+            }
+            await this.saveStoryEdits(data.title.trim(), data.content.trim());
+            return true;
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  private async saveStoryEdits(title: string, content: string) {
+    if (!this.story) return;
+
+    // Split content into sentences for TTS highlighting
+    const sentences = this.splitIntoSentences(content);
+
+    const updatedStory = await this.storyService.updateStory(this.story.id, {
+      title,
+      content,
+      sentences
+    });
+
+    if (updatedStory) {
+      this.story = updatedStory;
+      this.showToast('Story updated');
+    } else {
+      this.showToast('Failed to update story');
+    }
+  }
+
+  private splitIntoSentences(content: string): string[] {
+    // Split by sentence-ending punctuation while keeping the punctuation
+    return content
+      .split(/(?<=[.!?])\s+/)
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+  }
 
   async confirmDeleteStory() {
     if (!this.story) return;

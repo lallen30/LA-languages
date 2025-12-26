@@ -9,6 +9,7 @@ import { TranslationService } from '../services/translation.service';
 import { StoryService } from '../services/story.service';
 import { WordCategory } from '../models/story.model';
 import { TranslatePipe } from '../pipes/translate.pipe';
+import { MenuService } from '../services/menu.service';
 import { addIcons } from 'ionicons';
 import { Deck } from '../models/deck.model';
 import { CardType } from '../models/card.model';
@@ -35,7 +36,11 @@ import {
   trashOutline,
   downloadOutline,
   close,
-  bookOutline
+  bookOutline,
+  checkmarkDoneOutline,
+  listOutline,
+  menuOutline,
+  menu
 } from 'ionicons/icons';
 
 @Component({
@@ -88,6 +93,12 @@ export class DecksPage implements OnInit {
   // Selected deck for actions
   selectedDeck: any = null;
   
+  // Word selection modal state
+  showWordSelectionModal = false;
+  availableWords: { text: string; selected: boolean }[] = [];
+  pendingCategoryId: string | null = null;
+  pendingDeckForWords: Deck | null = null;
+  
   languages = [
     { code: 'es-ES', name: 'Spanish' },
     { code: 'fr-FR', name: 'French' },
@@ -103,6 +114,7 @@ export class DecksPage implements OnInit {
     private toastController: ToastController,
     private loadingController: LoadingController,
     private modalController: ModalController,
+    private menuService: MenuService,
     private storageService: StorageService,
     private imageService: ImageService,
     private translationService: TranslationService,
@@ -128,8 +140,17 @@ export class DecksPage implements OnInit {
       trashOutline,
       downloadOutline,
       close,
-      bookOutline
+      bookOutline,
+      checkmarkDoneOutline,
+      listOutline,
+      menuOutline,
+      menu
     });
+  }
+
+  openMenu() {
+    console.log('openMenu called from Decks');
+    this.menuService.open();
   }
 
   async ngOnInit() {
@@ -223,10 +244,16 @@ export class DecksPage implements OnInit {
       
       console.log('📚 Filtered decks for language', this.selectedLanguage, ':', this.filteredDecks);
       
-      // Update card counts for filtered decks
+      // Update card counts and mastered counts for filtered decks
       for (const deck of this.filteredDecks) {
         const cards = await this.storageService.getCardsByDeck(deck.id);
         deck.cardCount = cards.length;
+        // Calculate mastered cards: not new AND has 3+ successful repetitions
+        deck.masteredCards = cards.filter(c => !c.isNew && c.repetitions >= 3).length;
+        // Calculate new cards count
+        deck.newCards = cards.filter(c => c.isNew).length;
+        // Calculate review cards: not new and due for review
+        deck.reviewCards = cards.filter(c => !c.isNew && new Date(c.nextReview) <= new Date()).length;
       }
     } catch (error) {
       console.error('📚 Error loading and filtering decks:', error);
@@ -304,11 +331,17 @@ export class DecksPage implements OnInit {
     console.log('🔄 Refreshing decks and card counts...');
     
     try {
-      // Reload card counts for all decks
+      // Reload card counts and stats for all decks
       for (const deck of this.filteredDecks) {
         const cards = await this.storageService.getCardsByDeck(deck.id);
         deck.cardCount = cards.length;
-        console.log(`🔄 Deck "${deck.name}" - ${cards.length} cards`);
+        // Calculate mastered cards: not new AND has 3+ successful repetitions
+        deck.masteredCards = cards.filter(c => !c.isNew && c.repetitions >= 3).length;
+        // Calculate new cards count
+        deck.newCards = cards.filter(c => c.isNew).length;
+        // Calculate review cards: not new and due for review
+        deck.reviewCards = cards.filter(c => !c.isNew && new Date(c.nextReview) <= new Date()).length;
+        console.log(`🔄 Deck "${deck.name}" - ${cards.length} cards, ${deck.masteredCards} mastered`);
       }
       
       // Trigger change detection
@@ -437,54 +470,71 @@ export class DecksPage implements OnInit {
   }
 
   async editDeck(deck: any) {
-    // Open custom modal instead of alert
-    // Ensure action sheet is closed so it doesn't block interactions under iOS
-    this.lockSelectedDeck = true; // keep selection through action sheet dismissal
+    // Use Ionic AlertController for consistent dark mode styling
     this.isDeckActionSheetOpen = false;
     this.selectedDeck = deck;
-    this.editDeckName = deck?.name || '';
-    this.editDeckDescription = deck?.description || '';
-    this.showEditDeckModal = true;
+    
+    const alert = await this.alertController.create({
+      header: this.translationService.t('decks.editDeck'),
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: deck?.name || '',
+          placeholder: this.translationService.t('decks.deckName')
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          value: deck?.description || '',
+          placeholder: this.translationService.t('decks.description')
+        }
+      ],
+      buttons: [
+        {
+          text: this.translationService.t('common.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translationService.t('common.save'),
+          handler: async (data) => {
+            if (data.name?.trim()) {
+              await this.saveEditedDeckData(deck, data.name.trim(), data.description?.trim() || '');
+            }
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
-  closeEditDeckModal() {
-    this.showEditDeckModal = false;
-    this.lockSelectedDeck = false;
-  }
-
-  async saveEditedDeck() {
-    console.log('📝 saveEditedDeck clicked');
-    if (!this.selectedDeck) {
-      console.warn('No selectedDeck when saving');
+  async saveEditedDeckData(deck: any, name: string, description: string) {
+    if (!deck) {
+      console.warn('No deck when saving');
       return;
     }
-    const name = (this.editDeckName || '').trim();
-    if (!name) {
-      this.showToast('Please enter a deck name');
-      return;
-    }
+    
     // Apply changes
-    this.selectedDeck.name = name;
-    this.selectedDeck.description = this.editDeckDescription || '';
+    deck.name = name;
+    deck.description = description;
 
     // Persist (best-effort)
     try {
-      await this.storageService.saveDeck(this.selectedDeck);
+      await this.storageService.saveDeck(deck);
     } catch (e) {
       console.warn('saveDeck failed (non-fatal for UI):', e);
     }
 
     // Trigger UI change detection by rebinding array
-    const idx = this.filteredDecks.findIndex((d: any) => d.id === this.selectedDeck.id);
+    const idx = this.filteredDecks.findIndex((d: any) => d.id === deck.id);
     if (idx > -1) {
       // Replace with a shallow clone to update reference
-      this.filteredDecks[idx] = { ...this.selectedDeck };
+      this.filteredDecks[idx] = { ...deck };
       this.filteredDecks = [...this.filteredDecks];
     }
 
     this.showToast(this.translationService.t('decks.deckUpdated'));
-    this.showEditDeckModal = false;
-    this.lockSelectedDeck = false;
   }
 
   async exportDeck(deck: Deck) {
@@ -590,24 +640,31 @@ export class DecksPage implements OnInit {
   async deleteDeck(deck: any) {
     // Close action sheet first to avoid iOS presentation conflicts
     this.isDeckActionSheetOpen = false;
-    this.deckToDelete = deck;
-    // Defer opening custom modal so it isn't stacked under the sheet
-    setTimeout(() => {
-      this.showDeleteDeckModal = true;
-    }, 250);
+    
+    const alert = await this.alertController.create({
+      header: this.translationService.t('decks.deleteDeck'),
+      message: `${this.translationService.t('decks.deleteConfirm')} <strong>${deck?.name}</strong>?`,
+      buttons: [
+        {
+          text: this.translationService.t('common.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translationService.t('common.delete'),
+          role: 'destructive',
+          handler: async () => {
+            await this.performDeleteDeck(deck);
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
-  closeDeleteDeckModal() {
-    this.showDeleteDeckModal = false;
-    this.deckToDelete = null;
-  }
-
-  async confirmDeleteDeck() {
-    if (!this.deckToDelete) {
-      this.closeDeleteDeckModal();
-      return;
-    }
-    const deck = this.deckToDelete;
+  async performDeleteDeck(deck: any) {
+    if (!deck) return;
+    
     try {
       // Persist deletion (also removes cards for this deck)
       await this.storageService.deleteDeck(deck.id);
@@ -625,30 +682,47 @@ export class DecksPage implements OnInit {
     } catch (e) {
       console.error('Failed to delete deck:', e);
       this.showToast(this.translationService.t('decks.deckDeleteFailed'));
-    } finally {
-      this.closeDeleteDeckModal();
     }
   }
 
-  // Create Deck - Custom Modal version
-  openCreateDeckModal() {
+  // Create Deck - Using AlertController for proper dark mode styling
+  async openCreateDeckModal() {
     console.log('📦 Opening Create Deck modal');
-    this.newDeckName = '';
-    this.newDeckDescription = '';
-    this.showCreateDeckModal = true;
+    
+    const alert = await this.alertController.create({
+      header: this.translationService.t('decks.createNewDeck'),
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          placeholder: this.translationService.t('decks.deckName')
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          placeholder: this.translationService.t('decks.description')
+        }
+      ],
+      buttons: [
+        {
+          text: this.translationService.t('common.cancel'),
+          role: 'cancel'
+        },
+        {
+          text: this.translationService.t('common.create'),
+          handler: async (data) => {
+            if (data.name?.trim()) {
+              await this.performCreateDeck(data.name.trim(), data.description?.trim() || '');
+            }
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
 
-  closeCreateDeckModal() {
-    this.showCreateDeckModal = false;
-  }
-
-  async saveNewDeck() {
-    const name = (this.newDeckName || '').trim();
-    if (!name) {
-      this.showToast(this.translationService.t('decks.enterDeckName'));
-      return;
-    }
-
+  async performCreateDeck(name: string, description: string) {
     const id = Date.now().toString();
     
     // Map language code to language name
@@ -666,7 +740,7 @@ export class DecksPage implements OnInit {
     const newDeck: any = {
       id,
       name,
-      description: this.newDeckDescription || '',
+      description,
       language: languageName,
       cardCount: 0,
       masteredCards: 0,
@@ -685,12 +759,12 @@ export class DecksPage implements OnInit {
     if (newDeck.language === languageName) {
       this.filteredDecks = [...this.filteredDecks, newDeck];
     }
-    this.showCreateDeckModal = false;
     this.showToast(this.translationService.t('decks.deckCreated'));
   }
 
   /**
-   * Add all words from a deck to a word category for story generation
+   * Add words from a deck to a word category for story generation
+   * Shows option to add all words or select specific words
    */
   async addDeckWordsToCategory(deck: Deck) {
     // Get all cards from this deck
@@ -719,16 +793,111 @@ export class DecksPage implements OnInit {
       return;
     }
 
+    // Store deck for later use
+    this.pendingDeckForWords = deck;
+
+    // Show action sheet to choose between Add All or Select Words
+    const actionSheet = await this.actionSheetController.create({
+      header: `Add words from "${deck.name}"`,
+      buttons: [
+        {
+          text: `Add All ${words.length} Words`,
+          icon: 'checkmark-done-outline',
+          handler: () => {
+            // Delay to allow action sheet to close first
+            setTimeout(() => this.ngZone.run(() => this.proceedWithWords(words)), 300);
+            return true;
+          }
+        },
+        {
+          text: 'Select Specific Words',
+          icon: 'list-outline',
+          handler: () => {
+            // Delay to allow action sheet to close first
+            setTimeout(() => this.ngZone.run(() => this.openWordSelectionModal(words)), 300);
+            return true;
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close-outline',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  /**
+   * Open word selection modal with available words
+   */
+  openWordSelectionModal(words: string[]) {
+    this.availableWords = words.map(text => ({ text, selected: true }));
+    this.showWordSelectionModal = true;
+  }
+
+  /**
+   * Close word selection modal
+   */
+  closeWordSelectionModal() {
+    this.showWordSelectionModal = false;
+    this.availableWords = [];
+  }
+
+  /**
+   * Get count of selected words
+   */
+  get selectedWordsCount(): number {
+    return this.availableWords.filter(w => w.selected).length;
+  }
+
+  /**
+   * Toggle word selection
+   */
+  toggleWordSelection(index: number) {
+    this.availableWords[index].selected = !this.availableWords[index].selected;
+  }
+
+  /**
+   * Select all words
+   */
+  selectAllWords() {
+    this.availableWords.forEach(w => w.selected = true);
+  }
+
+  /**
+   * Deselect all words
+   */
+  deselectAllWords() {
+    this.availableWords.forEach(w => w.selected = false);
+  }
+
+  /**
+   * Confirm word selection and proceed
+   */
+  confirmWordSelection() {
+    const selectedWords = this.availableWords.filter(w => w.selected).map(w => w.text);
+    this.closeWordSelectionModal();
+    if (selectedWords.length > 0) {
+      this.proceedWithWords(selectedWords);
+    }
+  }
+
+  /**
+   * Proceed with adding words to a category
+   */
+  async proceedWithWords(words: string[]) {
     // Get existing word categories
     const wordCategories = await this.storyService.getWordCategories();
 
     if (wordCategories.length === 0) {
       // Create a new category with deck name
+      const deckName = this.pendingDeckForWords?.name || 'New Category';
       const alert = await this.alertController.create({
         header: 'Create Word Category',
-        message: `No word categories exist. Create one to add ${words.length} words from "${deck.name}"?`,
+        message: `No word categories exist. Create one to add ${words.length} words?`,
         inputs: [
-          { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deck.name }
+          { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deckName }
         ],
         buttons: [
           { text: 'Cancel', role: 'cancel' },
@@ -758,10 +927,11 @@ export class DecksPage implements OnInit {
       buttons.push({
         text: 'Create New Category',
         handler: async () => {
+          const deckName = this.pendingDeckForWords?.name || 'New Category';
           const alert = await this.alertController.create({
             header: 'New Word Category',
             inputs: [
-              { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deck.name }
+              { name: 'categoryName', type: 'text', placeholder: 'Category name', value: deckName }
             ],
             buttons: [
               { text: 'Cancel', role: 'cancel' },

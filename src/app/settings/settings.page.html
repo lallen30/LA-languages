@@ -1,6 +1,16 @@
 <ion-header>
   <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()" class="menu-button">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'settings.title' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button style="visibility: hidden;">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -29,12 +39,6 @@
     <ion-item button detail="true" (click)="openModalKey('data')">
       <ion-icon name="server" slot="start"></ion-icon>
       <ion-label>{{ 'settings.data' | translate }}</ion-label>
-    </ion-item>
-
-    <!-- About -->
-    <ion-item button detail="true" (click)="openModalKey('about')">
-      <ion-icon name="information-circle" slot="start"></ion-icon>
-      <ion-label>{{ 'settings.about' | translate }}</ion-label>
     </ion-item>
 
   </ion-list>

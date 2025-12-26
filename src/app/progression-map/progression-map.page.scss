@@ -1,0 +1,344 @@
+// Header styling
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-toolbar-background, var(--ion-background-color));
+    --border-width: 0;
+    --color: var(--ion-toolbar-color, var(--ion-text-color));
+    
+    ion-title {
+      color: var(--ion-toolbar-color, var(--ion-text-color));
+      font-weight: 600;
+    }
+    
+    ion-button {
+      --color: var(--ion-toolbar-color, var(--ion-text-color));
+    }
+    
+    ion-icon {
+      color: var(--ion-toolbar-color, var(--ion-text-color));
+    }
+  }
+}
+
+// Content with background
+.map-content {
+  --background: transparent;
+  
+  // Light mode styling
+  &.light-mode {
+    --background: var(--ion-background-color, #ffffff);
+    
+    .stats-header {
+      background: rgba(0, 0, 0, 0.05);
+      
+      .mastered-count, .current-level {
+        .count, .level {
+          color: var(--ion-color-primary, #3880ff);
+          text-shadow: none;
+        }
+        
+        .label {
+          color: var(--ion-text-color, #000000);
+          opacity: 0.7;
+        }
+      }
+    }
+    
+    .level-info {
+      .level-number {
+        color: var(--ion-text-color, #000000);
+        opacity: 0.6;
+      }
+      
+      .level-title {
+        color: var(--ion-text-color, #000000);
+        text-shadow: none;
+      }
+      
+      .progress-text {
+        color: var(--ion-color-primary, #3880ff);
+      }
+      
+      .cards-required {
+        color: var(--ion-text-color, #000000);
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// Fixed background image
+.map-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Stats header
+.stats-header {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 16px;
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  margin: 16px;
+  
+  .mastered-count, .current-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .count, .level {
+      font-size: 32px;
+      font-weight: 700;
+      color: #FFD700;
+      text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+    }
+    
+    .label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+  }
+}
+
+// Levels container
+.levels-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  padding-bottom: 100px;
+}
+
+// Level node
+.level-node {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 8px;
+  
+  &.left {
+    flex-direction: row;
+    align-self: flex-start;
+    margin-right: 20%;
+  }
+  
+  &.right {
+    flex-direction: row-reverse;
+    align-self: flex-end;
+    margin-left: 20%;
+    
+    .level-info {
+      text-align: right;
+    }
+  }
+  
+  // Locked state
+  &.locked {
+    .level-image-container {
+      .level-image {
+        filter: grayscale(50%) brightness(0.6);
+        opacity: 0.4;
+      }
+    }
+    
+    .level-info {
+      opacity: 0.7;
+    }
+  }
+  
+  // Current state - glowing effect
+  &.current {
+    .level-image-container {
+      animation: pulse 2s ease-in-out infinite;
+      
+      .level-image {
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+      }
+    }
+  }
+  
+  // Completed state
+  &.completed {
+    .level-image-container {
+      .level-image {
+        filter: drop-shadow(0 0 10px rgba(76, 217, 100, 0.6));
+      }
+    }
+  }
+}
+
+// Level image container
+.level-image-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+  
+  .level-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.3s ease;
+  }
+  
+  // Lock overlay
+  .lock-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    ion-icon {
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+  
+  // Completed badge
+  .completed-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    
+    ion-icon {
+      font-size: 32px;
+      color: #4CD964;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+  }
+  
+  // Progress ring
+  .progress-ring {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      
+      .progress-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.2);
+        stroke-width: 4;
+      }
+      
+      .progress-bar {
+        fill: none;
+        stroke: #FFD700;
+        stroke-width: 4;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.5s ease;
+      }
+    }
+  }
+}
+
+// Level info
+.level-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  
+  .level-number {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .level-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .progress-text {
+    font-size: 12px;
+    color: #FFD700;
+    font-weight: 500;
+  }
+  
+  .cards-required {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// Connector lines
+.connector {
+  display: flex;
+  justify-content: center;
+  margin: -20px 0;
+  
+  &.left-to-right {
+    padding-left: 60px;
+  }
+  
+  &.right-to-left {
+    padding-right: 60px;
+  }
+  
+  .connector-image {
+    width: 80px;
+    height: auto;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  
+  &.active {
+    .connector-image {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(76, 217, 100, 0.5));
+    }
+  }
+  
+  &:not(.active) {
+    .connector-image {
+      filter: grayscale(100%);
+      opacity: 0.3;
+    }
+  }
+}
+
+// Bottom spacer for safe area
+.bottom-spacer {
+  height: 100px;
+}
+
+// Pulse animation for current level
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}

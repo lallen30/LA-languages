@@ -1,15 +1,22 @@
 <ion-header>
   <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()" class="menu-button">
+        <ion-icon name="menu" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'decks.title' | translate }}</ion-title>
-    <ion-button slot="end" fill="clear" (click)="refreshDecks()">
-      <ion-icon name="refresh" slot="icon-only"></ion-icon>
-    </ion-button>
-    <ion-button slot="end" fill="clear" (click)="showImportOptions()">
-      <ion-icon name="cloud-upload-outline" slot="icon-only"></ion-icon>
-    </ion-button>
-    <ion-button slot="end" fill="clear" (click)="isCreateDeckActionSheetOpen = true">
-      <ion-icon name="add" slot="icon-only"></ion-icon>
-    </ion-button>
+    <ion-buttons slot="end">
+      <ion-button (click)="refreshDecks()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showImportOptions()">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="isCreateDeckActionSheetOpen = true">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -97,28 +104,6 @@
   </ion-action-sheet>
 
   <!-- Custom Import Modal -->
-  <!-- Create Deck Modal -->
-  <div class="custom-modal-overlay" *ngIf="showCreateDeckModal" (click)="closeCreateDeckModal()">
-    <div class="custom-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.createNewDeck' | translate }}</h2>
-        <button class="close-btn" (click)="closeCreateDeckModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <label for="new-deck-name">{{ 'decks.deckName' | translate }}</label>
-        <input id="new-deck-name" type="text" [(ngModel)]="newDeckName" class="modal-input" [placeholder]="'decks.deckName' | translate" />
-
-        <label for="new-deck-desc">{{ 'decks.description' | translate }}</label>
-        <textarea id="new-deck-desc" [(ngModel)]="newDeckDescription" class="modal-textarea" [placeholder]="'decks.description' | translate"></textarea>
-
-        <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeCreateDeckModal()">{{ 'common.cancel' | translate }}</button>
-          <button class="modal-btn primary" (click)="saveNewDeck()" [disabled]="!(newDeckName && newDeckName.trim())">{{ 'common.save' | translate }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="custom-modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
@@ -163,46 +148,6 @@
     </div>
   </div>
 
-  <!-- Edit Deck Modal -->
-  <div class="custom-modal-overlay" *ngIf="showEditDeckModal" (click)="closeEditDeckModal()">
-    <div class="custom-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.editDeck' | translate }}</h2>
-        <button class="close-btn" (click)="closeEditDeckModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <label for="deck-name">{{ 'decks.deckName' | translate }}</label>
-        <input id="deck-name" type="text" [(ngModel)]="editDeckName" class="modal-input" [placeholder]="'decks.deckName' | translate" />
-
-        <label for="deck-desc">{{ 'decks.description' | translate }}</label>
-        <textarea id="deck-desc" [(ngModel)]="editDeckDescription" class="modal-textarea" [placeholder]="'decks.description' | translate"></textarea>
-
-        <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeEditDeckModal()">{{ 'common.cancel' | translate }}</button>
-          <button class="modal-btn primary" (click)="saveEditedDeck()" [disabled]="!(editDeckName && editDeckName.trim())">{{ 'common.save' | translate }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Delete Deck Modal -->
-  <div class="custom-modal-overlay" *ngIf="showDeleteDeckModal" (click)="closeDeleteDeckModal()">
-    <div class="custom-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ 'decks.deleteDeck' | translate }}</h2>
-        <button class="close-btn" (click)="closeDeleteDeckModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <p>{{ 'decks.deleteConfirm' | translate }}
-          <strong>{{ deckToDelete?.name }}</strong>?</p>
-        <div class="modal-buttons">
-          <button class="cancel-btn" (click)="closeDeleteDeckModal()">{{ 'common.cancel' | translate }}</button>
-          <button class="modal-btn danger" (click)="confirmDeleteDeck()">{{ 'common.delete' | translate }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- View Statistics Modal -->
   <div class="custom-modal-overlay" *ngIf="showStatsModal" (click)="closeStatsModal()">
     <div class="custom-modal" (click)="$event.stopPropagation()">
@@ -218,6 +163,40 @@
         <div class="stats-row"><strong>{{ 'decks.deckProgress' | translate }}:</strong> {{ statsProgress }}%</div>
         <div class="modal-buttons">
           <button class="modal-btn primary stats-btn" (click)="closeStatsModal()">{{ 'common.ok' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Word Selection Modal -->
+  <div class="custom-modal-overlay" *ngIf="showWordSelectionModal" (click)="closeWordSelectionModal()">
+    <div class="custom-modal word-selection-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Select Words</h2>
+        <button class="close-btn" (click)="closeWordSelectionModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <p class="selection-info">Select words to add to category ({{ selectedWordsCount }}/{{ availableWords.length }} selected)</p>
+        
+        <div class="selection-actions">
+          <button class="select-btn" (click)="selectAllWords()">Select All</button>
+          <button class="select-btn" (click)="deselectAllWords()">Deselect All</button>
+        </div>
+        
+        <div class="word-list">
+          <div class="word-item" *ngFor="let word of availableWords; let i = index" 
+               (click)="toggleWordSelection(i)"
+               [class.selected]="word.selected">
+            <span class="checkbox">{{ word.selected ? '☑' : '☐' }}</span>
+            <span class="word-text">{{ word.text }}</span>
+          </div>
+        </div>
+        
+        <div class="modal-buttons">
+          <button class="cancel-btn" (click)="closeWordSelectionModal()">{{ 'common.cancel' | translate }}</button>
+          <button class="modal-btn primary" (click)="confirmWordSelection()" [disabled]="selectedWordsCount === 0">
+            Add {{ selectedWordsCount }} Words
+          </button>
         </div>
       </div>
     </div>

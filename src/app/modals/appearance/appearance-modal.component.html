@@ -12,17 +12,16 @@
   <ion-list>
   <ion-item>
     <ion-icon name="moon" slot="start"></ion-icon>
-    <ion-label>{{ 'settings.darkMode' | translate }}</ion-label>
-    <div class="custom-toggle-wrapper" slot="end">
-      <label class="custom-toggle">
-        <input 
-          type="checkbox" 
-          [(ngModel)]="settings.darkMode"
-          (change)="onDarkModeChange()"
-        />
-        <span class="toggle-slider"></span>
-      </label>
-    </div>
+    <ion-label>{{ 'settings.themeMode' | translate }}</ion-label>
+    <ion-select 
+      [(ngModel)]="settings.themeMode" 
+      (ionChange)="onThemeModeChange()"
+      interface="popover"
+      slot="end">
+      <ion-select-option value="system">{{ 'settings.themeModeSystem' | translate }}</ion-select-option>
+      <ion-select-option value="light">{{ 'settings.themeModeLight' | translate }}</ion-select-option>
+      <ion-select-option value="dark">{{ 'settings.themeModeDark' | translate }}</ion-select-option>
+    </ion-select>
   </ion-item>
         
         <!-- Primary Colors -->
@@ -123,7 +122,24 @@
                   </ion-item>
                 </div>
 
-        <!-- Button Colors -->
+        <!-- Menu Colors -->
+        <div class="color-section">
+          <h4>{{ 'settings.menuColors' | translate }}</h4>
+          <ion-item button (click)="openCustomColorPicker('menuBackground', 'Menu Background', $event)">
+            <ion-label>{{ 'settings.menuBackground' | translate }}</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.menuBackground"></div>
+            </div>
+          </ion-item>
+          <ion-item button (click)="openCustomColorPicker('menuText', 'Menu Text', $event)">
+            <ion-label>{{ 'settings.menuText' | translate }}</ion-label>
+            <div class="color-preview-container" slot="end">
+              <div class="color-swatch" [style.background-color]="currentColorScheme.menuText"></div>
+            </div>
+          </ion-item>
+        </div>
+
+        <!-- Header/Footer Colors -->
         <div class="color-section">
           <h4>{{ 'settings.headerFooterColors' | translate }}</h4>
           <ion-item button (click)="openCustomColorPicker('headerBackground', 'Header Background', $event)">

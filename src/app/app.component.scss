@@ -1,0 +1,124 @@
+// Custom Sidebar Menu Styles
+:host {
+  .sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+  }
+
+  .sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: var(--app-menu-background, var(--ion-background-color, #fff));
+    z-index: 9999;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+
+    &.open {
+      left: 0;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      border-bottom: 1px solid var(--ion-border-color, #ddd);
+      background: var(--app-menu-background, var(--ion-toolbar-background, #f8f8f8));
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--app-menu-text, var(--ion-text-color, #000));
+      }
+
+      ion-button {
+        --color: var(--app-menu-text, var(--ion-text-color, #000));
+      }
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover, &:active {
+        background: var(--ion-color-light, #f4f4f4);
+      }
+
+      ion-icon {
+        font-size: 24px;
+        margin-right: 16px;
+        color: var(--app-menu-text, var(--ion-color-primary, #3880ff));
+      }
+
+      span {
+        font-size: 16px;
+        color: var(--app-menu-text, var(--ion-text-color, #000));
+      }
+    }
+  }
+}
+
+// Dark mode support
+body.dark {
+  .sidebar-menu {
+    background: var(--app-menu-background, var(--ion-background-color, #1a1a1a));
+
+    .sidebar-header {
+      background: var(--app-menu-background, var(--ion-toolbar-background, #1f1f1f));
+      border-bottom-color: #333;
+
+      h2 {
+        color: var(--app-menu-text, var(--ion-text-color, #fff));
+      }
+
+      ion-button {
+        --color: var(--app-menu-text, var(--ion-text-color, #fff));
+      }
+    }
+
+    .menu-item {
+      &:hover, &:active {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      ion-icon {
+        color: var(--app-menu-text, var(--ion-color-primary, #3880ff));
+      }
+
+      span {
+        color: var(--app-menu-text, var(--ion-text-color, #fff));
+      }
+    }
+  }
+}

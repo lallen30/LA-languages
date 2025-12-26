@@ -14,14 +14,14 @@
       <ion-label>Stories</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="stats" href="/tabs/stats">
-      <ion-icon aria-hidden="true" name="bar-chart"></ion-icon>
-      <ion-label>{{ 'tabs.stats' | translate }}</ion-label>
+    <ion-tab-button tab="progression-map" href="/tabs/progression-map">
+      <ion-icon aria-hidden="true" name="map-outline"></ion-icon>
+      <ion-label>Progress</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="settings" href="/tabs/settings">
-      <ion-icon aria-hidden="true" name="settings"></ion-icon>
-      <ion-label>{{ 'tabs.settings' | translate }}</ion-label>
+    <ion-tab-button (click)="openMenu()">
+      <ion-icon aria-hidden="true" name="menu"></ion-icon>
+      <ion-label>Menu</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

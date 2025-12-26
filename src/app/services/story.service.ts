@@ -153,6 +153,27 @@ Important: Return ONLY valid JSON, no additional text or markdown.`;
   }
 
   /**
+   * Update an existing story
+   */
+  async updateStory(id: string, updates: Partial<Pick<Story, 'title' | 'content' | 'sentences'>>): Promise<Story | null> {
+    const stories = await this.getStories();
+    const index = stories.findIndex(s => s.id === id);
+    
+    if (index === -1) {
+      return null;
+    }
+
+    stories[index] = {
+      ...stories[index],
+      ...updates,
+      updatedAt: new Date()
+    };
+
+    await this.storageService.set('stories', stories);
+    return stories[index];
+  }
+
+  /**
    * Delete a story
    */
   async deleteStory(id: string): Promise<void> {

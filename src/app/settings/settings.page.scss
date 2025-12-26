@@ -1,68 +1,31 @@
 
-@media (max-width: 768px) {
+// Header styling - match Home/Stories height
+ion-header {
+  ion-toolbar {
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-width: 0 0 0.55px 0;
+    border-bottom: 0.55px solid rgba(255, 255, 255, 0.1);
+    
+    ion-title {
+      text-align: center;
+    }
+  }
+}
 
+@media (max-width: 768px) {
   ion-toolbar.modal-toolbar ion-title {
     color: var(--ion-color-primary);
   }
 
-  .settings-container {
-    margin-top: 130px !important;
-    padding: 16px !important;
-    height: 100% !important;
-  }
   ion-list {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
-    height: 100% !important;
     border-radius: 0 !important;
     --background: var(--app-item-background) !important;
     --color: var(--app-item-text-color) !important;
     background: var(--app-item-background) !important;
     color: var(--app-item-text-color) !important;
-    
-  }
-  ion-header {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: relative !important;
-    z-index: 1000 !important;
-    background: var(--ion-background-color) !important;
-    border-bottom: 1px solid var(--ion-border-color, #c8c7cc) !important;
-    min-height: 44px !important;
-    height: auto !important;
-    /* Add safe area padding for iOS status bar */
-    padding-top: env(safe-area-inset-top) !important;
-    padding-top: constant(safe-area-inset-top) !important; /* Fallback for older iOS */
-  }
-
-  ion-toolbar {
-    --background: var(--ion-background-color) !important;
-    --color: var(--ion-text-color) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    height: auto !important;
-    padding: 8px 16px !important;
-    /* Ensure toolbar content is visible */
-    position: relative !important;
-    z-index: 1001 !important;
-  }
-
-  ion-title {
-    display: block !important;
-    text-align: center !important;
-    font-size: 17px !important;
-    font-weight: 600 !important;
-    color: var(--ion-text-color) !important;
-    margin: 0 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    /* Ensure title is visible */
-    position: relative !important;
-    z-index: 1002 !important;
   }
 }
 
@@ -75,6 +38,9 @@ ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
   --inner-padding-end: 0;
+  --border-width: 0;
+  --inner-border-width: 0;
+  --border-color: transparent;
   margin-bottom: 8px;
   
   width: 100%;
