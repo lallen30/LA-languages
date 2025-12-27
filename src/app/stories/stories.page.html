@@ -8,7 +8,7 @@
         <ion-icon name="cloud-upload-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Stories</ion-title>
+    <ion-title>{{ 'stories.title' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="showAddCategoryDialog()">
         <ion-icon name="folder-outline"></ion-icon>
@@ -34,11 +34,11 @@
     <!-- Category Filter Dropdown -->
     <ion-item>
       <ion-select 
-        label="Category" 
+        [label]="'stories.category' | translate" 
         [value]="selectedCategoryId" 
         (ionChange)="onCategoryChange($event)"
         interface="action-sheet">
-        <ion-select-option value="all">All Stories</ion-select-option>
+        <ion-select-option value="all">{{ 'stories.allStories' | translate }}</ion-select-option>
         <ion-select-option *ngFor="let cat of categories" [value]="cat.id">
           {{ cat.name }} ({{ cat.storyCount }})
         </ion-select-option>
@@ -47,41 +47,41 @@
 
     <!-- Word Categories Section -->
     <div class="section-header">
-      <h3>Word Categories</h3>
+      <h3>{{ 'stories.wordCategories' | translate }}</h3>
       <ion-button fill="clear" size="small" (click)="showAddWordCategoryDialog()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
-        Add
+        {{ 'stories.add' | translate }}
       </ion-button>
     </div>
 
     <ion-list *ngIf="wordCategories.length > 0">
       <ion-item *ngFor="let wc of wordCategories" class="word-category-row">
-        <ion-label>{{ wc.name }} ({{ wc.words.length }} words)</ion-label>
+        <ion-label>{{ wc.name }} ({{ wc.words.length }} {{ 'stories.words' | translate }})</ion-label>
         <ion-button fill="clear" slot="end" (click)="showWordCategoryOptions(wc)">
           <ion-icon name="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-item>
     </ion-list>
     <p *ngIf="wordCategories.length === 0" class="empty-message">
-      No word categories yet. Create one to organize words for story generation.
+      {{ 'stories.noWordCategories' | translate }}
     </p>
 
     <!-- Stories List -->
     <div class="section-header">
-      <h3>Generated Stories</h3>
+      <h3>{{ 'stories.generatedStories' | translate }}</h3>
     </div>
 
     <!-- Level Filter -->
     <ion-item>
       <ion-select 
-        label="Level" 
+        [label]="'stories.level' | translate" 
         [value]="selectedLevel" 
         (ionChange)="onLevelChange($event)"
         interface="action-sheet">
-        <ion-select-option value="all">All Levels</ion-select-option>
-        <ion-select-option value="beginner">Beginner</ion-select-option>
-        <ion-select-option value="intermediate">Intermediate</ion-select-option>
-        <ion-select-option value="advanced">Advanced</ion-select-option>
+        <ion-select-option value="all">{{ 'stories.allLevels' | translate }}</ion-select-option>
+        <ion-select-option value="beginner">{{ 'stories.beginner' | translate }}</ion-select-option>
+        <ion-select-option value="intermediate">{{ 'stories.intermediate' | translate }}</ion-select-option>
+        <ion-select-option value="advanced">{{ 'stories.advanced' | translate }}</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -96,42 +96,42 @@
 
     <div *ngIf="filteredStories.length === 0" class="empty-state">
       <ion-icon name="book-outline" size="large"></ion-icon>
-      <h3>No Stories Yet</h3>
-      <p>Tap the + button to generate your first AI story!</p>
+      <h3>{{ 'stories.noStoriesYet' | translate }}</h3>
+      <p>{{ 'stories.tapToGenerate' | translate }}</p>
     </div>
   </div>
 
   <!-- Add Story Form -->
   <div *ngIf="showAddStoryForm" class="add-story-form">
     <div class="form-header">
-      <h2>Generate New Story</h2>
-      <ion-button fill="clear" (click)="closeAddStoryForm()">Cancel</ion-button>
+      <h2>{{ 'stories.generateNewStory' | translate }}</h2>
+      <ion-button fill="clear" (click)="closeAddStoryForm()">{{ 'common.cancel' | translate }}</ion-button>
     </div>
 
     <ion-list>
       <!-- Subject -->
       <ion-item>
-        <ion-label position="stacked">Subject / Topic</ion-label>
+        <ion-label position="stacked">{{ 'stories.subjectTopic' | translate }}</ion-label>
         <ion-input [(ngModel)]="newStory.subject" placeholder="e.g., A trip to the market"></ion-input>
       </ion-item>
 
       <!-- Level -->
       <ion-item>
         <ion-select 
-          label="Difficulty Level" 
+          [label]="'stories.difficultyLevel' | translate" 
           label-placement="stacked"
           [(ngModel)]="newStory.level"
           interface="action-sheet">
-          <ion-select-option value="beginner">Beginner</ion-select-option>
-          <ion-select-option value="intermediate">Intermediate</ion-select-option>
-          <ion-select-option value="advanced">Advanced</ion-select-option>
+          <ion-select-option value="beginner">{{ 'stories.beginner' | translate }}</ion-select-option>
+          <ion-select-option value="intermediate">{{ 'stories.intermediate' | translate }}</ion-select-option>
+          <ion-select-option value="advanced">{{ 'stories.advanced' | translate }}</ion-select-option>
         </ion-select>
       </ion-item>
 
       <!-- Category -->
       <ion-item>
         <ion-select 
-          label="Save to Category" 
+          [label]="'stories.saveToCategory' | translate" 
           label-placement="stacked"
           [(ngModel)]="newStory.categoryId" 
           placeholder="Select category"
@@ -142,16 +142,16 @@
         </ion-select>
       </ion-item>
       <ion-button *ngIf="categories.length === 0" fill="clear" (click)="showAddCategoryDialog()">
-        + Create Category First
+        {{ 'stories.createCategoryFirst' | translate }}
       </ion-button>
 
       <!-- Words to Include -->
       <div class="words-section">
-        <ion-label>Words to Include</ion-label>
+        <ion-label>{{ 'stories.wordsToInclude' | translate }}</ion-label>
         
         <!-- Add from word categories -->
         <div class="word-category-buttons" *ngIf="wordCategories.length > 0">
-          <p>Add from category:</p>
+          <p>{{ 'stories.addFromCategory' | translate }}</p>
           <ion-chip *ngFor="let wc of wordCategories" (click)="addWordsFromCategory(wc)" color="secondary">
             <ion-icon name="add-outline"></ion-icon>
             <ion-label>{{ wc.name }}</ion-label>
@@ -160,8 +160,8 @@
 
         <!-- Manual word input -->
         <div class="word-input-row">
-          <ion-input [(ngModel)]="newStory.wordInput" placeholder="Type a word" (keyup.enter)="addWordToStory()"></ion-input>
-          <ion-button (click)="addWordToStory()" fill="solid" size="small">Add</ion-button>
+          <ion-input [(ngModel)]="newStory.wordInput" [placeholder]="'stories.typeWord' | translate" (keyup.enter)="addWordToStory()"></ion-input>
+          <ion-button (click)="addWordToStory()" fill="solid" size="small">{{ 'stories.add' | translate }}</ion-button>
         </div>
 
         <!-- Selected words -->
@@ -171,13 +171,13 @@
             <ion-icon name="close-outline"></ion-icon>
           </ion-chip>
         </div>
-        <p *ngIf="newStory.words.length === 0" class="hint">Add words that should appear in the story</p>
+        <p *ngIf="newStory.words.length === 0" class="hint">{{ 'stories.addWordsHint' | translate }}</p>
       </div>
     </ion-list>
 
     <ion-button expand="block" (click)="generateStory()" [disabled]="!newStory.subject || !newStory.categoryId || newStory.words.length === 0">
       <ion-icon name="sparkles-outline" slot="start"></ion-icon>
-      Generate Story with AI
+      {{ 'stories.generateWithAI' | translate }}
     </ion-button>
   </div>
 

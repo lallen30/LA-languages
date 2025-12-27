@@ -195,7 +195,7 @@ export class StorageService {
     // Get all settings
     const settings: Record<string, any> = {};
     const settingKeys = [
-      'darkMode', 'nativeLanguage', 'ttsLanguage', 'spanishDialect', 
+      'darkMode', 'themeMode', 'nativeLanguage', 'ttsLanguage', 'spanishDialect', 
       'spanishVoiceGender', 'spanishVoiceName', 'ttsRate', 'ttsPitch',
       'autoSpeak', 'autoSpeakOnLoad', 'studyReminders', 'maxCardsPerSession',
       'pictureWordDisplay', 'lightColorScheme', 'darkColorScheme'
@@ -242,9 +242,21 @@ export class StorageService {
     
     // Import settings (v2.0 format)
     if (data.settings) {
+      console.log('[StorageService] Importing settings:', Object.keys(data.settings));
       for (const [key, value] of Object.entries(data.settings)) {
+        console.log(`[StorageService] Saving setting_${key}:`, typeof value === 'object' ? JSON.stringify(value).substring(0, 100) + '...' : value);
         await this._storage?.set(`setting_${key}`, value);
       }
+      
+      // If darkMode is set but themeMode is not, set themeMode based on darkMode
+      // This ensures backwards compatibility with older backups
+      if (data.settings.darkMode !== undefined && data.settings.themeMode === undefined) {
+        const themeMode = data.settings.darkMode ? 'dark' : 'light';
+        console.log(`[StorageService] Setting themeMode to '${themeMode}' based on darkMode: ${data.settings.darkMode}`);
+        await this._storage?.set('setting_themeMode', themeMode);
+      }
+      
+      console.log('[StorageService] All settings imported');
     }
     
     // Import story data

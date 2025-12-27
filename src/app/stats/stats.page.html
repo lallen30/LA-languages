@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
 
   <div class="stats-container">
     <!-- Loading -->
@@ -81,6 +81,15 @@
             <ion-text color="medium">
               <h4>{{ 'stats.metricsTitle' | translate }}</h4>
               <div class="explanation-item">
+                <strong>{{ 'stats.notStarted' | translate }}:</strong> {{ 'stats.notStartedDesc' | translate }}
+              </div>
+              <div class="explanation-item">
+                <strong>{{ 'stats.learning' | translate }}:</strong> {{ 'stats.learningDesc' | translate }}
+              </div>
+              <div class="explanation-item">
+                <strong>{{ 'stats.dueToday' | translate }}:</strong> {{ 'stats.dueTodayDesc' | translate }}
+              </div>
+              <div class="explanation-item">
                 <strong>{{ 'stats.mastered' | translate }}:</strong> {{ 'stats.masteredDesc' | translate }}
               </div>
               <div class="explanation-item">
@@ -125,18 +134,27 @@
               
               <div class="deck-details">
                 <div class="detail-item">
+                  <ion-icon name="library-outline" color="medium"></ion-icon>
                   <span class="detail-label">{{ 'stats.total' | translate }}:</span>
                   <span class="detail-value">{{ deck.totalCards }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">{{ 'stats.new' | translate }}:</span>
+                  <ion-icon name="add-circle-outline" color="tertiary"></ion-icon>
+                  <span class="detail-label">{{ 'stats.notStarted' | translate }}:</span>
                   <span class="detail-value">{{ deck.newCards }}</span>
                 </div>
                 <div class="detail-item">
-                  <span class="detail-label">{{ 'stats.review' | translate }}:</span>
+                  <ion-icon name="school-outline" color="warning"></ion-icon>
+                  <span class="detail-label">{{ 'stats.learning' | translate }}:</span>
+                  <span class="detail-value">{{ deck.learningCards || 0 }}</span>
+                </div>
+                <div class="detail-item">
+                  <ion-icon name="time-outline" color="primary"></ion-icon>
+                  <span class="detail-label">{{ 'stats.dueToday' | translate }}:</span>
                   <span class="detail-value">{{ deck.reviewCards }}</span>
                 </div>
                 <div class="detail-item">
+                  <ion-icon name="trophy-outline" color="success"></ion-icon>
                   <span class="detail-label">{{ 'stats.mastered' | translate }}:</span>
                   <span class="detail-value">{{ deck.masteredCards }}</span>
                 </div>

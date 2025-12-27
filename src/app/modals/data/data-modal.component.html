@@ -9,8 +9,71 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <!-- Loading Overlay -->
+  <div *ngIf="isImporting" class="loading-overlay">
+    <div class="loading-content">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>{{ 'settings.importing' | translate }}</p>
+    </div>
+  </div>
+
+  <!-- Import Options Popup (shown when showImportOptions is true) -->
+  <div *ngIf="showImportOptions" class="import-options-section">
+    <ion-card>
+      <ion-card-header [style.background]="buttonBackground">
+        <ion-card-title [style.color]="buttonText">{{ 'settings.importData' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="import-description">{{ 'settings.chooseImportMethod' | translate }}</p>
+        
+        <!-- URL Input -->
+        <div class="url-input-container">
+          <ion-item>
+            <ion-label position="stacked">{{ 'settings.importFromUrl' | translate }}</ion-label>
+            <ion-input 
+              type="url" 
+              [(ngModel)]="importOptionsUrl" 
+              placeholder="https://example.com/data.json"
+              [clearInput]="true">
+            </ion-input>
+          </ion-item>
+          <ion-button 
+            expand="block" 
+            [disabled]="!importOptionsUrl"
+            (click)="importFromUrl()"
+            [style.--background]="buttonBackground"
+            [style.--color]="buttonText">
+            <ion-icon name="cloud-download" slot="start"></ion-icon>
+            {{ 'settings.importFromUrlBtn' | translate }}
+          </ion-button>
+        </div>
+        
+        <div class="divider">
+          <span>{{ 'common.or' | translate }}</span>
+        </div>
+        
+        <!-- Local File -->
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="importFromLocalFile()"
+          [style.--border-color]="buttonBackground"
+          [style.color]="buttonBackground">
+          <ion-icon name="folder-open" slot="start"></ion-icon>
+          {{ 'settings.importFromFile' | translate }}
+        </ion-button>
+        
+        <div class="cancel-button">
+          <ion-button fill="clear" (click)="cancelImportOptions()">
+            {{ 'common.cancel' | translate }}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
   <!-- URL Input Section (shown when showUrlInput is true) -->
-  <div *ngIf="showUrlInput" class="url-input-section">
+  <div *ngIf="showUrlInput && !showImportOptions" class="url-input-section">
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{ 'settings.importFromUrl' | translate }}</ion-card-title>
@@ -38,7 +101,7 @@
   </div>
 
   <!-- Main buttons (hidden when URL input is shown) -->
-  <div class="data-buttons" *ngIf="!showUrlInput">
+  <div class="data-buttons" *ngIf="!showUrlInput && !showImportOptions">
     <ion-button expand="block" fill="outline" (click)="handleExportData()">
       <ion-icon name="download" slot="start"></ion-icon>
       {{ 'settings.exportData' | translate }}

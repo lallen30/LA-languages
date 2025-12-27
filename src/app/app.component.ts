@@ -5,10 +5,13 @@ import {
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
-import { homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline } from 'ionicons/icons';
+import { homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline, helpCircleOutline } from 'ionicons/icons';
+import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
 import { StorageService } from './services/storage.service';
 import { AboutModalComponent } from './modals/about/about-modal.component';
 import { MenuService } from './services/menu.service';
+import { TranslatePipe } from './pipes/translate.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,7 +19,7 @@ import { Subscription } from 'rxjs';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   imports: [
-    IonApp, IonRouterOutlet, IonIcon, IonButton, CommonModule
+    IonApp, IonRouterOutlet, IonIcon, IonButton, CommonModule, TranslatePipe
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -29,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     private modalController: ModalController
   ) {
-    addIcons({ homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline });
+    addIcons({ homeOutline, libraryOutline, statsChartOutline, settingsOutline, menuOutline, closeOutline, mapOutline, informationCircleOutline, helpCircleOutline });
   }
 
   closeMenu() {
@@ -47,10 +50,27 @@ export class AppComponent implements OnInit, OnDestroy {
       component: AboutModalComponent,
       componentProps: {
         openHelp: () => this.router.navigate(['/tabs/help']),
-        openBuyMeCoffee: () => window.open('https://paypal.me/lallen300', '_blank')
+        openBuyMeCoffee: () => this.openExternalUrl('https://paypal.me/lallen300')
       }
     });
     await modal.present();
+  }
+
+  async openExternalUrl(url: string) {
+    console.log('Opening external URL:', url);
+    try {
+      if (Capacitor.isNativePlatform()) {
+        // Use Browser plugin to open URL in Safari
+        await Browser.open({ url: url });
+      } else {
+        // On web, use standard window.open
+        window.open(url, '_blank');
+      }
+    } catch (error) {
+      console.error('Error opening URL:', error);
+      // Fallback
+      window.location.href = url;
+    }
   }
 
   async ngOnInit() {

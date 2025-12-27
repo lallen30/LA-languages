@@ -8,7 +8,7 @@
     </ion-buttons>
     
     <!-- Show title when no session active -->
-    <ion-title *ngIf="!isSessionActive">Flashcards</ion-title>
+    <ion-title *ngIf="!isSessionActive">{{ 'flashcards.title' | translate }}</ion-title>
     
     <!-- Show progress during session - size="small" prevents truncation -->
     <ion-title *ngIf="isSessionActive" size="small">{{ currentCardNumber }}/{{ totalCardsInSession }}</ion-title>
@@ -56,11 +56,11 @@
   <div *ngIf="isSessionActive && currentCard" class="session-container no-padding">
     <!-- Fill in the Blank Card -->
     <div *ngIf="currentCard.type === 'fill-blank'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
+      <div class="flashcard" [class.flipped]="isFlipped" [class.transitioning]="isTransitioning">
         <div class="card-front">
           <div class="card-content">
             <h2>{{ currentCard.sentenceFront }}</h2>
-            <p class="hint">Tap to reveal answer</p>
+            <p class="hint">{{ 'flashcards.tapToReveal' | translate }}</p>
             <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
               {{ currentCard.englishTranslation }}
             </p>
@@ -80,12 +80,12 @@
 
     <!-- Picture Word Card -->
     <div *ngIf="currentCard.type === 'picture-word'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
+      <div class="flashcard" [class.flipped]="isFlipped" [class.transitioning]="isTransitioning">
         <!-- Show Spanish word first or images first based on showWordFirst -->
         <div class="card-front" *ngIf="currentCard.showWordFirst">
           <div class="card-content">
             <h2>{{ currentCard.spanishWord }}</h2>
-            <p class="hint">Tap to see images</p>
+            <p class="hint">{{ 'flashcards.tapToSeeImages' | translate }}</p>
             <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
               {{ currentCard.englishTranslation }}
             </p>
@@ -105,7 +105,7 @@
           <ng-template #noImages>
             <div class="no-images">
               <ion-icon name="image-outline" size="large"></ion-icon>
-              <p>No images available</p>
+              <p>{{ 'flashcards.noImagesAvailable' | translate }}</p>
             </div>
           </ng-template>
           <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
@@ -123,7 +123,7 @@
             </div>
             <div *ngIf="!currentCard.imageUrls || currentCard.imageUrls.length === 0" class="no-images">
               <ion-icon name="image-outline" size="large"></ion-icon>
-              <p>No images available</p>
+              <p>{{ 'flashcards.noImagesAvailable' | translate }}</p>
             </div>
             <p *ngIf="showTranslation && currentCard.englishTranslation" class="translation">
               {{ currentCard.englishTranslation }}
@@ -142,12 +142,12 @@
 
     <!-- Translate Card -->
     <div *ngIf="currentCard.type === 'translate'" class="card-container" (click)="flipCard()">
-      <div class="flashcard" [class.flipped]="isFlipped">
+      <div class="flashcard" [class.flipped]="isFlipped" [class.transitioning]="isTransitioning">
         <!-- Front: Always show, content depends on showTargetLanguageFirst -->
         <div class="card-front">
           <div class="card-content">
             <h2>{{ currentCard.showTargetLanguageFirst ? currentCard.targetLanguageWord : currentCard.englishTranslation }}</h2>
-            <p class="hint">{{ currentCard.showTargetLanguageFirst ? 'Translate to English' : 'Translate to target language' }}</p>
+            <p class="hint">{{ currentCard.showTargetLanguageFirst ? ('flashcards.translateToEnglish' | translate) : ('flashcards.translateToTarget' | translate) }}</p>
           </div>
         </div>
         
@@ -175,19 +175,19 @@
     <div class="review-tab-bar" *ngIf="currentCard && showReviewButtons" (click)="debugBarClick($event)">
       <button class="review-tab again-tab" (click)="markIncorrect()">
         <ion-icon name="close"></ion-icon>
-        <span class="tab-label">Again</span>
+        <span class="tab-label">{{ 'flashcards.again' | translate }}</span>
       </button>
       <button class="review-tab hard-tab" (click)="markCorrect('hard')">
         <ion-icon name="thumbs-down"></ion-icon>
-        <span class="tab-label">Hard</span>
+        <span class="tab-label">{{ 'flashcards.hard' | translate }}</span>
       </button>
       <button class="review-tab good-tab" (click)="markCorrect('normal')">
         <ion-icon name="thumbs-up"></ion-icon>
-        <span class="tab-label">Good</span>
+        <span class="tab-label">{{ 'flashcards.good' | translate }}</span>
       </button>
       <button class="review-tab easy-tab" (click)="markCorrect('easy')">
         <ion-icon name="checkmark"></ion-icon>
-        <span class="tab-label">Easy</span>
+        <span class="tab-label">{{ 'flashcards.easy' | translate }}</span>
       </button>
     </div>
   </div>

@@ -13,6 +13,7 @@ export class TtsService {
   private voicesLoaded = false;
   private useGoogleTTS = true; // Enable Google Cloud TTS for better quality
   private audioCache: Map<string, string> = new Map(); // Cache audio URLs
+  private currentAudio: HTMLAudioElement | null = null; // Track current audio for stopping
   
   // Google Cloud TTS API configuration - using environment variables
   private readonly GOOGLE_TTS_API_KEY = environment.googleApiKey;
@@ -183,14 +184,24 @@ export class TtsService {
 
     // Play the audio
     return new Promise((resolve, reject) => {
+      // Stop any currently playing audio
+      if (this.currentAudio) {
+        this.currentAudio.pause();
+        this.currentAudio = null;
+      }
+      
       const audio = new Audio(audioUrl);
+      this.currentAudio = audio;
+      
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
+        this.currentAudio = null;
         console.log('TTS: Voice preview playback completed');
         resolve();
       };
       audio.onerror = (e) => {
         URL.revokeObjectURL(audioUrl);
+        this.currentAudio = null;
         console.error('TTS: Audio playback error:', e);
         reject(e);
       };
@@ -264,12 +275,22 @@ export class TtsService {
 
     // Play the audio
     return new Promise((resolve, reject) => {
+      // Stop any currently playing audio
+      if (this.currentAudio) {
+        this.currentAudio.pause();
+        this.currentAudio = null;
+      }
+      
       const audio = new Audio(audioUrl);
+      this.currentAudio = audio;
+      
       audio.onended = () => {
+        this.currentAudio = null;
         console.log('TTS: Google Cloud TTS playback completed');
         resolve();
       };
       audio.onerror = (e) => {
+        this.currentAudio = null;
         console.error('TTS: Audio playback error:', e);
         reject(e);
       };
@@ -394,6 +415,15 @@ export class TtsService {
    * Stop any ongoing speech
    */
   stop(): void {
+    // Stop Google Cloud TTS audio
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
+      console.log('TTS: Stopped Google Cloud TTS audio');
+    }
+    
+    // Stop browser TTS
     if (this.synth) {
       this.synth.cancel();
     }
@@ -403,6 +433,11 @@ export class TtsService {
    * Check if TTS is currently speaking
    */
   isSpeaking(): boolean {
+    // Check Google Cloud TTS audio
+    if (this.currentAudio && !this.currentAudio.paused) {
+      return true;
+    }
+    // Check browser TTS
     return this.synth ? this.synth.speaking : false;
   }
 

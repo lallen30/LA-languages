@@ -107,15 +107,15 @@
   <div class="custom-modal-overlay" *ngIf="showWordSelectionModal" (click)="closeWordSelectionModal()">
     <div class="custom-modal word-selection-modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>Select Words</h2>
+        <h2>{{ 'wordSelection.selectWords' | translate }}</h2>
         <button class="close-btn" (click)="closeWordSelectionModal()">×</button>
       </div>
       <div class="modal-content">
-        <p class="selection-info">Select words to add to category ({{ selectedWordsCount }}/{{ availableWords.length }} selected)</p>
+        <p class="selection-info">{{ 'wordSelection.selectWordsToAdd' | translate }} ({{ selectedWordsCount }}/{{ availableWords.length }} {{ 'wordSelection.selected' | translate }})</p>
         
         <div class="selection-actions">
-          <button class="select-btn" (click)="selectAllWords()">Select All</button>
-          <button class="select-btn" (click)="deselectAllWords()">Deselect All</button>
+          <button class="select-btn" (click)="selectAllWords()">{{ 'wordSelection.selectAll' | translate }}</button>
+          <button class="select-btn" (click)="deselectAllWords()">{{ 'wordSelection.deselectAll' | translate }}</button>
         </div>
         
         <div class="word-list">
@@ -130,7 +130,7 @@
         <div class="modal-buttons">
           <button class="cancel-btn" (click)="closeWordSelectionModal()">{{ 'common.cancel' | translate }}</button>
           <button class="modal-btn primary" (click)="confirmWordSelection()" [disabled]="selectedWordsCount === 0">
-            Add {{ selectedWordsCount }} Words
+            {{ 'wordSelection.addWords' | translate }} {{ selectedWordsCount }}
           </button>
         </div>
       </div>

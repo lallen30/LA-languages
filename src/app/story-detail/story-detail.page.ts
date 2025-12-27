@@ -14,6 +14,7 @@ import {
 import { StoryService } from '../services/story.service';
 import { TtsService } from '../services/tts.service';
 import { Story, StoryLevel } from '../models/story.model';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 @Component({
   selector: 'app-story-detail',
@@ -23,7 +24,7 @@ import { Story, StoryLevel } from '../models/story.model';
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon,
     IonChip, IonLabel, IonSpinner, IonProgressBar,
-    CommonModule, FormsModule
+    CommonModule, FormsModule, TranslatePipe
   ]
 })
 export class StoryDetailPage implements OnInit, OnDestroy {

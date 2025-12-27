@@ -8,13 +8,14 @@ import { Deck } from '../models/deck.model';
 import { StorageService } from '../services/storage.service';
 import { CardService } from '../services/card.service';
 import { ImageService } from '../services/image.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 @Component({
   selector: 'app-card-management',
   templateUrl: './card-management.page.html',
   styleUrls: ['./card-management.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, TranslatePipe]
 })
 export class CardManagementPage implements OnInit {
   deck: Deck | null = null;

@@ -64,12 +64,14 @@ addIcons({
   'cloud-upload': cloudUpload
 });
 
+import { TranslatePipe } from '../pipes/translate.pipe';
+
 @Component({
   selector: 'app-help',
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, TranslatePipe]
 })
 export class HelpPage implements OnInit {
 

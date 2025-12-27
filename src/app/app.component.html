@@ -3,7 +3,7 @@
   <div class="sidebar-backdrop" [class.active]="isMenuOpen" (click)="closeMenu()"></div>
   <div class="sidebar-menu" [class.open]="isMenuOpen">
     <div class="sidebar-header">
-      <h2>Menu</h2>
+      <h2>{{ 'menu.title' | translate }}</h2>
       <ion-button fill="clear" (click)="closeMenu()">
         <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
@@ -11,27 +11,31 @@
     <div class="sidebar-content">
       <div class="menu-item" (click)="navigateTo('/tabs/home')">
         <ion-icon name="home-outline"></ion-icon>
-        <span>Home</span>
+        <span>{{ 'menu.home' | translate }}</span>
       </div>
       <div class="menu-item" (click)="navigateTo('/tabs/decks_backup')">
         <ion-icon name="library-outline"></ion-icon>
-        <span>Decks</span>
+        <span>{{ 'menu.decks' | translate }}</span>
       </div>
       <div class="menu-item" (click)="navigateTo('/tabs/progression-map')">
         <ion-icon name="map-outline"></ion-icon>
-        <span>Progress</span>
+        <span>{{ 'menu.progress' | translate }}</span>
       </div>
       <div class="menu-item" (click)="navigateTo('/tabs/stats')">
         <ion-icon name="stats-chart-outline"></ion-icon>
-        <span>Statistics</span>
+        <span>{{ 'menu.statistics' | translate }}</span>
       </div>
       <div class="menu-item" (click)="navigateTo('/tabs/settings')">
         <ion-icon name="settings-outline"></ion-icon>
-        <span>Settings</span>
+        <span>{{ 'menu.settings' | translate }}</span>
+      </div>
+      <div class="menu-item" (click)="navigateTo('/tabs/help')">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>{{ 'menu.helpGuide' | translate }}</span>
       </div>
       <div class="menu-item" (click)="openAbout()">
         <ion-icon name="information-circle-outline"></ion-icon>
-        <span>About</span>
+        <span>{{ 'menu.about' | translate }}</span>
       </div>
     </div>
   </div>

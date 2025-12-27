@@ -53,8 +53,8 @@ export class AppearanceModalComponent implements OnInit {
 
   darkColorScheme = {
     primary: '#74D105',
-    secondary: '#50c8ff',
-    tertiary: '#6370ff',
+    secondary: '#ff6b35',
+    tertiary: '#7044ff',
     background: '#121212',
     cardBackground: '#1e1e1e',
     headerBackground: '#1f1f1f',

@@ -9,7 +9,11 @@ import { TranslatePipe } from '../pipes/translate.pipe';
 import { TranslationService } from '../services/translation.service';
 import { MenuService } from '../services/menu.service';
 import { addIcons } from 'ionicons';
-import { menuOutline, menu } from 'ionicons/icons';
+import { 
+  menuOutline, menu, today, checkmarkDone, library, trophy, analytics,
+  libraryOutline, addCircleOutline, schoolOutline, timeOutline, trophyOutline,
+  checkmarkCircle, star, flame, barChartOutline, refresh
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-stats',
@@ -37,7 +41,11 @@ export class StatsPage implements OnInit {
     private translationService: TranslationService,
     private menuService: MenuService
   ) {
-    addIcons({ menuOutline, menu });
+    addIcons({ 
+      menuOutline, menu, today, checkmarkDone, library, trophy, analytics,
+      libraryOutline, addCircleOutline, schoolOutline, timeOutline, trophyOutline,
+      checkmarkCircle, star, flame, barChartOutline, refresh
+    });
   }
 
   openMenu() {
@@ -128,14 +136,17 @@ export class StatsPage implements OnInit {
 
   private calculateDeckStats(cards: Card[]): DeckStats {
     const totalCards = cards.length;
+    // Not Started = cards that have never been studied (isNew = true)
     const newCards = cards.filter(c => c.isNew).length;
+    // Mastered = cards reviewed successfully 3+ times
     const masteredCards = cards.filter(c => !c.isNew && c.repetitions >= 3).length;
+    // Learning = cards that have been started but not yet mastered (1-2 repetitions)
+    const learningCards = cards.filter(c => !c.isNew && c.repetitions > 0 && c.repetitions < 3).length;
+    // Due Today = cards that are due for review (nextReview date is today or earlier)
     const reviewCards = cards.filter(c => !c.isNew && c.nextReview <= new Date()).length;
     
-    // Calculate completion percentage based on cards that have been studied at least once
-    // This provides more meaningful progress for users who are just starting
-    const studiedCards = cards.filter(c => !c.isNew || c.repetitions > 0).length;
-    const completionPercentage = totalCards > 0 ? Math.round((studiedCards / totalCards) * 100) : 0;
+    // Calculate completion percentage based on mastered cards
+    const completionPercentage = totalCards > 0 ? Math.round((masteredCards / totalCards) * 100) : 0;
     
     const easeFactors = cards.filter(c => !c.isNew).map(c => c.easeFactor);
     const averageEaseFactor = easeFactors.length > 0 
@@ -147,6 +158,7 @@ export class StatsPage implements OnInit {
       newCards,
       reviewCards,
       masteredCards,
+      learningCards,
       completionPercentage,
       averageEaseFactor,
       streak: 0 // TODO: Calculate actual streak

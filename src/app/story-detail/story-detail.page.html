@@ -5,7 +5,7 @@
         <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ story?.title || 'Story' }}</ion-title>
+    <ion-title>{{ story?.title || ('stories.title' | translate) }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openEditStory()">
         <ion-icon name="create-outline"></ion-icon>
@@ -39,7 +39,7 @@
     <div class="tts-controls">
       <ion-button *ngIf="!isPlaying" (click)="startReading()" fill="solid" color="primary">
         <ion-icon name="play-outline" slot="start"></ion-icon>
-        Listen to Story
+        {{ 'stories.listenToStory' | translate }}
       </ion-button>
       
       <div *ngIf="isPlaying" class="playback-controls">
@@ -69,7 +69,7 @@
 
     <!-- Words Included Section -->
     <div class="words-used">
-      <strong>Words included:</strong>
+      <strong>{{ 'stories.wordsIncluded' | translate }}</strong>
       <div class="word-chips">
         <ion-chip *ngFor="let word of story.wordsUsed" size="small" color="tertiary" (click)="speakWord(word)">
           <ion-icon name="volume-medium-outline"></ion-icon>
@@ -81,7 +81,7 @@
 
   <!-- Story Not Found -->
   <div *ngIf="!isLoading && !story" class="not-found">
-    <h3>Story not found</h3>
-    <ion-button routerLink="/tabs/stories">Back to Stories</ion-button>
+    <h3>{{ 'stories.storyNotFound' | translate }}</h3>
+    <ion-button routerLink="/tabs/stories">{{ 'stories.backToStories' | translate }}</ion-button>
   </div>
 </ion-content>

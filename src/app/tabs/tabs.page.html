@@ -11,17 +11,17 @@
 
     <ion-tab-button tab="stories" href="/tabs/stories">
       <ion-icon aria-hidden="true" name="book"></ion-icon>
-      <ion-label>Stories</ion-label>
+      <ion-label>{{ 'tabs.stories' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="progression-map" href="/tabs/progression-map">
       <ion-icon aria-hidden="true" name="map-outline"></ion-icon>
-      <ion-label>Progress</ion-label>
+      <ion-label>{{ 'tabs.progress' | translate }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button (click)="openMenu()">
       <ion-icon aria-hidden="true" name="menu"></ion-icon>
-      <ion-label>Menu</ion-label>
+      <ion-label>{{ 'tabs.menu' | translate }}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

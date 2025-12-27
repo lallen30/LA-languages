@@ -19,6 +19,7 @@ import {
 import { StoryService } from '../services/story.service';
 import { Story, StoryCategory, WordCategory, StoryLevel } from '../models/story.model';
 import { StorageService } from '../services/storage.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 @Component({
   selector: 'app-stories',
@@ -31,7 +32,7 @@ import { StorageService } from '../services/storage.service';
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
     IonChip, IonBadge, IonSpinner, IonRefresher, IonRefresherContent,
     IonInput, IonSelect, IonSelectOption,
-    CommonModule, FormsModule
+    CommonModule, FormsModule, TranslatePipe
   ]
 })
 export class StoriesPage implements OnInit {

@@ -15,6 +15,7 @@ import { addIcons } from 'ionicons';
 import { arrowBack, lockClosed, checkmarkCircle, menu } from 'ionicons/icons';
 import { StorageService } from '../services/storage.service';
 import { MenuService } from '../services/menu.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 export interface Level {
   id: number;
@@ -41,7 +42,8 @@ export type LevelStatus = 'locked' | 'current' | 'completed';
     IonButton,
     IonIcon,
     CommonModule, 
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ]
 })
 export class ProgressionMapPage implements OnInit {

@@ -29,17 +29,19 @@ import {
 } from 'ionicons/icons';
 import { StoryService } from '../services/story.service';
 import { WordCategory } from '../models/story.model';
+import { TranslatePipe } from '../pipes/translate.pipe';
 
 @Component({
   selector: 'app-flashcards',
   templateUrl: './flashcards.page.html',
   styleUrls: ['./flashcards.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, TranslatePipe]
 })
 export class FlashcardsPage implements OnInit, OnDestroy {
   currentCard: Card | null = null;
   isFlipped = false;
+  isTransitioning = false; // Hide card during transition to prevent flash
   showTranslation = false;
   showAnswer = false;
   showReviewButtons = false;
@@ -119,7 +121,8 @@ export class FlashcardsPage implements OnInit, OnDestroy {
         try {
           const wasSessionActive = this.isSessionActive;
           this.currentCard = card;
-          this.isFlipped = false;
+          // Note: isFlipped is reset in markCorrect/markIncorrect BEFORE this subscription fires
+          // to prevent the flash of the next card's back side
           this.showTranslation = false;
           this.showReviewButtons = !!card;
           this.updateSessionStatus();
@@ -255,6 +258,13 @@ export class FlashcardsPage implements OnInit, OnDestroy {
       return;
     }
 
+    // Store reference to current card before resetting flip
+    const cardToProcess = this.currentCard;
+
+    // Hide card during transition to prevent flash of next card's back
+    this.isTransitioning = true;
+    this.isFlipped = false;
+
     console.log('Creating response object...');
     const response: CardResponse = {
       correct: true,
@@ -262,8 +272,13 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     };
     console.log('Response object created:', response);
 
-    console.log('Calling cardService.processCardResponse...');
-    await this.cardService.processCardResponse(this.currentCard, response);
+    // Process the card response (this will load the next card)
+    await this.cardService.processCardResponse(cardToProcess, response);
+    
+    // Small delay then show the card again
+    await new Promise(resolve => setTimeout(resolve, 50));
+    this.isTransitioning = false;
+    
     console.log('=== markCorrect END ===');
   }
 
@@ -277,6 +292,13 @@ export class FlashcardsPage implements OnInit, OnDestroy {
       console.log('ERROR: No current card available');
       return;
     }
+
+    // Store reference to current card before resetting flip
+    const cardToProcess = this.currentCard;
+
+    // Hide card during transition to prevent flash of next card's back
+    this.isTransitioning = true;
+    this.isFlipped = false;
     
     console.log('Creating response object...');
     const response: CardResponse = {
@@ -285,7 +307,12 @@ export class FlashcardsPage implements OnInit, OnDestroy {
     };
     
     console.log('Processing incorrect response:', response);
-    await this.cardService.processCardResponse(this.currentCard, response);
+    await this.cardService.processCardResponse(cardToProcess, response);
+    
+    // Small delay then show the card again
+    await new Promise(resolve => setTimeout(resolve, 50));
+    this.isTransitioning = false;
+    
     console.log('=== markIncorrect END ===');
   }
 

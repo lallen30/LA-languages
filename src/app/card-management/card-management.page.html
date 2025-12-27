@@ -5,7 +5,7 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ deck?.name || 'Manage Cards' }}</ion-title>
+    <ion-title>{{ deck?.name || ('cardManagement.title' | translate) }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="resetAllCardsProgress()" [disabled]="cards.length === 0">
         <ion-icon name="refresh-outline"></ion-icon>
@@ -17,7 +17,7 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{ deck?.name || 'Manage Cards' }}</ion-title>
+      <ion-title size="large">{{ deck?.name || ('cardManagement.title' | translate) }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -25,14 +25,14 @@
   <ion-searchbar 
     [(ngModel)]="searchTerm" 
     (ionInput)="filterCards()" 
-    placeholder="Search cards..."
+    [placeholder]="'cardManagement.searchCards' | translate"
     show-clear-button="focus">
   </ion-searchbar>
 
   <!-- Cards Count -->
   <div class="cards-info">
     <ion-chip color="primary">
-      <ion-label>{{ filteredCards.length }} of {{ cards.length }} cards</ion-label>
+      <ion-label>{{ filteredCards.length }} {{ 'cardManagement.ofCards' | translate }} {{ cards.length }} {{ 'cardManagement.cards' | translate }}</ion-label>
     </ion-chip>
   </div>
 
@@ -71,9 +71,9 @@
       <div class="card-stats">
         <ion-item lines="none">
           <ion-label>
-            <p>Repetitions: {{ card.repetitions || 0 }}</p>
-            <p>Ease Factor: {{ (card.easeFactor || 2.5).toFixed(1) }}</p>
-            <p *ngIf="card.nextReview">Next Review: {{ card.nextReview | date:'short' }}</p>
+            <p>{{ 'cardManagement.repetitions' | translate }}: {{ card.repetitions || 0 }}</p>
+            <p>{{ 'cardManagement.easeFactor' | translate }}: {{ (card.easeFactor || 2.5).toFixed(1) }}</p>
+            <p *ngIf="card.nextReview">{{ 'cardManagement.nextReview' | translate }}: {{ card.nextReview | date:'short' }}</p>
           </ion-label>
         </ion-item>
       </div>
@@ -83,17 +83,17 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="filteredCards.length === 0 && cards.length > 0">
     <ion-icon name="search-outline" size="large"></ion-icon>
-    <h3>No cards found</h3>
-    <p>Try adjusting your search terms</p>
+    <h3>{{ 'cardManagement.noCardsFound' | translate }}</h3>
+    <p>{{ 'cardManagement.adjustSearch' | translate }}</p>
   </div>
 
   <div class="empty-state" *ngIf="cards.length === 0">
     <ion-icon name="library-outline" size="large"></ion-icon>
-    <h3>No cards in this deck</h3>
-    <p>Add some cards to get started!</p>
+    <h3>{{ 'cardManagement.noCardsInDeck' | translate }}</h3>
+    <p>{{ 'cardManagement.addCardsToStart' | translate }}</p>
     <ion-button fill="outline" (click)="addCard()">
       <ion-icon name="add" slot="start"></ion-icon>
-      Add Cards
+      {{ 'cardManagement.addCards' | translate }}
     </ion-button>
   </div>
 </ion-content>

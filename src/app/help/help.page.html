@@ -5,14 +5,14 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Help & Guide</ion-title>
+    <ion-title>{{ 'help.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Help & Guide</ion-title>
+      <ion-title size="large">{{ 'help.title' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -21,18 +21,18 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="sparkles" slot="start"></ion-icon>
-        Welcome to FluentFlip
+        {{ 'help.welcomeTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>FluentFlip is a powerful language learning app that combines <strong>flashcard-based spaced repetition</strong> with <strong>AI-generated stories</strong> to help you master vocabulary and reading comprehension.</p>
+      <p>{{ 'help.welcomeDesc' | translate }}</p>
       
-      <h4>Main Features:</h4>
+      <h4>{{ 'help.mainFeatures' | translate }}</h4>
       <ul>
-        <li><strong>Flashcard Decks</strong> - Create and study vocabulary with spaced repetition</li>
-        <li><strong>AI Stories</strong> - Generate custom stories using your vocabulary words</li>
-        <li><strong>Text-to-Speech</strong> - Hear correct pronunciation of words and stories</li>
-        <li><strong>Progress Tracking</strong> - Monitor your learning with detailed statistics</li>
+        <li><strong>{{ 'help.flashcardDecks' | translate }}</strong> - {{ 'help.flashcardDecksDesc' | translate }}</li>
+        <li><strong>{{ 'help.aiStories' | translate }}</strong> - {{ 'help.aiStoriesDesc' | translate }}</li>
+        <li><strong>{{ 'help.textToSpeech' | translate }}</strong> - {{ 'help.textToSpeechDesc' | translate }}</li>
+        <li><strong>{{ 'help.progressTracking' | translate }}</strong> - {{ 'help.progressTrackingDesc' | translate }}</li>
       </ul>
     </ion-card-content>
   </ion-card>
@@ -42,33 +42,33 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="library" slot="start"></ion-icon>
-        Spaced Repetition System
+        {{ 'help.spacedRepTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>FluentFlip uses a scientifically-proven <strong>spaced repetition algorithm</strong> to help you learn more effectively by showing cards at optimal intervals.</p>
+      <p>{{ 'help.spacedRepDesc' | translate }}</p>
       
-      <h4>How It Works:</h4>
+      <h4>{{ 'help.howItWorks' | translate }}</h4>
       <ul>
-        <li><strong>New cards</strong> appear immediately for learning</li>
-        <li><strong>Easy cards</strong> reappear after longer intervals (days/weeks)</li>
-        <li><strong>Good cards</strong> reappear at standard intervals</li>
-        <li><strong>Hard cards</strong> reappear sooner for more practice</li>
-        <li><strong>"I don't know" cards</strong> reset to day 1 and need relearning</li>
+        <li><strong>{{ 'help.newCards' | translate }}</strong> {{ 'help.newCardsDesc' | translate }}</li>
+        <li><strong>{{ 'help.easyCards' | translate }}</strong> {{ 'help.easyCardsDesc' | translate }}</li>
+        <li><strong>{{ 'help.goodCards' | translate }}</strong> {{ 'help.goodCardsDesc' | translate }}</li>
+        <li><strong>{{ 'help.hardCards' | translate }}</strong> {{ 'help.hardCardsDesc' | translate }}</li>
+        <li><strong>{{ 'help.dontKnowCards' | translate }}</strong> {{ 'help.dontKnowCardsDesc' | translate }}</li>
       </ul>
 
       <ion-note color="primary">
         <ion-icon name="information-circle" slot="start"></ion-icon>
-        The algorithm automatically adjusts based on your performance to optimize long-term retention.
+        {{ 'help.algorithmNote' | translate }}
       </ion-note>
 
-      <h4>Mastered Cards:</h4>
-      <p>A card is considered <strong>mastered</strong> when it meets both criteria:</p>
+      <h4>{{ 'help.masteredCardsTitle' | translate }}</h4>
+      <p>{{ 'help.masteredCardsDesc' | translate }}</p>
       <ul>
-        <li>The card has been <strong>studied at least once</strong> (no longer "new")</li>
-        <li>The card has been <strong>successfully reviewed 3 or more times</strong></li>
+        <li>{{ 'help.masteredCriteria1' | translate }}</li>
+        <li>{{ 'help.masteredCriteria2' | translate }}</li>
       </ul>
-      <p>The "Mastered" count on each deck shows how many cards you've learned well enough that they're in your long-term memory.</p>
+      <p>{{ 'help.masteredExplanation' | translate }}</p>
     </ion-card-content>
   </ion-card>
   <!-- Study Session Guide -->
@@ -76,47 +76,47 @@
     <ion-card-header>
       <ion-card-title class="study-session-guide">
         <ion-icon name="school" slot="start"></ion-icon>
-        Study Session Guide
+        {{ 'help.studySessionTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h4>During Study Sessions:</h4>
+      <h4>{{ 'help.duringStudy' | translate }}</h4>
       <div class="response-guide">
         <div class="response-item">
           <ion-button size="small" color="success" fill="outline">
             <ion-icon name="checkmark" slot="start"></ion-icon>
-            Easy
+            {{ 'help.easy' | translate }}
           </ion-button>
-          <span>You knew the answer immediately and confidently</span>
+          <span>{{ 'help.easyResponse' | translate }}</span>
         </div>
         <div class="response-item">
           <ion-button size="small" color="primary" fill="outline">
             <ion-icon name="thumbs-up" slot="start"></ion-icon>
-            Good
+            {{ 'help.good' | translate }}
           </ion-button>
-          <span>You knew the answer after thinking briefly</span>
+          <span>{{ 'help.goodResponse' | translate }}</span>
         </div>
         <div class="response-item">
           <ion-button size="small" color="warning" fill="outline">
             <ion-icon name="thumbs-down" slot="start"></ion-icon>
-            Hard
+            {{ 'help.hard' | translate }}
           </ion-button>
-          <span>You struggled but eventually remembered</span>
+          <span>{{ 'help.hardResponse' | translate }}</span>
         </div>
         <div class="response-item">
           <ion-button size="small" color="danger" fill="outline">
             <ion-icon name="close" slot="start"></ion-icon>
-            Again
+            {{ 'help.again' | translate }}
           </ion-button>
-          <span>You couldn't remember or got it wrong</span>
+          <span>{{ 'help.againResponse' | translate }}</span>
         </div>
       </div>
 
-      <h4>Intra-Session Repetition:</h4>
-      <p>Cards marked as <strong>Hard</strong> or <strong>I don't know</strong> will reappear within the same study session for immediate reinforcement:</p>
+      <h4>{{ 'help.intraSessionTitle' | translate }}</h4>
+      <p>{{ 'help.intraSessionDesc' | translate }}</p>
       <ul>
-        <li><strong>Hard cards</strong> reappear after ~8 cards for additional practice</li>
-        <li><strong>"I don't know" cards</strong> reappear after ~3 cards for quick review</li>
+        <li>{{ 'help.hardReappear' | translate }}</li>
+        <li>{{ 'help.dontKnowReappear' | translate }}</li>
       </ul>
     </ion-card-content>
   </ion-card>
@@ -126,24 +126,24 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="checkmark-circle" slot="start"></ion-icon>
-        Session Completion
+        {{ 'help.sessionCompleteTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>When you finish a study session, you'll see a summary with three options:</p>
+      <p>{{ 'help.sessionCompleteDesc' | translate }}</p>
       
       <div class="completion-options">
         <div class="option-item">
-          <ion-button size="small" color="tertiary" fill="outline">Review Missed Cards</ion-button>
-          <span>Practice only the cards you marked "I don't know" for focused learning</span>
+          <ion-button size="small" color="tertiary" fill="outline">{{ 'help.reviewMissedBtn' | translate }}</ion-button>
+          <span>{{ 'help.reviewMissedDesc' | translate }}</span>
         </div>
         <div class="option-item">
-          <ion-button size="small" color="primary" fill="outline">Study More Cards</ion-button>
-          <span>Continue with more cards from the same deck</span>
+          <ion-button size="small" color="primary" fill="outline">{{ 'help.studyMoreBtn' | translate }}</ion-button>
+          <span>{{ 'help.studyMoreDesc' | translate }}</span>
         </div>
         <div class="option-item">
-          <ion-button size="small" color="medium" fill="outline">Finish</ion-button>
-          <span>Return to the Decks page</span>
+          <ion-button size="small" color="medium" fill="outline">{{ 'help.finishBtn' | translate }}</ion-button>
+          <span>{{ 'help.finishDesc' | translate }}</span>
         </div>
       </div>
     </ion-card-content>
@@ -154,39 +154,39 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="albums" slot="start"></ion-icon>
-        Decks & Cards
+        {{ 'help.decksCardsTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h4>Creating Decks:</h4>
-      <p>Decks are collections of flashcards organized by topic. To create a deck:</p>
+      <h4>{{ 'help.creatingDecks' | translate }}</h4>
+      <p>{{ 'help.creatingDecksDesc' | translate }}</p>
       <ol>
-        <li>Go to the <strong>Decks</strong> tab</li>
-        <li>Tap the <strong>+</strong> button in the header</li>
-        <li>Enter a name and optional description</li>
-        <li>Choose a language for the deck</li>
+        <li>{{ 'help.deckStep1' | translate }}</li>
+        <li>{{ 'help.deckStep2' | translate }}</li>
+        <li>{{ 'help.deckStep3' | translate }}</li>
+        <li>{{ 'help.deckStep4' | translate }}</li>
       </ol>
 
-      <h4>Card Types:</h4>
+      <h4>{{ 'help.cardTypes' | translate }}</h4>
       <ul>
-        <li><strong>Picture-Word:</strong> Image with target language word and English translation. Great for visual learners!</li>
-        <li><strong>Fill-in-the-Blank:</strong> Complete sentences with missing words. Helps learn words in context.</li>
-        <li><strong>Translation:</strong> Translate between languages. Cards randomly show either direction for comprehensive practice.</li>
+        <li><strong>{{ 'help.pictureWordType' | translate }}</strong> {{ 'help.pictureWordDesc' | translate }}</li>
+        <li><strong>{{ 'help.fillBlankType' | translate }}</strong> {{ 'help.fillBlankDesc' | translate }}</li>
+        <li><strong>{{ 'help.translateType' | translate }}</strong> {{ 'help.translateDesc' | translate }}</li>
       </ul>
 
-      <h4>Adding Cards:</h4>
+      <h4>{{ 'help.addingCards' | translate }}</h4>
       <ol>
-        <li>Select a deck from the Decks page</li>
-        <li>Tap the <strong>+</strong> button</li>
-        <li>Choose the card type (Picture, Fill-in-Blank, or Translate)</li>
-        <li>Enter the required information</li>
+        <li>{{ 'help.addCardStep1' | translate }}</li>
+        <li>{{ 'help.addCardStep2' | translate }}</li>
+        <li>{{ 'help.addCardStep3' | translate }}</li>
+        <li>{{ 'help.addCardStep4' | translate }}</li>
       </ol>
 
-      <h4>Managing Cards:</h4>
+      <h4>{{ 'help.managingCards' | translate }}</h4>
       <ul>
-        <li><strong>Manage Deck:</strong> View, edit, or delete individual cards</li>
-        <li><strong>Reset Progress:</strong> Reset individual cards or entire decks to start fresh</li>
-        <li><strong>Import/Export:</strong> Share decks between devices or with others</li>
+        <li>{{ 'help.manageDeck' | translate }}</li>
+        <li>{{ 'help.resetProgress' | translate }}</li>
+        <li>{{ 'help.importExport' | translate }}</li>
       </ul>
     </ion-card-content>
   </ion-card>
@@ -196,48 +196,48 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="book" slot="start"></ion-icon>
-        AI Stories
+        {{ 'help.aiStoriesSectionTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Generate custom stories using AI that incorporate your vocabulary words. This helps you see words used in context and improves reading comprehension.</p>
+      <p>{{ 'help.aiStoriesSectionDesc' | translate }}</p>
 
-      <h4>Story Categories:</h4>
-      <p>Organize your stories into categories (e.g., "Travel", "Food", "Daily Life"):</p>
+      <h4>{{ 'help.storyCategories' | translate }}</h4>
+      <p>{{ 'help.storyCategoriesDesc' | translate }}</p>
       <ul>
-        <li>Tap the <strong>folder icon</strong> in the Stories header to create a category</li>
-        <li>Filter stories by category using the dropdown</li>
+        <li>{{ 'help.storyCategoryTip1' | translate }}</li>
+        <li>{{ 'help.storyCategoryTip2' | translate }}</li>
       </ul>
 
-      <h4>Word Categories:</h4>
-      <p>Create collections of vocabulary words to use in story generation:</p>
+      <h4>{{ 'help.wordCategoriesTitle' | translate }}</h4>
+      <p>{{ 'help.wordCategoriesDesc' | translate }}</p>
       <ul>
-        <li>Tap the <strong>+</strong> button to create a word category</li>
-        <li>Add words you want to practice</li>
-        <li>Use these words when generating new stories</li>
+        <li>{{ 'help.wordCategoryTip1' | translate }}</li>
+        <li>{{ 'help.wordCategoryTip2' | translate }}</li>
+        <li>{{ 'help.wordCategoryTip3' | translate }}</li>
       </ul>
 
-      <h4>Generating Stories:</h4>
+      <h4>{{ 'help.generatingStories' | translate }}</h4>
       <ol>
-        <li>Go to the <strong>Stories</strong> tab</li>
-        <li>Tap a word category and select "Use in New Story"</li>
-        <li>Choose a subject, difficulty level, and story category</li>
-        <li>The AI will generate a story incorporating your vocabulary</li>
+        <li>{{ 'help.genStoryStep1' | translate }}</li>
+        <li>{{ 'help.genStoryStep2' | translate }}</li>
+        <li>{{ 'help.genStoryStep3' | translate }}</li>
+        <li>{{ 'help.genStoryStep4' | translate }}</li>
       </ol>
 
-      <h4>Reading Stories:</h4>
+      <h4>{{ 'help.readingStories' | translate }}</h4>
       <ul>
-        <li>Tap any story to read it</li>
-        <li>Use the <strong>speaker icon</strong> to hear the story read aloud</li>
-        <li>Tap individual words in the "Words included" section to hear pronunciation</li>
-        <li>Filter stories by level (Beginner, Intermediate, Advanced)</li>
+        <li>{{ 'help.readStoryTip1' | translate }}</li>
+        <li>{{ 'help.readStoryTip2' | translate }}</li>
+        <li>{{ 'help.readStoryTip3' | translate }}</li>
+        <li>{{ 'help.readStoryTip4' | translate }}</li>
       </ul>
 
-      <h4>Export & Import Stories:</h4>
+      <h4>{{ 'help.exportImportStories' | translate }}</h4>
       <ul>
-        <li>Export all stories or just a selected category</li>
-        <li>Export individual stories from the menu</li>
-        <li>Import stories on another device - categories are created automatically</li>
+        <li>{{ 'help.exportStoryTip1' | translate }}</li>
+        <li>{{ 'help.exportStoryTip2' | translate }}</li>
+        <li>{{ 'help.exportStoryTip3' | translate }}</li>
       </ul>
     </ion-card-content>
   </ion-card>
@@ -247,48 +247,47 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="cloud-download" slot="start"></ion-icon>
-        Data Management
+        {{ 'help.dataManagementTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>Manage your app data from <strong>Settings → Data</strong>.</p>
+      <p>{{ 'help.dataManagementDesc' | translate }}</p>
 
-      <h4>Export All App Data:</h4>
-      <p>Create a complete backup of everything including:</p>
+      <h4>{{ 'help.exportAllData' | translate }}</h4>
+      <p>{{ 'help.exportAllDataDesc' | translate }}</p>
       <ul>
-        <li>All decks and flashcards</li>
-        <li>Study progress and statistics</li>
-        <li>All stories and categories</li>
-        <li>Word categories</li>
-        <li>App settings (language, appearance, study preferences)</li>
+        <li>{{ 'help.exportItem1' | translate }}</li>
+        <li>{{ 'help.exportItem2' | translate }}</li>
+        <li>{{ 'help.exportItem3' | translate }}</li>
+        <li>{{ 'help.exportItem4' | translate }}</li>
+        <li>{{ 'help.exportItem5' | translate }}</li>
       </ul>
 
-      <h4>Import And Replace All App Data:</h4>
-      <p>Restore from a backup file. This will replace all current data with the backup.</p>
+      <h4>{{ 'help.importReplaceData' | translate }}</h4>
+      <p>{{ 'help.importReplaceDesc' | translate }}</p>
 
       <ion-note color="warning">
         <ion-icon name="warning" slot="start"></ion-icon>
         <div>
-          <strong>Important:</strong><br>
-          Importing data replaces all existing data. Export your current data first if you want to keep it.
+          {{ 'help.importWarning' | translate }}
         </div>
       </ion-note>
 
-      <h4>Import Multiple Decks (File):</h4>
-      <p>Add decks from a JSON file without replacing your existing data. Great for importing shared deck collections.</p>
+      <h4>{{ 'help.importMultipleFile' | translate }}</h4>
+      <p>{{ 'help.importMultipleFileDesc' | translate }}</p>
 
-      <h4>Import Multiple Decks (URL):</h4>
-      <p>Import decks directly from a web URL. Useful for downloading community-shared deck collections.</p>
+      <h4>{{ 'help.importMultipleUrl' | translate }}</h4>
+      <p>{{ 'help.importMultipleUrlDesc' | translate }}</p>
 
-      <h4>Reset Settings:</h4>
-      <p>Restore all app settings to their default values. This does not affect your decks, cards, or stories.</p>
+      <h4>{{ 'help.resetSettingsHelp' | translate }}</h4>
+      <p>{{ 'help.resetSettingsDesc' | translate }}</p>
 
-      <h4>Delete All Data:</h4>
-      <p>Permanently remove all decks, cards, stories, and progress. Use with caution - this cannot be undone!</p>
+      <h4>{{ 'help.deleteAllDataHelp' | translate }}</h4>
+      <p>{{ 'help.deleteAllDataDesc' | translate }}</p>
 
       <ion-note color="primary">
         <ion-icon name="bulb" slot="start"></ion-icon>
-        <strong>Tip:</strong> Regularly export your data to keep a backup of your learning progress.
+        {{ 'help.backupTip' | translate }}
       </ion-note>
     </ion-card-content>
   </ion-card>
@@ -299,38 +298,38 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="settings" slot="start"></ion-icon>
-        Settings & Customization
+        {{ 'help.settingsTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h4>Language Settings:</h4>
+      <h4>{{ 'help.languageSettingsHelp' | translate }}</h4>
       <ul>
-        <li><strong>Native Language:</strong> Language for the app interface</li>
-        <li><strong>Target Language:</strong> Language you are learning</li>
+        <li>{{ 'help.nativeLanguageHelp' | translate }}</li>
+        <li>{{ 'help.targetLanguageHelp' | translate }}</li>
       </ul>
 
-      <h4>Text-to-Speech:</h4>
+      <h4>{{ 'help.ttsSettingsHelp' | translate }}</h4>
       <ul>
-        <li><strong>Voice Selection:</strong> Choose from available voices for your target language</li>
-        <li><strong>Speech Rate:</strong> Adjust how fast words are spoken</li>
-        <li><strong>Auto-speak:</strong> Automatically pronounce words when cards flip</li>
+        <li>{{ 'help.voiceSelection' | translate }}</li>
+        <li>{{ 'help.speechRateHelp' | translate }}</li>
+        <li>{{ 'help.autoSpeakHelp' | translate }}</li>
       </ul>
 
-      <h4>Study Settings:</h4>
+      <h4>{{ 'help.studySettingsHelp' | translate }}</h4>
       <ul>
-        <li><strong>Max Cards Per Session:</strong> Control how many cards you study (5-500)</li>
-        <li><strong>Study Reminders:</strong> Get notifications to maintain your streak</li>
+        <li>{{ 'help.maxCardsHelp' | translate }}</li>
+        <li>{{ 'help.remindersHelp' | translate }}</li>
       </ul>
 
-      <h4>Appearance:</h4>
+      <h4>{{ 'help.appearanceHelp' | translate }}</h4>
       <ul>
-        <li><strong>Dark Mode:</strong> Switch between light and dark themes</li>
-        <li><strong>Color Customization:</strong> Personalize button colors and backgrounds</li>
+        <li>{{ 'help.darkModeHelp' | translate }}</li>
+        <li>{{ 'help.colorCustomization' | translate }}</li>
       </ul>
 
       <ion-note color="success">
         <ion-icon name="bulb" slot="start"></ion-icon>
-        <strong>Tip:</strong> Start with 20 cards per session and adjust based on your available time.
+        {{ 'help.settingsTip' | translate }}
       </ion-note>
     </ion-card-content>
   </ion-card>
@@ -340,7 +339,7 @@
     <ion-card-header>
       <ion-card-title class="tips-title">
         <ion-icon name="star" slot="start"></ion-icon>
-        Tips & Best Practices
+        {{ 'help.tipsTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -348,42 +347,42 @@
         <div class="tip-item">
           <ion-icon name="time" color="primary"></ion-icon>
           <div>
-            <strong>Study consistently:</strong> Daily 10-15 minute sessions are more effective than long, infrequent sessions.
+            <strong>{{ 'help.studyConsistently' | translate }}</strong> {{ 'help.studyConsistentlyDesc' | translate }}
           </div>
         </div>
         
         <div class="tip-item">
           <ion-icon name="trending-up" color="success"></ion-icon>
           <div>
-            <strong>Be honest with responses:</strong> Choose the difficulty that truly reflects your knowledge for optimal scheduling.
+            <strong>{{ 'help.beHonest' | translate }}</strong> {{ 'help.beHonestDesc' | translate }}
           </div>
         </div>
         
         <div class="tip-item">
           <ion-icon name="book" color="tertiary"></ion-icon>
           <div>
-            <strong>Read AI stories:</strong> Stories help you see vocabulary in context and improve reading comprehension.
+            <strong>{{ 'help.readStories' | translate }}</strong> {{ 'help.readStoriesDesc' | translate }}
           </div>
         </div>
         
         <div class="tip-item">
           <ion-icon name="volume-high" color="medium"></ion-icon>
           <div>
-            <strong>Use audio features:</strong> Enable auto-speak to improve pronunciation and listening skills.
+            <strong>{{ 'help.useAudio' | translate }}</strong> {{ 'help.useAudioDesc' | translate }}
           </div>
         </div>
         
         <div class="tip-item">
           <ion-icon name="cloud-upload" color="warning"></ion-icon>
           <div>
-            <strong>Backup regularly:</strong> Export your data periodically to avoid losing progress.
+            <strong>{{ 'help.backupRegularly' | translate }}</strong> {{ 'help.backupRegularlyDesc' | translate }}
           </div>
         </div>
         
         <div class="tip-item">
           <ion-icon name="library" color="primary"></ion-icon>
           <div>
-            <strong>Organize your content:</strong> Create focused decks and story categories for targeted learning.
+            <strong>{{ 'help.organizeContent' | translate }}</strong> {{ 'help.organizeContentDesc' | translate }}
           </div>
         </div>
       </div>
@@ -395,25 +394,25 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="rocket" slot="start"></ion-icon>
-        Getting Started
+        {{ 'help.gettingStartedTitle' | translate }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h4>Quick Start Guide:</h4>
+      <h4>{{ 'help.quickStartGuide' | translate }}</h4>
       <ol>
-        <li><strong>Create a deck</strong> in the Decks tab or import existing cards</li>
-        <li><strong>Add cards</strong> using the + button (Picture, Fill-in-Blank, or Translate)</li>
-        <li><strong>Start studying</strong> by tapping the Study button on a deck</li>
-        <li><strong>Answer honestly</strong> using Easy, Good, Hard, or "I don't know"</li>
-        <li><strong>Review missed cards</strong> at the end of each session</li>
-        <li><strong>Create word categories</strong> in the Stories tab</li>
-        <li><strong>Generate AI stories</strong> using your vocabulary words</li>
-        <li><strong>Study daily</strong> to maintain momentum and see progress</li>
+        <li>{{ 'help.quickStep1' | translate }}</li>
+        <li>{{ 'help.quickStep2' | translate }}</li>
+        <li>{{ 'help.quickStep3' | translate }}</li>
+        <li>{{ 'help.quickStep4' | translate }}</li>
+        <li>{{ 'help.quickStep5' | translate }}</li>
+        <li>{{ 'help.quickStep6' | translate }}</li>
+        <li>{{ 'help.quickStep7' | translate }}</li>
+        <li>{{ 'help.quickStep8' | translate }}</li>
       </ol>
       
       <ion-note color="success">
         <ion-icon name="heart" slot="start"></ion-icon>
-        Remember: Learning is a journey. Be patient with yourself and celebrate small victories!
+        {{ 'help.rememberNote' | translate }}
       </ion-note>
     </ion-card-content>
   </ion-card>

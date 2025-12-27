@@ -17,6 +17,7 @@ export interface DeckStats {
   newCards: number;
   reviewCards: number;
   masteredCards: number;
+  learningCards?: number;
   completionPercentage: number;
   averageEaseFactor: number;
   streak: number;

@@ -5,7 +5,7 @@
         <ion-icon name="menu" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Progression Map</ion-title>
+    <ion-title>{{ 'progressMap.title' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button style="visibility: hidden;">
         <ion-icon name="menu" slot="icon-only"></ion-icon>
@@ -24,10 +24,10 @@
   <div class="stats-header">
     <div class="mastered-count">
       <span class="count">{{ totalMasteredCards }}</span>
-      <span class="label">Cards Mastered</span>
+      <span class="label">{{ 'progressMap.cardsMastered' | translate }}</span>
     </div>
     <div class="current-level">
-      <span class="label">Current Level</span>
+      <span class="label">{{ 'progressMap.currentLevel' | translate }}</span>
       <span class="level">{{ currentLevel }}</span>
     </div>
   </div>
@@ -71,17 +71,17 @@
         
         <!-- Level Info -->
         <div class="level-info">
-          <span class="level-number">Level {{ level.id }}</span>
+          <span class="level-number">{{ 'progressMap.level' | translate }} {{ level.id }}</span>
           <span class="level-title">{{ level.title }}</span>
           
           <!-- Progress text for current level -->
           <span class="progress-text" *ngIf="getLevelStatus(level) === 'current'">
-            {{ getCardsToNextLevel(level) }} cards to go
+            {{ getCardsToNextLevel(level) }} {{ 'progressMap.cardsToGo' | translate }}
           </span>
           
           <!-- Cards required for locked levels -->
           <span class="cards-required" *ngIf="getLevelStatus(level) === 'locked'">
-            {{ level.cumulativeCards }} cards needed
+            {{ level.cumulativeCards }} {{ 'progressMap.cardsNeeded' | translate }}
           </span>
         </div>
       </div>

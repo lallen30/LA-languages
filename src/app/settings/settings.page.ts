@@ -149,8 +149,8 @@ export class SettingsPage implements OnInit, AfterViewInit {
 
   darkColorScheme = {
     primary: '#74D105',
-    secondary: '#50c8ff',
-    tertiary: '#6370ff',
+    secondary: '#ff6b35',
+    tertiary: '#7044ff',
     background: '#121212',
     cardBackground: '#1e1e1e',
     headerBackground: '#1f1f1f',
@@ -665,18 +665,21 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
 
       const platform = Capacitor.getPlatform();
       if (platform === 'ios' || platform === 'android') {
+        // Write to Cache directory for better share compatibility
         await Filesystem.writeFile({
           path: fileName,
           data: dataStr,
-          directory: Directory.Documents,
+          directory: Directory.Cache,
           encoding: Encoding.UTF8
         });
-        const { uri } = await Filesystem.getUri({ path: fileName, directory: Directory.Documents });
-        if (platform === 'ios') {
-          await Share.share({ title: 'Export Data', text: 'Flashcards backup', url: uri });
-        } else {
-          await Share.share({ title: 'Export Data', text: 'Flashcards backup', files: [uri] });
-        }
+        const { uri } = await Filesystem.getUri({ path: fileName, directory: Directory.Cache });
+        
+        // Use dialogTitle to show the filename in the share dialog
+        await Share.share({ 
+          title: fileName,
+          dialogTitle: fileName,
+          files: [uri]
+        });
       } else {
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -905,52 +908,127 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
   }
 
   async showResetSettingsConfirmation() {
-    const alert = await this.alertController.create({
-      header: this.translationService.t('settings.resetSettingsTitle'),
-      message: this.translationService.t('settings.resetSettingsMsg'),
-      buttons: [
-        { text: this.translationService.t('common.cancel'), role: 'cancel' },
-        {
-          text: 'Reset',
-          role: 'destructive',
-          handler: () => {
-            this.performReset();
+    console.log('[Settings] showResetSettingsConfirmation called');
+    try {
+      const alert = await this.alertController.create({
+        header: this.translationService.t('settings.resetSettingsTitle') || 'Reset Settings',
+        message: this.translationService.t('settings.resetSettingsMsg') || 'Are you sure you want to reset all settings to defaults?',
+        buttons: [
+          { text: this.translationService.t('common.cancel') || 'Cancel', role: 'cancel' },
+          {
+            text: this.translationService.t('common.reset') || 'Reset',
+            role: 'confirm'
           }
-        }
-      ]
-    });
-    await alert.present();
+        ]
+      });
+      console.log('[Settings] Alert created, presenting...');
+      await alert.present();
+      console.log('[Settings] Alert presented');
+      
+      const { role } = await alert.onDidDismiss();
+      console.log('[Settings] Alert dismissed with role:', role);
+      
+      if (role === 'confirm') {
+        console.log('[Settings] Reset confirmed, calling performReset');
+        await this.performReset();
+      }
+    } catch (error) {
+      console.error('[Settings] Error showing reset confirmation:', error);
+    }
   }
 
   async performReset() {
-    this.settings = {
-      darkMode: false,
-      themeMode: 'system' as 'system' | 'light' | 'dark',
-      nativeLanguage: 'en-US',
-      ttsLanguage: 'es-ES',
-      spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
-      spanishVoiceGender: 'male' as 'male' | 'female',
-      spanishVoiceName: 'es-ES-Neural2-B',
-      ttsRate: 1.0,
-      ttsPitch: 1.0,
-      autoSpeak: false,
-      autoSpeakOnLoad: false,
-      studyReminders: true,
-      maxCardsPerSession: 20,
-      pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'
-    };
+    console.log('[Settings] performReset started');
+    try {
+      this.settings = {
+        darkMode: false,
+        themeMode: 'system' as 'system' | 'light' | 'dark',
+        nativeLanguage: 'en-US',
+        ttsLanguage: 'es-ES',
+        spanishDialect: 'es-ES' as 'es-ES' | 'es-US',
+        spanishVoiceGender: 'male' as 'male' | 'female',
+        spanishVoiceName: 'es-ES-Neural2-B',
+        ttsRate: 1.0,
+        ttsPitch: 1.0,
+        autoSpeak: false,
+        autoSpeakOnLoad: false,
+        studyReminders: true,
+        maxCardsPerSession: 20,
+        pictureWordDisplay: 'images-first' as 'images-first' | 'word-first' | 'random'
+      };
 
-    for (const [key, value] of Object.entries(this.settings)) {
-      await this.storageService.saveSetting(key, value);
+      for (const [key, value] of Object.entries(this.settings)) {
+        await this.storageService.saveSetting(key, value);
+      }
+      console.log('[Settings] Settings saved to storage');
+
+      this.applyDarkMode();
+      await this.translationService.setLanguage(this.settings.nativeLanguage as any);
+      this.ttsService.setLanguage(this.settings.ttsLanguage);
+      this.ttsService.setRate(this.settings.ttsRate);
+      this.ttsService.setPitch(this.settings.ttsPitch);
+      console.log('[Settings] Settings applied');
+
+      // Reset color schemes to defaults
+      const defaultLightColorScheme = {
+        primary: '#74D105',
+        secondary: '#ff6b35',
+        tertiary: '#7044ff',
+        background: '#ffffff',
+        cardBackground: '#f8f9fa',
+        headerBackground: '#ffffff',
+        footerBackground: '#ffffff',
+        menuBackground: '#ffffff',
+        menuText: '#74D105',
+        itemBackground: '#ffffff',
+        buttonBackground: '#0080ff',
+        textPrimary: '#000000',
+        textSecondary: '#666666',
+        headerText: '#74D105',
+        footerText: '#74D105',
+        cardText: '#000000',
+        itemText: '#000000',
+        buttonText: '#ffffff'
+      };
+      const defaultDarkColorScheme = {
+        primary: '#74D105',
+        secondary: '#ff6b35',
+        tertiary: '#7044ff',
+        background: '#000000',
+        cardBackground: '#1a1a1a',
+        headerBackground: '#1a1a1a',
+        footerBackground: '#1a1a1a',
+        menuBackground: '#2d2d2d',
+        menuText: '#74D105',
+        itemBackground: '#1a1a1a',
+        buttonBackground: '#0080ff',
+        textPrimary: '#ffffff',
+        textSecondary: '#cccccc',
+        headerText: '#74D105',
+        footerText: '#74D105',
+        cardText: '#ffffff',
+        itemText: '#ffffff',
+        buttonText: '#ffffff'
+      };
+      console.log('[Settings] Saving light color scheme...');
+      await this.storageService.saveSetting('lightColorScheme', defaultLightColorScheme);
+      console.log('[Settings] Light color scheme saved');
+      
+      console.log('[Settings] Saving dark color scheme...');
+      await this.storageService.saveSetting('darkColorScheme', defaultDarkColorScheme);
+      console.log('[Settings] Dark color scheme saved');
+
+      console.log('[Settings] All settings and colors reset, reloading app now');
+      
+      // Use setTimeout to ensure the reload happens outside the current execution context
+      setTimeout(() => {
+        console.log('[Settings] Executing reload...');
+        location.reload();
+      }, 100);
+    } catch (error) {
+      console.error('[Settings] performReset error:', error);
+      alert('Error resetting settings: ' + (error instanceof Error ? error.message : 'Unknown error'));
     }
-
-    this.applyDarkMode();
-    await this.translationService.setLanguage(this.settings.nativeLanguage as any);
-    this.ttsService.setLanguage(this.settings.ttsLanguage);
-    this.ttsService.setRate(this.settings.ttsRate);
-    this.ttsService.setPitch(this.settings.ttsPitch);
-
-    await this.showToast(this.translationService.t('settings.settingsReset'));
   }
 
   private applyDarkMode() {
