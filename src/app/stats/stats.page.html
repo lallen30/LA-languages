@@ -28,7 +28,23 @@
         <ion-card-content>
           <div class="stats-grid">
             <div class="stat-item">
-              <ion-icon name="library" class="stat-icon" color="primary"></ion-icon>
+              <ion-icon name="today" class="stat-icon" color="tertiary"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.todayReviews || 0 }}</span>
+                <span class="stat-label">{{ 'stats.todayReviews' | translate }}</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <ion-icon name="checkmark-done" class="stat-icon" color="primary"></ion-icon>
+              <div class="stat-content">
+                <span class="stat-number">{{ userStats.totalReviews || 0 }}</span>
+                <span class="stat-label">{{ 'stats.totalReviews' | translate }}</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <ion-icon name="library" class="stat-icon" color="secondary"></ion-icon>
               <div class="stat-content">
                 <span class="stat-number">{{ userStats.totalCards }}</span>
                 <span class="stat-label">{{ 'stats.totalCards' | translate }}</span>

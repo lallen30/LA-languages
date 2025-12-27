@@ -21,6 +21,7 @@ import { menuOutline, menu } from 'ionicons/icons';
 export class StatsPage implements OnInit {
   userStats = {
     totalReviews: 0,
+    todayReviews: 0,
     streak: 0,
     lastReviewDate: null as Date | null,
     masteredCards: 0,

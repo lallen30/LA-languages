@@ -15,6 +15,14 @@
     
     <!-- Header Action Buttons -->
     <ion-buttons slot="end" *ngIf="isSessionActive">
+      <!-- Edit Card Button -->
+      <ion-button 
+        *ngIf="currentCard"
+        fill="clear" 
+        (click)="openCardActions()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      
       <!-- Copy Button -->
       <ion-button 
         fill="clear" 
@@ -36,14 +44,6 @@
         fill="clear" 
         (click)="showTranslation = !showTranslation">
         <ion-icon name="language"></ion-icon>
-      </ion-button>
-      
-      <!-- Edit Card Button -->
-      <ion-button 
-        *ngIf="currentCard"
-        fill="clear" 
-        (click)="openCardActions()">
-        <ion-icon name="create-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

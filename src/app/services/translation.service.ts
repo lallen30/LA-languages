@@ -248,7 +248,9 @@ export class TranslationService {
         resetStats: 'Reset Statistics',
         resetConfirm: 'Are you sure you want to reset all statistics? This cannot be undone.',
         total: 'Total',
-        review: 'Review'
+        review: 'Review',
+        todayReviews: 'Today\'s Reviews',
+        totalReviews: 'Total Reviews'
       }
     };
 
@@ -473,7 +475,9 @@ export class TranslationService {
         resetStats: 'Restablecer Estadísticas',
         resetConfirm: '¿Estás seguro de que quieres restablecer todas las estadísticas? Esto no se puede deshacer.',
         total: 'Total',
-        review: 'Revisar'
+        review: 'Revisar',
+        todayReviews: 'Repasos de Hoy',
+        totalReviews: 'Repasos Totales'
       }
     };
 
@@ -609,7 +613,9 @@ export class TranslationService {
         resetStats: 'Réinitialiser les Statistiques',
         resetConfirm: 'Êtes-vous sûr de vouloir réinitialiser toutes les statistiques? Cela ne peut pas être annulé.',
         total: 'Total',
-        review: 'Réviser'
+        review: 'Réviser',
+        todayReviews: 'Révisions Aujourd\'hui',
+        totalReviews: 'Révisions Totales'
       }
     };
 
@@ -745,7 +751,9 @@ export class TranslationService {
         resetStats: 'Redefinir Estatísticas',
         resetConfirm: 'Tem certeza de que deseja redefinir todas as estatísticas? Isso não pode ser desfeito.',
         total: 'Total',
-        review: 'Revisar'
+        review: 'Revisar',
+        todayReviews: 'Revisões de Hoje',
+        totalReviews: 'Revisões Totais'
       }
     };
 
@@ -881,7 +889,9 @@ export class TranslationService {
         resetStats: 'Statistiken Zurücksetzen',
         resetConfirm: 'Sind Sie sicher, dass Sie alle Statistiken zurücksetzen möchten? Dies kann nicht rückgängig gemacht werden.',
         total: 'Gesamt',
-        review: 'Überprüfen'
+        review: 'Überprüfen',
+        todayReviews: 'Heutige Überprüfungen',
+        totalReviews: 'Gesamte Überprüfungen'
       }
     };
 
@@ -1017,7 +1027,9 @@ export class TranslationService {
         resetStats: 'Reimposta Statistiche',
         resetConfirm: 'Sei sicuro di voler reimpostare tutte le statistiche? Questa azione non può essere annullata.',
         total: 'Totale',
-        review: 'Rivedi'
+        review: 'Rivedi',
+        todayReviews: 'Revisioni di Oggi',
+        totalReviews: 'Revisioni Totali'
       }
     };
   }

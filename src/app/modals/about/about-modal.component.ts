@@ -44,9 +44,20 @@ export class AboutModalComponent implements OnInit {
   }
 
   async handleOpenHelp() {
+    console.log('handleOpenHelp called');
     await this.close();
     if (this.openHelp) {
+      console.log('Calling openHelp');
       this.openHelp();
+    }
+  }
+
+  async handleOpenBuyMeCoffee() {
+    console.log('handleOpenBuyMeCoffee called');
+    await this.close();
+    if (this.openBuyMeCoffee) {
+      console.log('Calling openBuyMeCoffee');
+      this.openBuyMeCoffee();
     }
   }
 

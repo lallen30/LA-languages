@@ -44,7 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
   async openAbout() {
     this.closeMenu();
     const modal = await this.modalController.create({
-      component: AboutModalComponent
+      component: AboutModalComponent,
+      componentProps: {
+        openHelp: () => this.router.navigate(['/tabs/help']),
+        openBuyMeCoffee: () => window.open('https://paypal.me/lallen300', '_blank')
+      }
     });
     await modal.present();
   }

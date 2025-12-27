@@ -293,7 +293,7 @@ export class SettingsPage implements OnInit, AfterViewInit {
         importMultipleDecks: () => this.importMultipleDecks(),
         importMultipleDecksFromUrl: () => this.importMultipleDecksFromUrl(),
         downloadAndImportMultipleDecks: (url: string) => this.downloadAndImportMultipleDecks(url),
-        resetAllSettings: () => this.resetAllSettings()
+        performResetSettings: () => this.performReset()
       };
     }
     if (key === 'appearance') {
@@ -442,6 +442,16 @@ export class SettingsPage implements OnInit, AfterViewInit {
     try {
       await modal.present();
       console.log('[Settings] modal.present() resolved (direct)');
+      
+      // Wait for modal to dismiss and check for actions
+      const { data } = await modal.onDidDismiss();
+      console.log('[Settings] modal dismissed with data:', data);
+      
+      // Handle reset settings action
+      if (data?.action === 'resetSettings') {
+        console.log('[Settings] Reset settings action triggered');
+        await this.showResetSettingsConfirmation();
+      }
     } catch (e) {
       console.error('[Settings] modal.present() threw (direct)', e);
       throw e;
@@ -894,7 +904,25 @@ private async presentWithWatchdog(modal: HTMLIonModalElement, timeoutMs: number)
     }
   }
 
-  private async performReset() {
+  async showResetSettingsConfirmation() {
+    const alert = await this.alertController.create({
+      header: this.translationService.t('settings.resetSettingsTitle'),
+      message: this.translationService.t('settings.resetSettingsMsg'),
+      buttons: [
+        { text: this.translationService.t('common.cancel'), role: 'cancel' },
+        {
+          text: 'Reset',
+          role: 'destructive',
+          handler: () => {
+            this.performReset();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async performReset() {
     this.settings = {
       darkMode: false,
       themeMode: 'system' as 'system' | 'light' | 'dark',

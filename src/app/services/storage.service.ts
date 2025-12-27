@@ -120,12 +120,45 @@ export class StorageService {
 
   async getStats(): Promise<any> {
     await this.ensureStorage();
-    return await this._storage?.get('user_stats') || {
+    const stats = await this._storage?.get('user_stats') || {
       totalReviews: 0,
       streak: 0,
       lastReviewDate: null,
-      masteredCards: 0
+      masteredCards: 0,
+      todayReviews: 0,
+      todayDate: null
     };
+    
+    // Reset today's reviews if it's a new day
+    const today = new Date().toDateString();
+    if (stats.todayDate !== today) {
+      stats.todayReviews = 0;
+      stats.todayDate = today;
+    }
+    
+    return stats;
+  }
+
+  async incrementReviewCount(): Promise<void> {
+    await this.ensureStorage();
+    const stats = await this.getStats();
+    const today = new Date().toDateString();
+    
+    // Increment total reviews
+    stats.totalReviews = (stats.totalReviews || 0) + 1;
+    
+    // Increment today's reviews (reset if new day)
+    if (stats.todayDate !== today) {
+      stats.todayReviews = 1;
+      stats.todayDate = today;
+    } else {
+      stats.todayReviews = (stats.todayReviews || 0) + 1;
+    }
+    
+    // Update last review date
+    stats.lastReviewDate = new Date().toISOString();
+    
+    await this.saveStats(stats);
   }
 
   async resetAllCardProgress(): Promise<void> {

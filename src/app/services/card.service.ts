@@ -134,6 +134,9 @@ export class CardService {
     const updatedCard = this.srsService.updateCard(card, response);
     await this.storageService.updateCard(updatedCard);
     
+    // Increment review count for statistics
+    await this.storageService.incrementReviewCount();
+    
     // Track missed cards for review feature
     if (!response.correct) {
       // Add to missed cards if not already there

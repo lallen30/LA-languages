@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { StorageService } from '../../services/storage.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-data-modal',
@@ -18,7 +19,7 @@ export class DataModalComponent implements OnInit {
   @Input() importMultipleDecks?: () => void;
   @Input() importMultipleDecksFromUrl?: () => void;
   @Input() downloadAndImportMultipleDecks?: (url: string) => Promise<void>;
-  @Input() resetAllSettings?: () => void;
+  @Input() performResetSettings?: () => void;
   @Input() resetAllData?: () => void;
   @Input() settings?: any;
   
@@ -31,7 +32,10 @@ export class DataModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private translationService: TranslationService
   ) {}
   
   async ngOnInit() {
@@ -103,9 +107,9 @@ export class DataModalComponent implements OnInit {
   }
 
   async handleResetSettings() {
-    if (this.resetAllSettings) {
-      await this.resetAllSettings();
-    }
+    console.log('handleResetSettings called');
+    // Close the modal first, then trigger the reset from settings page
+    await this.modalCtrl.dismiss({ action: 'resetSettings' });
   }
 
   async handleResetData() {
